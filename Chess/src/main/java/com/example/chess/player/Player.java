@@ -10,6 +10,7 @@ import com.example.chess.piece.PiecesType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Player {
     protected Board board;
@@ -23,7 +24,8 @@ public abstract class Player {
         this.legalMoves = legalMoves;
         this.opponentMoves = opponentMoves;
         this.king = findKing(); // find king of player
-        this.isInCheck = !isAttackingOnTile(this.board.getTile(king.getPiecePosI(), king.getPiecePosJ()), opponentMoves).isEmpty();
+        if (this.king != null)
+            this.isInCheck = !isAttackingOnTile(this.board.getTile(king.getPiecePosI(), king.getPiecePosJ()), opponentMoves).isEmpty();
     }
 
     /**
@@ -108,7 +110,21 @@ public abstract class Player {
      */
     public abstract Player opponent();
 
+    @Override
     public String toString() {
         return getType().toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return isInCheck == player.isInCheck && Objects.equals(board, player.board) && Objects.equals(king, player.king) && Objects.equals(legalMoves, player.legalMoves);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board, king, legalMoves, isInCheck);
     }
 }

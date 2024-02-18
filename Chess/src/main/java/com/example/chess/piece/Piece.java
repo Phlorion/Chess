@@ -13,13 +13,6 @@ public abstract class Piece {
     PieceKind pieceKind;
     boolean hasMoved;
 
-    public Piece() {
-        piecePosI = piecePosJ = 0;
-        this.type = PiecesType.WHITE;
-        this.pieceKind = PieceKind.PAWN;
-        hasMoved = false;
-    }
-
     public Piece(int pos_i, int pos_j, PiecesType type) {
         piecePosI = pos_i;
         piecePosJ = pos_j;

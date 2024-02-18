@@ -9,9 +9,9 @@ import com.example.chess.player.PlayerWhite;
 import java.util.*;
 
 public class Board {
-    final static int NUM_TILES = 64;
-    final static int NUM_TILES_PER_ROW = 8;
-    final static int NUM_TILES_PER_COL = 8;
+    public final static int NUM_TILES = 64;
+    public final static int NUM_TILES_PER_ROW = 8;
+    public final static int NUM_TILES_PER_COL = 8;
     List<Tile> board;
     Collection<Piece> whitePieces;
     Collection<Piece> blackPieces;

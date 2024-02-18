@@ -5,6 +5,7 @@ import com.example.chess.piece.Piece;
 import com.example.chess.board.Tile;
 import com.example.chess.player.Player;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 public abstract class Move {
@@ -58,5 +59,14 @@ public abstract class Move {
     @Override
     public String toString() {
         return "Piece: " + piece + " From: (" + from.getI() + ", " + from.getJ() + ") To: (" + to.getI() + ", " + to.getJ() + ")";
+    }
+
+    public static class CompareMoves implements Comparator<Move> {
+
+        @Override
+        public int compare(Move o1, Move o2) {
+            return (Board.NUM_TILES_PER_ROW * o1.getTo().getI() + o1.getTo().getJ())
+                    - (Board.NUM_TILES_PER_ROW * o2.getTo().getI() + o2.getTo().getJ());
+        }
     }
 }
