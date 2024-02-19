@@ -18,7 +18,7 @@ public abstract class Piece {
         piecePosJ = pos_j;
         this.type = type;
         this.pieceKind = PieceKind.PAWN;
-        hasMoved = false;
+        this.hasMoved = false;
     }
 
     /**

@@ -11,7 +11,6 @@ import java.util.List;
 
 public class Pawn extends Piece {
     final int[][] CANDIDATE_MOVE_DESTINATION_COORDINATES = {{-1, 0}, {-2, 0}, {-1, -1}, {-1, 1}};
-    boolean hasMoved;
 
     public Pawn(int pos_i, int pos_j, PiecesType type) {
         super(pos_i, pos_j, type);
@@ -42,11 +41,11 @@ public class Pawn extends Piece {
                     legalMoves.add(new RegularMove(board, currentTile, candidateDestinationTile, this));
                 }
                 // if at starting rank can move 2 tiles
-                if (!hasMoved && current[0] == -2 && candidateDestinationTile.isEmpty()) {
+                else if (!hasMoved && current[0] == -2 && candidateDestinationTile.isEmpty()) {
                     legalMoves.add(new RegularMove(board, currentTile, candidateDestinationTile, this));
                 }
                 // if enemy piece near, can capture
-                if ((current[1] == -1 || current[1] == 1) &&
+                else if ((current[1] == -1 || current[1] == 1) &&
                         !candidateDestinationTile.isEmpty() && type != candidateDestinationTile.getPiece().getType()) {
                     legalMoves.add(new CaptureMove(board, currentTile, candidateDestinationTile, this, candidateDestinationTile.getPiece()));
                 }
