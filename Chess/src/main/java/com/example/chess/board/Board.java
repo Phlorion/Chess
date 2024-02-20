@@ -180,7 +180,7 @@ public class Board {
      */
     public Tile getTileByPiece(Piece piece) {
         for (Tile t : board) {
-            if (t.getPiece().equals(piece)) {
+            if (t.getPiece() != null && t.getPiece().equals(piece)) {
                 return t;
             }
         }
