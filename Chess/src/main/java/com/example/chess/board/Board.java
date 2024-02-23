@@ -168,26 +168,43 @@ public class Board {
             Board temp;
             Tile kingTile;
             for (Move m : tempLegalMoves) {
-                System.out.println(m);
+                //System.out.println(m);
                 temp = board;
-                System.out.println(temp);
+                //System.out.println(temp);
                 temp = m.fakeExecute(temp);
-                System.out.println(temp.getOpponentPlayer().getActivePieces());
-                System.out.println(temp);
+                //System.out.println(temp.getOpponentPlayer().getActivePieces());
+                //System.out.println(temp);
                 kingTile = temp.getTileByPiece(temp.getCurrentPlayer().getKing());
                 temp.getOpponentPlayer().setLegalMoves(calculateAllLegalMoves(temp, temp.getOpponentPlayer()));
                 if (!Player.isAttackingOnTile(kingTile, temp.getOpponentPlayer().getAllLegalMoves()).isEmpty()) {
                     board = m.reverseFakeExecute(temp);
                     legalMoves.remove(m);
-                    System.out.println("Illegal");
+                    //System.out.println("Illegal");
                 } else {
                     board = m.reverseFakeExecute(temp);
-                    System.out.println("Legal");
+                    //System.out.println("Legal");
                 }
-                System.out.println("-----------------------------------------");
+                //System.out.println("-----------------------------------------");
             }
-
             System.out.println(legalMoves);
+
+        } else if (player.equals(currentPlayer)) {
+            List<Move> tempLegalMoves = new ArrayList<>(legalMoves);
+            for (Move m : tempLegalMoves) {
+                if (m.getPiece().equals(player.getKing())) {
+                    if (!Player.isAttackingOnTile(m.getTo(), board.getOpponentPlayer().getAllLegalMoves()).isEmpty()) {
+                        legalMoves.remove(m);
+                    }
+                }
+            }
+            System.out.println(legalMoves);
+        }
+
+        // checkmate and stalemate
+        if (legalMoves.isEmpty() && player.isChecked()) {
+            player.setIsCheckMated(true);
+        } else if (legalMoves.isEmpty() && !player.isChecked()) {
+            player.setIsStaleMated(true);
         }
 
         return legalMoves;

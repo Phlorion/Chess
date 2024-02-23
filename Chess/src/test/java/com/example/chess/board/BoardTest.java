@@ -25,9 +25,9 @@ public class BoardTest {
     @Before
     public void setUp() {
         blackKing = new King(0, 4, PiecesType.BLACK);
-        whiteKing = new King(7, 4, PiecesType.WHITE);
-        blackRook = new Rook(7, 5, PiecesType.BLACK);
-        whiteQueen = new Queen(5, 6, PiecesType.WHITE);
+        whiteKing = new King(7, 3, PiecesType.WHITE);
+        blackRook = new Rook(7, 4, PiecesType.BLACK);
+        whiteQueen = new Queen(7, 5, PiecesType.WHITE);
         whiteBishop = new Bishop(5, 5, PiecesType.WHITE);
         Board.Builder builder = new Board.Builder();
         builder.setPiece(blackKing);

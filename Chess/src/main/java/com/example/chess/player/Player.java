@@ -16,10 +16,14 @@ public abstract class Player {
     protected Board board;
     protected King king;
     protected Collection<Move> legalMoves;
+    private boolean isCheckMated;
+    private boolean isStaleMated;
 
     public Player(Board board) {
         this.board = board;
         this.king = findKing(); // find king of player
+        this.isCheckMated = false;
+        this.isStaleMated = false;
     }
 
     public King getKing() {
@@ -71,7 +75,6 @@ public abstract class Player {
         return attacking;
     }
 
-    // TODO: implement conditions for checking and other rules
     public boolean isLegalMove(Move move) {
         return getAllLegalMoves().contains(move);
     }
@@ -87,21 +90,23 @@ public abstract class Player {
         return !isAttackingOnTile(this.board.getTile(king.getPiecePosI(), king.getPiecePosJ()), opponent().getAllLegalMoves()).isEmpty();
     }
 
-    // TODO: implement below methods
+    public void setIsCheckMated(boolean isCheckMated) {
+        this.isCheckMated = isCheckMated;
+    }
+
     public boolean isCheckMated() {
-        List<Move> kingLegalMoves = king.legalMoves(this.board);
-        for (Move m : kingLegalMoves) {
-            if (isChecked() && !isAttackingOnTile(m.getTo(), opponent().getAllLegalMoves()).isEmpty()) {
-                kingLegalMoves.remove(m);
-            }
-        }
-        return kingLegalMoves.isEmpty();
+        return this.isCheckMated;
+    }
+
+    public void setIsStaleMated(boolean isStaleMated) {
+        this.isStaleMated = isStaleMated;
     }
 
     public boolean isStaleMated() {
-        return false;
+        return this.isStaleMated;
     }
 
+    // TODO: implement below methods
     public boolean isCastled() {
         return false;
     }
