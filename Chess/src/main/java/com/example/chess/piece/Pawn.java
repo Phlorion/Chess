@@ -57,6 +57,9 @@ public class Pawn extends Piece {
 
     @Override
     public String toString() {
-        return PieceKind.PAWN.toString();
+        if (type.equals(PiecesType.WHITE))
+            return PieceKind.PAWN.toString();
+        else
+            return PieceKind.PAWN.toString().toLowerCase();
     }
 }

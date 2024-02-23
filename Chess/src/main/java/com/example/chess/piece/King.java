@@ -5,8 +5,10 @@ import com.example.chess.board.Tile;
 import com.example.chess.move.CaptureMove;
 import com.example.chess.move.Move;
 import com.example.chess.move.RegularMove;
+import com.example.chess.player.Player;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class King extends Piece {
@@ -56,6 +58,9 @@ public class King extends Piece {
 
     @Override
     public String toString() {
-        return PieceKind.KING.toString();
+        if (type.equals(PiecesType.WHITE))
+            return PieceKind.KING.toString();
+        else
+            return PieceKind.KING.toString().toLowerCase();
     }
 }

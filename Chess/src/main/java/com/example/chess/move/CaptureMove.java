@@ -17,18 +17,18 @@ public class CaptureMove extends Move {
      * @return The new board
      */
     @Override
-    public Board execute() {
+    public Board execute(Board board) {
         Board.Builder builder = new Board.Builder();
 
         // set current player
-        for (Piece p : this.board.getCurrentPlayer().getActivePieces()) {
+        for (Piece p : board.getCurrentPlayer().getActivePieces()) {
             if (!this.piece.equals(p)) {
                 builder.setPiece(p);
             }
         }
 
         // set opponent player
-        for (Piece p : this.board.getOpponentPlayer().getActivePieces()) {
+        for (Piece p : board.getOpponentPlayer().getActivePieces()) {
             if (!this.capturingPiece.equals(p)) {
                 builder.setPiece(p);
             }
@@ -37,14 +37,80 @@ public class CaptureMove extends Move {
         // move the moved piece
         piece.setPiecePosI(to.getI());
         piece.setPiecePosJ(to.getJ());
+        piece.setMoves(piece.getMoves()+1);
         if (!piece.hasMoved()) piece.setHasMoved(true);
         builder.setPiece(piece);
         // remove the captured piece
-        this.board.getOpponentPlayer().getActivePieces().remove(capturingPiece);
+        board.getOpponentPlayer().getActivePieces().remove(capturingPiece);
 
         // pass the turn to the opponent
-        builder.setMoveMaker(this.board.getOpponentPlayer().getType());
+        builder.setMoveMaker(board.getOpponentPlayer().getType());
 
         return builder.build();
+    }
+
+    @Override
+    public Board fakeExecute(Board board) {
+        Board.Builder builder = new Board.Builder();
+
+        // set current player
+        for (Piece p : board.getCurrentPlayer().getActivePieces()) {
+            if (!this.piece.equals(p)) {
+                builder.setPiece(p);
+            }
+        }
+
+        // set opponent player
+        for (Piece p : board.getOpponentPlayer().getActivePieces()) {
+            if (!this.capturingPiece.equals(p)) {
+                builder.setPiece(p);
+            }
+        }
+
+        // move the moved piece
+        piece.setPiecePosI(to.getI());
+        piece.setPiecePosJ(to.getJ());
+        piece.setMoves(piece.getMoves()+1);
+        if (!piece.hasMoved()) piece.setHasMoved(true);
+        builder.setPiece(piece);
+        // remove the captured piece
+        board.getOpponentPlayer().getActivePieces().remove(capturingPiece);
+
+        // pass the turn to the opponent
+        builder.setMoveMaker(board.getCurrentPlayer().getType());
+
+        return builder.fakeBuild();
+    }
+
+    @Override
+    public Board reverseFakeExecute(Board board) {
+        Board.Builder builder = new Board.Builder();
+
+        // set current player
+        for (Piece p : board.getCurrentPlayer().getActivePieces()) {
+            if (!this.piece.equals(p)) {
+                builder.setPiece(p);
+            }
+        }
+
+        // set opponent player
+        for (Piece p : board.getOpponentPlayer().getActivePieces()) {
+            builder.setPiece(p);
+        }
+
+        // move the moved piece
+        piece.setPiecePosI(from.getI());
+        piece.setPiecePosJ(from.getJ());
+        piece.setMoves(piece.getMoves()-1);
+        if (piece.getMoves() == 0) piece.setHasMoved(false);
+        builder.setPiece(piece);
+        // undo removed captured piece
+        board.getOpponentPlayer().getActivePieces().add(capturingPiece);
+        builder.setPiece(capturingPiece);
+
+        // pass the turn to the opponent
+        builder.setMoveMaker(board.getCurrentPlayer().getType());
+
+        return builder.fakeBuild();
     }
 }

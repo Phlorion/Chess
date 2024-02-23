@@ -104,7 +104,7 @@ public class PieceTest {
     public void hasMoved() {
         Assert.assertFalse(piece.hasMoved());
         Move toExecuteMove = piece.legalMoves(board).get(0);
-        board = toExecuteMove.execute();
+        board = toExecuteMove.execute(board);
         Assert.assertTrue(piece.hasMoved());
     }
 

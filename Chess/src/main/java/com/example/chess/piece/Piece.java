@@ -3,6 +3,8 @@ package com.example.chess.piece;
 import com.example.chess.board.Board;
 import com.example.chess.move.Move;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,13 +14,15 @@ public abstract class Piece {
     PiecesType type; // black or white
     PieceKind pieceKind;
     boolean hasMoved;
+    int moves;
 
     public Piece(int pos_i, int pos_j, PiecesType type) {
-        piecePosI = pos_i;
-        piecePosJ = pos_j;
+        this.piecePosI = pos_i;
+        this.piecePosJ = pos_j;
         this.type = type;
         this.pieceKind = PieceKind.PAWN;
         this.hasMoved = false;
+        this.moves = 0;
     }
 
     /**
@@ -66,6 +70,14 @@ public abstract class Piece {
 
     public void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
+    }
+
+    public int getMoves() {
+        return moves;
+    }
+
+    public void setMoves(int moves) {
+        this.moves = moves;
     }
 
     @Override

@@ -37,8 +37,8 @@ public class Game {
                 Piece movingPiece = from.getPiece();
 
                 // if there is no piece or the piece does not belong to the player ask again for a move
-                if (movingPiece == null || movingPiece.getType() != board.currentPlayer.getType()) {
-                    System.out.println("There is no " + board.currentPlayer.getType().toString().toLowerCase() + " piece in (" + fromI + ", " + fromJ + ")");
+                if (movingPiece == null || movingPiece.getType() != board.getCurrentPlayer().getType()) {
+                    System.out.println("There is no " + board.getCurrentPlayer().getType().toString().toLowerCase() + " piece in (" + fromI + ", " + fromJ + ")");
                     continue;
                 }
 

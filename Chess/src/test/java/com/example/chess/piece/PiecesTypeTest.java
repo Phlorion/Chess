@@ -21,11 +21,15 @@ public class PiecesTypeTest {
     public void setUp() {
         piecesTypeWhite = PiecesType.WHITE;
         piecesTypeBlack = PiecesType.BLACK;
+        Piece kingWhite = new King(7, 4, PiecesType.WHITE);
+        Piece kingBlack = new King(0, 4, PiecesType.BLACK);
         Board.Builder builder = new Board.Builder();
         builder.setMoveMaker(PiecesType.WHITE);
+        builder.setPiece(kingWhite);
+        builder.setPiece(kingBlack);
         Board board = builder.build();
-        playerWhite = new PlayerWhite(board, null, null);
-        playerBlack = new PlayerBlack(board, null, null);
+        playerWhite = new PlayerWhite(board);
+        playerBlack = new PlayerBlack(board);
     }
 
     @Test

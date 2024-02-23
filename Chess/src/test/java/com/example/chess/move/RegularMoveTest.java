@@ -33,7 +33,7 @@ public class RegularMoveTest {
 
     @Test
     public void execute() {
-        board = move.execute();
+        board = move.execute(board);
         // piece
         Assert.assertEquals(5, piece.getPiecePosI());
         Assert.assertEquals(5, piece.getPiecePosJ());

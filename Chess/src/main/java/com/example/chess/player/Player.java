@@ -16,16 +16,30 @@ public abstract class Player {
     protected Board board;
     protected King king;
     protected Collection<Move> legalMoves;
-    protected Collection<Move> opponentMoves;
-    private boolean isInCheck;
 
-    public Player(Board board, Collection<Move> legalMoves, Collection<Move> opponentMoves) {
+    public Player(Board board) {
         this.board = board;
-        this.legalMoves = legalMoves;
-        this.opponentMoves = opponentMoves;
         this.king = findKing(); // find king of player
-        if (this.king != null)
-            this.isInCheck = !isAttackingOnTile(this.board.getTile(king.getPiecePosI(), king.getPiecePosJ()), opponentMoves).isEmpty();
+    }
+
+    public King getKing() {
+        return king;
+    }
+
+    /**
+     * Get the legal moves of this player's pieces
+     * @return The legal moves
+     */
+    public Collection<Move> getAllLegalMoves() {
+        return this.legalMoves;
+    }
+
+    /**
+     * Set the legal moves of this player's pieces
+     * @param legalMoves The legal moves
+     */
+    public void setLegalMoves(Collection<Move> legalMoves) {
+        this.legalMoves = legalMoves;
     }
 
     /**
@@ -47,7 +61,7 @@ public abstract class Player {
      * @param moves The moves we are examining
      * @return The moves from the total set of legal moves that are attacking this tile
      */
-    private List<Move> isAttackingOnTile(Tile tile, Collection<Move> moves) {
+    public static List<Move> isAttackingOnTile(Tile tile, Collection<Move> moves) {
         List<Move> attacking = new ArrayList<>();
         for (Move m : moves) {
             if (tile.equals(m.getTo())) {
@@ -57,33 +71,33 @@ public abstract class Player {
         return attacking;
     }
 
+    // TODO: implement conditions for checking and other rules
     public boolean isLegalMove(Move move) {
-        return legalMoves.contains(move);
+        return getAllLegalMoves().contains(move);
     }
 
-    // TODO: implement conditions for checking and other rules
     public Board makeMove(Move move) {
         if (isLegalMove(move)) {
-            this.board = move.execute();
+            this.board = move.execute(this.board);
         }
         return this.board;
     }
 
     public boolean isChecked() {
-        return isInCheck;
+        return !isAttackingOnTile(this.board.getTile(king.getPiecePosI(), king.getPiecePosJ()), opponent().getAllLegalMoves()).isEmpty();
     }
 
+    // TODO: implement below methods
     public boolean isCheckMated() {
         List<Move> kingLegalMoves = king.legalMoves(this.board);
         for (Move m : kingLegalMoves) {
-            if (isChecked() && !isAttackingOnTile(m.getTo(), opponentMoves).isEmpty()) {
+            if (isChecked() && !isAttackingOnTile(m.getTo(), opponent().getAllLegalMoves()).isEmpty()) {
                 kingLegalMoves.remove(m);
             }
         }
         return kingLegalMoves.isEmpty();
     }
 
-    // TODO: implement below methods
     public boolean isStaleMated() {
         return false;
     }
@@ -120,11 +134,11 @@ public abstract class Player {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return isInCheck == player.isInCheck && Objects.equals(board, player.board) && Objects.equals(king, player.king) && Objects.equals(legalMoves, player.legalMoves);
+        return Objects.equals(board, player.board) && Objects.equals(king, player.king);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(board, king, legalMoves, isInCheck);
+        return Objects.hash(board, king);
     }
 }

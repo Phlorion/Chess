@@ -25,7 +25,10 @@ public abstract class Move {
      * Executes the move. This means a new updated board is made.
      * @return The new board
      */
-    public abstract Board execute();
+    public abstract Board execute(Board board);
+    public abstract Board fakeExecute(Board board);
+
+    public abstract Board reverseFakeExecute(Board board);
 
     public Tile getFrom() {
         return from;
@@ -41,6 +44,10 @@ public abstract class Move {
 
     public void setTo(Tile to) {
         this.to = to;
+    }
+
+    public Piece getPiece() {
+        return piece;
     }
 
     @Override

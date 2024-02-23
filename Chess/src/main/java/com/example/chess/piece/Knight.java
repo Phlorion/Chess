@@ -57,6 +57,9 @@ public class Knight extends Piece {
 
     @Override
     public String toString() {
-        return PieceKind.KNIGHT.toString();
+        if (type.equals(PiecesType.WHITE))
+            return PieceKind.KNIGHT.toString();
+        else
+            return PieceKind.KNIGHT.toString().toLowerCase();
     }
 }

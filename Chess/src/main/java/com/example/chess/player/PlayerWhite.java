@@ -8,8 +8,8 @@ import com.example.chess.piece.PiecesType;
 import java.util.Collection;
 
 public class PlayerWhite extends Player {
-    public PlayerWhite(Board board, Collection<Move> legalMoves, Collection<Move> opponentMoves) {
-        super(board, legalMoves, opponentMoves);
+    public PlayerWhite(Board board) {
+        super(board);
     }
 
     @Override

@@ -29,7 +29,7 @@ public class KnightTest {
         Piece kingBlack = new King(0, 4, PiecesType.BLACK);
         Piece kingWhite = new King(7, 4, PiecesType.WHITE);
         Board.Builder builder = new Board.Builder();
-        builder.setPiece(piece);
+        //builder.setPiece(piece);
         builder.setPiece(enemyPiece);
         builder.setPiece(allyPiece);
         builder.setPiece(kingWhite);

@@ -65,6 +65,9 @@ public class Queen extends Piece {
 
     @Override
     public String toString() {
-        return PieceKind.QUEEN.toString();
+        if (type.equals(PiecesType.WHITE))
+            return PieceKind.QUEEN.toString();
+        else
+            return PieceKind.QUEEN.toString().toLowerCase();
     }
 }
