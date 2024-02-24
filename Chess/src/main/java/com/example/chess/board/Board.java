@@ -163,7 +163,7 @@ public class Board {
         // if the player we are calculating all the legal moves for is the current one,
         // then remove the moves that are going to put him in a check position and the ones
         // that are not going to help him get out of a check position
-        if (player.equals(currentPlayer) && currentPlayer.isChecked()) {
+        if (player.equals(currentPlayer)) {
             List<Move> tempLegalMoves = new ArrayList<>(legalMoves);
             Board temp;
             Tile kingTile;
@@ -188,7 +188,7 @@ public class Board {
             }
             System.out.println(legalMoves);
 
-        } else if (player.equals(currentPlayer)) {
+        } /*else if (player.equals(currentPlayer)) {
             List<Move> tempLegalMoves = new ArrayList<>(legalMoves);
             for (Move m : tempLegalMoves) {
                 if (m.getPiece().equals(player.getKing())) {
@@ -197,8 +197,9 @@ public class Board {
                     }
                 }
             }
+
             System.out.println(legalMoves);
-        }
+        }*/
 
         // checkmate and stalemate
         if (legalMoves.isEmpty() && player.isChecked()) {

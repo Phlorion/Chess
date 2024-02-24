@@ -10,4 +10,8 @@ module com.example.chess {
     opens com.example.chess.board to javafx.fxml;
     exports com.example.chess.move;
     opens com.example.chess.move to javafx.fxml;
+    exports com.example.chess;
+    opens com.example.chess to javafx.fxml;
+    opens com.example to javafx.fxml;
+    exports com.example to javafx.graphics;
 }

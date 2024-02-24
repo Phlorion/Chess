@@ -1,6 +1,7 @@
-package com.example.chess.board;
+package com.example.chess;
 
 import com.example.chess.board.Board;
+import com.example.chess.board.Tile;
 import com.example.chess.move.CaptureMove;
 import com.example.chess.move.Move;
 import com.example.chess.move.RegularMove;
@@ -8,7 +9,7 @@ import com.example.chess.piece.*;
 
 import java.util.Scanner;
 
-public class Game {
+public class TestGame {
 
     public static void main(String[] args) {
 
@@ -65,9 +66,9 @@ public class Game {
                 boolean validMove = false;
                 for (Move m : board.getCurrentPlayer().getAllLegalMoves()) {
                     System.out.println(m);
-                    if (m.getFrom().equals(from) && m.getTo().equals(to)) {
+                    if (m.getFrom().equals(from) && m.getTo().equals(to) && m.getPiece().equals(movingPiece)) {
                         validMove = true;
-                        board = board.currentPlayer.makeMove(m);
+                        board = board.getCurrentPlayer().makeMove(m);
                         System.out.println(board);
                         break;
                     }
