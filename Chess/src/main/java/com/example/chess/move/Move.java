@@ -28,7 +28,7 @@ public abstract class Move {
     public abstract Board execute(Board board);
     public abstract Board fakeExecute(Board board);
 
-    public abstract Board reverseFakeExecute(Board board);
+    public abstract void reverseFakeExecute(Board board);
 
     public Tile getFrom() {
         return from;

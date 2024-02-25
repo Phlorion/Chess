@@ -5,10 +5,10 @@ import com.example.chess.board.Tile;
 import com.example.chess.move.Move;
 import com.example.chess.piece.Piece;
 import com.example.chess.piece.PiecesType;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
@@ -26,25 +26,33 @@ import java.util.*;
 
 public class Table {
 
-    final static int WIDTH = 512;
-    final static int HEIGHT = 536;
+    final static int BOARD_WIDTH = 512;
+    final static int BOARD_HEIGHT = 512;
     final static int MENU_BAR_HEIGHT = 24;
-    final static int TILE_WIDTH = WIDTH / Board.NUM_TILES_PER_ROW;
-    final static int TILE_HEIGHT = (HEIGHT - MENU_BAR_HEIGHT) / Board.NUM_TILES_PER_COL;
+    final static int MOVES_HISTORY_WIDTH = 160;
+    final static int WIDTH = BOARD_WIDTH + MOVES_HISTORY_WIDTH;
+    final static int HEIGHT = BOARD_HEIGHT + MENU_BAR_HEIGHT;
+    final static int TILE_WIDTH = BOARD_WIDTH / Board.NUM_TILES_PER_ROW;
+    final static int TILE_HEIGHT = BOARD_HEIGHT / Board.NUM_TILES_PER_COL;
     Stage primaryStage;
     GridPane boardGridPane;
+    MoveHistory moveHistory;
     Board board;
     Map<Piece, ImageView> pieceMap;
-    Piece currentPieceHolder = null;
+    static Piece currentPieceHolder = null;
 
     public Table(Stage stage) {
         primaryStage = stage;
         primaryStage.setTitle("Chess"); // set title of the window
         primaryStage.setResizable(false); // set resizable to false
-        GridPane layout = new GridPane(); // create the base GridPane where we will place the menu bar and the game board
-        Scene scene = new Scene(layout, WIDTH, HEIGHT); // create a new Scene
-        createMenuBar(layout); // create the menu bar
-        boardGridPane = createBoard(layout); // create the game board
+        GridPane windowLayout = new GridPane(); // create the base GridPane where we will place the menu bar and the game board
+        Scene scene = new Scene(windowLayout, WIDTH, HEIGHT); // create a new Scene
+        createMenuBar(windowLayout); // create the menu bar
+        GridPane gameLayout = new GridPane();
+        GridPane.setConstraints(gameLayout, 0, 1);
+        windowLayout.getChildren().add(gameLayout);
+        boardGridPane = createBoard(gameLayout); // create the game board
+        moveHistory = new MoveHistory(gameLayout, MOVES_HISTORY_WIDTH); // create the moves history catalogue
         stage.setScene(scene);
         stage.show();
     }
@@ -78,7 +86,7 @@ public class Table {
             GridPane.setConstraints(tile, i / Board.NUM_TILES_PER_ROW, i % Board.NUM_TILES_PER_ROW);
             gridBoard.getChildren().add(tile);
         }
-        GridPane.setConstraints(gridBoard, 0, 1);
+        GridPane.setConstraints(gridBoard, 0, 0);
         layout.getChildren().add(gridBoard);
 
         return gridBoard;
@@ -187,14 +195,14 @@ public class Table {
                 } else if (currentPieceHolder != null) {
                     for (Move m : board.getCurrentPlayer().getAllLegalMoves()) {
                         if (m.getPiece().equals(currentPieceHolder)) {
-                            Pane tile = getTileFromGridPane(boardGridPane, m.getTo().getI(), m.getTo().getJ());
-                            if (tile.getChildren().size() > 0) {
+                            Pane t = getTileFromGridPane(boardGridPane, m.getTo().getI(), m.getTo().getJ());
+                            if (t.getChildren().size() > 0) {
                                 Circle doughnut = new Circle();
                                 doughnut.setCenterX(TILE_WIDTH / 2.);
                                 doughnut.setCenterY(TILE_HEIGHT / 2.);
                                 doughnut.setRadius(TILE_WIDTH / 2.5);
                                 doughnut.setOpacity(0.4f);
-                                tile.getChildren().add(0, doughnut);
+                                t.getChildren().add(0, doughnut);
                                 Circle inside = new Circle();
                                 inside.setCenterX(TILE_WIDTH / 2.);
                                 inside.setCenterY(TILE_HEIGHT / 2.);
@@ -202,14 +210,14 @@ public class Table {
                                 if ((m.getTo().getI() % 2 == 0 && m.getTo().getJ() % 2 != 0)
                                 || (m.getTo().getI() % 2 != 0 && m.getTo().getJ() % 2 == 0)) inside.setStyle("-fx-fill: #769655;");
                                 else inside.setStyle("-fx-fill: #eeeed2;");
-                                tile.getChildren().add(1, inside);
+                                t.getChildren().add(1, inside);
                             } else {
                                 Circle circle = new Circle();
                                 circle.setCenterX(TILE_WIDTH / 2.);
                                 circle.setCenterY(TILE_HEIGHT / 2.);
                                 circle.setRadius(TILE_WIDTH / 5.);
                                 circle.setOpacity(0.4f);
-                                tile.getChildren().add(0, circle);
+                                t.getChildren().add(0, circle);
                             }
                         }
                     }
@@ -243,6 +251,7 @@ public class Table {
                     for (Move m : board.getCurrentPlayer().getAllLegalMoves()) {
                         // if the move the current player is legal
                         if (m.getFrom().equals(from) && m.getTo().equals(to) && m.getPiece().equals(currentPieceHolder)) {
+                            System.out.println(m);
                             // make the move and set the new board
                             setBoard(board.getCurrentPlayer().makeMove(m));
                             // set the pieces based on the new board
@@ -251,8 +260,25 @@ public class Table {
                             } catch (FileNotFoundException e) {
                                 throw new RuntimeException(e);
                             }
+
+                            // add move to moves history
+                            Label l = new Label();
+                            l.setText(currentPieceHolder + ", " + from.getI() + "" + from.getJ() + ", " + to.getI() + "" + to.getJ());
+                            if (currentPieceHolder.getType().equals(PiecesType.WHITE)) moveHistory.add(l, 0);
+                            else moveHistory.add(l, 1);
+
                             System.out.println(board);
                             System.out.println(board.getCurrentPlayer() + "'s turn");
+
+                            // check if check-mated or stale-mated
+                            if (board.getCurrentPlayer().isCheckMated()) {
+                                System.out.println(board.getOpponentPlayer() + " WINS!");
+                                break;
+                            } else if (board.getCurrentPlayer().isStaleMated()) {
+                                System.out.println("TIE");
+                                break;
+                            }
+
                             break;
                         }
                     }

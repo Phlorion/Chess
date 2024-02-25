@@ -15,7 +15,8 @@ public class Game extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        //Board board = Board.createStandardBoard();
+        Board board = Board.createStandardBoard();
+        /*
         Board.Builder builder = new Board.Builder();
         builder.setPiece(new King(0, 4, PiecesType.BLACK));
         builder.setPiece(new King(7, 4, PiecesType.WHITE));
@@ -26,6 +27,7 @@ public class Game extends Application {
         builder.setPiece(new Pawn(6, 3, PiecesType.BLACK));
         builder.setMoveMaker(PiecesType.WHITE);
         Board board = builder.build();
+         */
 
         System.out.println(board);
         System.out.println(board.getCurrentPlayer() + "'s turn");

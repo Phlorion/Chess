@@ -13,17 +13,20 @@ public class TestGame {
 
     public static void main(String[] args) {
 
-        // Board board = Board.createStandardBoard();
-        Board board;
+        Board board = Board.createStandardBoard();
+        /*
         Board.Builder builder = new Board.Builder();
-        builder.setPiece(new King(0, 6, PiecesType.BLACK));
-        builder.setPiece(new King(7, 3, PiecesType.WHITE));
-        builder.setPiece(new Rook(7, 4, PiecesType.BLACK));
-        builder.setPiece(new Queen(7, 5, PiecesType.WHITE));
-        builder.setPiece(new Rook(5, 5, PiecesType.WHITE));
-        builder.setPiece(new Rook(0, 2, PiecesType.BLACK));
+        builder.setPiece(new King(0, 4, PiecesType.BLACK));
+        builder.setPiece(new King(7, 4, PiecesType.WHITE));
+        builder.setPiece(new Bishop(4, 6, PiecesType.BLACK));
+        builder.setPiece(new Knight(6, 4, PiecesType.BLACK));
+        builder.setPiece(new Rook(7, 0, PiecesType.WHITE));
+        builder.setPiece(new Pawn(6, 0, PiecesType.WHITE));
+        builder.setPiece(new Pawn(6, 3, PiecesType.BLACK));
         builder.setMoveMaker(PiecesType.WHITE);
-        board = builder.build();
+        Board board = builder.build();
+         */
+
         System.out.println(board);
 
         boolean gameLoop = true;

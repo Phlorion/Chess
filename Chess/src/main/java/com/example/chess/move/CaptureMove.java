@@ -3,6 +3,7 @@ package com.example.chess.move;
 import com.example.chess.board.Board;
 import com.example.chess.piece.Piece;
 import com.example.chess.board.Tile;
+import javafx.scene.layout.Border;
 
 public class CaptureMove extends Move {
     Piece capturingPiece;
@@ -83,7 +84,7 @@ public class CaptureMove extends Move {
     }
 
     @Override
-    public Board reverseFakeExecute(Board board) {
+    public void reverseFakeExecute(Board board) {
         Board.Builder builder = new Board.Builder();
 
         // set current player
@@ -111,6 +112,6 @@ public class CaptureMove extends Move {
         // pass the turn to the opponent
         builder.setMoveMaker(board.getCurrentPlayer().getType());
 
-        return builder.fakeBuild();
+        board.setAllTiles(Board.createBoard(builder));
     }
 }

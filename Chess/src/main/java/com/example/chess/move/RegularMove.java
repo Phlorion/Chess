@@ -75,7 +75,7 @@ public class RegularMove extends Move {
     }
 
     @Override
-    public Board reverseFakeExecute(Board board) {
+    public void reverseFakeExecute(Board board) {
         Board.Builder builder = new Board.Builder();
 
         // set current player
@@ -99,7 +99,5 @@ public class RegularMove extends Move {
 
         // pass the turn to the opponent
         builder.setMoveMaker(board.getCurrentPlayer().getType());
-
-        return builder.fakeBuild();
     }
 }

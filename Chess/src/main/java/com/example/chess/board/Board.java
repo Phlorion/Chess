@@ -40,6 +40,24 @@ public class Board {
         }
     }
 
+    private Board(Board original) {
+        this.board = new ArrayList<>(original.board);
+        this.whitePieces = new ArrayList<>(original.whitePieces);
+        this.blackPieces = new ArrayList<>(original.blackPieces);
+        this.playerWhite = new PlayerWhite(this);
+        this.playerBlack = new PlayerBlack(this);
+        if (original.currentPlayer.getType().equals(PiecesType.WHITE)) {
+            this.currentPlayer = this.playerWhite;
+            this.opponentPlayer = this.playerBlack;
+        }
+        else {
+            this.currentPlayer = this.playerBlack;
+            this.opponentPlayer = this.playerWhite;
+        }
+        this.currentPlayer.setLegalMoves(original.getCurrentPlayer().getAllLegalMoves());
+        this.opponentPlayer.setLegalMoves(original.getOpponentPlayer().getAllLegalMoves());
+    }
+
     public Collection<Piece> getWhitePieces() {return whitePieces;}
     public Collection<Piece> getBlackPieces() {
         return blackPieces;
@@ -63,7 +81,7 @@ public class Board {
      * @param builder The builder we are using to build this board object
      * @return A list of all the tiles of this board
      */
-    private static List<Tile> createBoard(Builder builder) {
+    public static List<Tile> createBoard(Builder builder) {
         Tile[] tiles = new Tile[NUM_TILES];
         for (int z=0; z<NUM_TILES; z++) {
             tiles[z] = new Tile(z / NUM_TILES_PER_ROW, z % NUM_TILES_PER_ROW, builder.boardConfig.get(z));
@@ -169,24 +187,26 @@ public class Board {
             Tile kingTile;
             for (Move m : tempLegalMoves) {
                 //System.out.println(m);
-                temp = board;
+                temp = new Board(board);
                 //System.out.println(temp);
-                temp = m.fakeExecute(temp);
                 //System.out.println(temp.getOpponentPlayer().getActivePieces());
+                temp = m.fakeExecute(temp);
                 //System.out.println(temp);
+                //System.out.println(temp.getOpponentPlayer().getActivePieces());
                 kingTile = temp.getTileByPiece(temp.getCurrentPlayer().getKing());
                 temp.getOpponentPlayer().setLegalMoves(calculateAllLegalMoves(temp, temp.getOpponentPlayer()));
                 if (!Player.isAttackingOnTile(kingTile, temp.getOpponentPlayer().getAllLegalMoves()).isEmpty()) {
-                    board = m.reverseFakeExecute(temp);
+                    m.reverseFakeExecute(temp);
                     legalMoves.remove(m);
                     //System.out.println("Illegal");
                 } else {
-                    board = m.reverseFakeExecute(temp);
+                    m.reverseFakeExecute(temp);
+                    //System.out.println(board.getOpponentPlayer().getActivePieces());
                     //System.out.println("Legal");
                 }
                 //System.out.println("-----------------------------------------");
             }
-            System.out.println(legalMoves);
+            //System.out.println(legalMoves);
 
         } /*else if (player.equals(currentPlayer)) {
             List<Move> tempLegalMoves = new ArrayList<>(legalMoves);
@@ -217,6 +237,10 @@ public class Board {
      */
     public ArrayList<Tile> getAllTiles() {
         return new ArrayList<>(board);
+    }
+
+    public void setAllTiles(List<Tile> tiles) {
+        this.board = tiles;
     }
 
     /**
