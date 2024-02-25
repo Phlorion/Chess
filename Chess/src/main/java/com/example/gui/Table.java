@@ -5,6 +5,7 @@ import com.example.chess.board.Tile;
 import com.example.chess.move.Move;
 import com.example.chess.piece.Piece;
 import com.example.chess.piece.PiecesType;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -16,13 +17,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Table {
 
@@ -88,15 +88,19 @@ public class Table {
         this.board = board;
     }
 
+    /**
+     * Set the pieces on the gui board based on the real board that is passed in this object
+     * @throws FileNotFoundException If the image of a piece is not found then throw the exception
+     */
     public void setPieces() throws FileNotFoundException {
-        if (board == null) return;
-        flashTable();
+        if (board == null) return; // if the board passed is null return
+        flashTable(); // first clear all the pieces before drawing them again
         pieceMap = new HashMap<>();
         for (Tile tile : board.getAllTiles()) {
             Piece piece = tile.getPiece();
             if (piece != null) {
                 ImageView pieceImage = new ImageView();
-                if (piece.getType().equals(PiecesType.WHITE)) {
+                if (piece.getType().equals(PiecesType.WHITE)) { // WHITE
                     switch (piece.getPieceKind()) {
                         case PAWN -> {
                             pieceImage.setImage(new Image(new FileInputStream("pieces/Chess_plt60.png")));
@@ -125,7 +129,7 @@ public class Table {
                         default -> {
                         }
                     }
-                } else {
+                } else { // BLACK
                     switch (piece.getPieceKind()) {
                         case PAWN -> {
                             pieceImage.setImage(new Image(new FileInputStream("pieces/Chess_pdt60.png")));
@@ -155,12 +159,14 @@ public class Table {
                         }
                     }
                 }
+                // set the image of the piece to the corresponding tile
                 Pane gridPaneTile = Table.getTileFromGridPane(boardGridPane, piece.getPiecePosI(), piece.getPiecePosJ());
                 pieceImage.setX(0); pieceImage.setY(0);
                 pieceImage.setFitWidth(TILE_WIDTH);
                 pieceImage.setFitHeight(TILE_HEIGHT);
                 gridPaneTile.getChildren().add(pieceImage);
 
+                // add event listeners to the tile
                 addTileEventListeners(gridPaneTile);
             }
         }
@@ -170,12 +176,43 @@ public class Table {
         tile.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                if (currentPieceHolder != null) return;
                 int fromI = (int) (mouseEvent.getSceneY() - MENU_BAR_HEIGHT) / TILE_HEIGHT;
                 int fromJ = (int) mouseEvent.getSceneX() / TILE_WIDTH;
-                System.out.println(fromI + ", " + fromJ);
+                //System.out.println(fromI + ", " + fromJ);
                 currentPieceHolder = board.getTile(fromI, fromJ).getPiece();
+                // if we click on anything other than the current player's pieces, ignore
                 if (currentPieceHolder != null && !currentPieceHolder.getType().equals(board.getCurrentPlayer().getType())) {
                     currentPieceHolder = null;
+                } else if (currentPieceHolder != null) {
+                    for (Move m : board.getCurrentPlayer().getAllLegalMoves()) {
+                        if (m.getPiece().equals(currentPieceHolder)) {
+                            Pane tile = getTileFromGridPane(boardGridPane, m.getTo().getI(), m.getTo().getJ());
+                            if (tile.getChildren().size() > 0) {
+                                Circle doughnut = new Circle();
+                                doughnut.setCenterX(TILE_WIDTH / 2.);
+                                doughnut.setCenterY(TILE_HEIGHT / 2.);
+                                doughnut.setRadius(TILE_WIDTH / 2.5);
+                                doughnut.setOpacity(0.4f);
+                                tile.getChildren().add(0, doughnut);
+                                Circle inside = new Circle();
+                                inside.setCenterX(TILE_WIDTH / 2.);
+                                inside.setCenterY(TILE_HEIGHT / 2.);
+                                inside.setRadius(TILE_WIDTH / 4.);
+                                if ((m.getTo().getI() % 2 == 0 && m.getTo().getJ() % 2 != 0)
+                                || (m.getTo().getI() % 2 != 0 && m.getTo().getJ() % 2 == 0)) inside.setStyle("-fx-fill: #769655;");
+                                else inside.setStyle("-fx-fill: #eeeed2;");
+                                tile.getChildren().add(1, inside);
+                            } else {
+                                Circle circle = new Circle();
+                                circle.setCenterX(TILE_WIDTH / 2.);
+                                circle.setCenterY(TILE_HEIGHT / 2.);
+                                circle.setRadius(TILE_WIDTH / 5.);
+                                circle.setOpacity(0.4f);
+                                tile.getChildren().add(0, circle);
+                            }
+                        }
+                    }
                 }
                 mouseEvent.consume();
             }
@@ -185,15 +222,30 @@ public class Table {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (currentPieceHolder != null) {
+                    // when mouse released, first remove all the circles drawn to indicate the legal moves
+                    for (int z=0; z<Board.NUM_TILES; z++) {
+                        Pane t = getTileFromGridPane(boardGridPane, z / Board.NUM_TILES_PER_ROW, z % Board.NUM_TILES_PER_ROW);
+                        List<Node> tempChildren = new ArrayList<>(t.getChildren());
+                        for (Node child : tempChildren) {
+                            if (!child.getClass().getName().equals("javafx.scene.image.ImageView")) {
+                                t.getChildren().remove(child);
+                            }
+                        }
+                    }
+
                     int toI = (int) (mouseEvent.getSceneY() - MENU_BAR_HEIGHT) / TILE_HEIGHT;
                     int toJ = (int) mouseEvent.getSceneX() / TILE_WIDTH;
-                    System.out.println(toI + ", " + toJ);
+                    //System.out.println(toI + ", " + toJ);
 
                     Tile from = board.getTile(currentPieceHolder.getPiecePosI(), currentPieceHolder.getPiecePosJ());
                     Tile to = board.getTile(toI, toJ);
+                    // check all the legal moves of the current player
                     for (Move m : board.getCurrentPlayer().getAllLegalMoves()) {
+                        // if the move the current player is legal
                         if (m.getFrom().equals(from) && m.getTo().equals(to) && m.getPiece().equals(currentPieceHolder)) {
+                            // make the move and set the new board
                             setBoard(board.getCurrentPlayer().makeMove(m));
+                            // set the pieces based on the new board
                             try {
                                 setPieces();
                             } catch (FileNotFoundException e) {

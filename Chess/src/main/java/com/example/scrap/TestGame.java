@@ -1,4 +1,4 @@
-package com.example.chess;
+package com.example.scrap;
 
 import com.example.chess.board.Board;
 import com.example.chess.board.Tile;
