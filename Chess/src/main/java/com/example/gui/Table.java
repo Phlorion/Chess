@@ -5,7 +5,9 @@ import com.example.chess.board.Tile;
 import com.example.chess.move.Move;
 import com.example.chess.piece.Piece;
 import com.example.chess.piece.PiecesType;
+import com.example.chess.util.BoardUtil;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -17,7 +19,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -74,6 +78,7 @@ public class Table {
     }
 
     private GridPane createBoard(GridPane layout) {
+        // create the board GridPane
         GridPane gridBoard = new GridPane();
         for (int i=0; i < Board.NUM_TILES; i++) {
             Pane tile = new Pane();
@@ -86,6 +91,33 @@ public class Table {
             GridPane.setConstraints(tile, i / Board.NUM_TILES_PER_ROW, i % Board.NUM_TILES_PER_ROW);
             gridBoard.getChildren().add(tile);
         }
+
+        // add the indexes on the board
+        for (int i=0; i<Board.NUM_TILES_PER_COL; i++) {
+            Pane p = Table.getTileFromGridPane(gridBoard, i, 0);
+            Label l_i = new Label();
+            l_i.setText("" + (Board.NUM_TILES_PER_COL - i));
+            l_i.setPrefWidth(TILE_WIDTH);
+            l_i.setPrefHeight(TILE_HEIGHT);
+            l_i.setFont(Font.font("Arial", 16));
+            l_i.setAlignment(Pos.TOP_LEFT);
+            if (i % 2 != 0) l_i.setTextFill(Color.web("#eeeed2"));
+            else l_i.setTextFill(Color.web("#769655"));
+            p.getChildren().add(l_i);
+        }
+        for (int j=0; j<Board.NUM_TILES_PER_ROW; j++) {
+            Pane p = Table.getTileFromGridPane(gridBoard, Board.NUM_TILES_PER_COL-1, j);
+            Label l_j = new Label();
+            l_j.setText("" + BoardUtil.boardNumToString(j));
+            l_j.setPrefWidth(TILE_WIDTH - 4);
+            l_j.setPrefHeight(TILE_HEIGHT);
+            l_j.setFont(Font.font("Arial", 16));
+            l_j.setAlignment(Pos.BOTTOM_RIGHT);
+            if (j % 2 != 0) l_j.setTextFill(Color.web("#769655"));
+            else l_j.setTextFill(Color.web("#eeeed2"));
+            p.getChildren().add(l_j);
+        }
+
         GridPane.setConstraints(gridBoard, 0, 0);
         layout.getChildren().add(gridBoard);
 
@@ -196,7 +228,7 @@ public class Table {
                     for (Move m : board.getCurrentPlayer().getAllLegalMoves()) {
                         if (m.getPiece().equals(currentPieceHolder)) {
                             Pane t = getTileFromGridPane(boardGridPane, m.getTo().getI(), m.getTo().getJ());
-                            if (t.getChildren().size() > 0) {
+                            if (m.getClass().getName().equals("com.example.chess.move.CaptureMove")) {
                                 Circle doughnut = new Circle();
                                 doughnut.setCenterX(TILE_WIDTH / 2.);
                                 doughnut.setCenterY(TILE_HEIGHT / 2.);
@@ -235,7 +267,8 @@ public class Table {
                         Pane t = getTileFromGridPane(boardGridPane, z / Board.NUM_TILES_PER_ROW, z % Board.NUM_TILES_PER_ROW);
                         List<Node> tempChildren = new ArrayList<>(t.getChildren());
                         for (Node child : tempChildren) {
-                            if (!child.getClass().getName().equals("javafx.scene.image.ImageView")) {
+                            if (!child.getClass().getName().equals("javafx.scene.image.ImageView")
+                            && !child.getClass().getName().equals("javafx.scene.control.Label")) {
                                 t.getChildren().remove(child);
                             }
                         }
@@ -263,7 +296,7 @@ public class Table {
 
                             // add move to moves history
                             Label l = new Label();
-                            l.setText(currentPieceHolder + ", " + from.getI() + "" + from.getJ() + ", " + to.getI() + "" + to.getJ());
+                            l.setText(currentPieceHolder + ", " + BoardUtil.boardIndexToString(from.getI(), from.getJ()) + ", " + BoardUtil.boardIndexToString(to.getI(), to.getJ()));
                             if (currentPieceHolder.getType().equals(PiecesType.WHITE)) moveHistory.add(l, 0);
                             else moveHistory.add(l, 1);
 
@@ -278,7 +311,6 @@ public class Table {
                                 System.out.println("TIE");
                                 break;
                             }
-
                             break;
                         }
                     }
@@ -292,8 +324,11 @@ public class Table {
     private void flashTable() {
         for (int z=0; z<Board.NUM_TILES; z++) {
             Pane tile = getTileFromGridPane(boardGridPane, z / Board.NUM_TILES_PER_ROW, z % Board.NUM_TILES_PER_ROW);
-            if (tile.getChildren().size() > 0)
-                tile.getChildren().remove(0);
+            List<Node> tempTileChildren = new ArrayList<>(tile.getChildren());
+            for (Node child : tempTileChildren) {
+                if (!child.getClass().getName().equals("javafx.scene.control.Label"))
+                    tile.getChildren().remove(child);
+            }
         }
     }
 

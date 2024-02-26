@@ -1,16 +1,17 @@
 package com.example.scrap;
 
-import com.almasb.fxgl.core.collection.grid.Grid;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -43,6 +44,14 @@ public class CircleTest extends Application {
         circle.setRadius(32.f);
         circle.setOpacity(0.5f);
         tile1.getChildren().add(circle);
+
+        Label l1 = new Label();
+        l1.setText("8");
+        l1.setPrefWidth(tile1.getPrefWidth());
+        l1.setPrefHeight(tile1.getPrefHeight());
+        l1.setFont(Font.font("Arial", 24));
+        l1.setAlignment(Pos.BOTTOM_RIGHT);
+        tile1.getChildren().add(l1);
 
         // Empty tile circle 2
         Pane tile2 = new Pane();
