@@ -274,6 +274,13 @@ public class Table {
                         }
                     }
 
+                    // if mouse pos is outside the window ignore
+                    if (!isValidMouseCoordinate(mouseEvent.getSceneX(), mouseEvent.getSceneY())) {
+                        currentPieceHolder = null;
+                        mouseEvent.consume();
+                        return;
+                    }
+
                     int toI = (int) (mouseEvent.getSceneY() - MENU_BAR_HEIGHT) / TILE_HEIGHT;
                     int toJ = (int) mouseEvent.getSceneX() / TILE_WIDTH;
                     //System.out.println(toI + ", " + toJ);
@@ -350,6 +357,10 @@ public class Table {
             }
         }
         return null;
+    }
+
+    private boolean isValidMouseCoordinate(double x, double y) {
+        return x >= 0 && x <= Table.WIDTH && y >= 0 && y <= Table.HEIGHT;
     }
 
 }
