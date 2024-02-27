@@ -41,7 +41,7 @@ public class Pawn extends Piece {
                     legalMoves.add(new RegularMove(board, currentTile, candidateDestinationTile, this));
                 }
                 // if at starting rank can move 2 tiles
-                else if (!hasMoved && current[0] == -2 && candidateDestinationTile.isEmpty()) {
+                else if (!hasMoved && current[0] == -2 && candidateDestinationTile.isEmpty() && board.getTile(candidateDestinationCoordinateI + type.getDirection(), candidateDestinationCoordinateJ).isEmpty()) {
                     legalMoves.add(new RegularMove(board, currentTile, candidateDestinationTile, this));
                 }
                 // if enemy piece near, can capture

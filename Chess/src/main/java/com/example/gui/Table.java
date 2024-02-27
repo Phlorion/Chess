@@ -306,9 +306,11 @@ public class Table {
                             // check if check-mated or stale-mated
                             if (board.getCurrentPlayer().isCheckMated()) {
                                 System.out.println(board.getOpponentPlayer() + " WINS!");
+                                EndGame.CheckMate checkMate = new EndGame.CheckMate(board);
                                 break;
                             } else if (board.getCurrentPlayer().isStaleMated()) {
                                 System.out.println("TIE");
+                                EndGame.StaleMate staleMate = new EndGame.StaleMate(board);
                                 break;
                             }
                             break;
@@ -323,7 +325,7 @@ public class Table {
 
     private void flashTable() {
         for (int z=0; z<Board.NUM_TILES; z++) {
-            Pane tile = getTileFromGridPane(boardGridPane, z / Board.NUM_TILES_PER_ROW, z % Board.NUM_TILES_PER_ROW);
+            Pane tile = Table.getTileFromGridPane(boardGridPane, z / Board.NUM_TILES_PER_ROW, z % Board.NUM_TILES_PER_ROW);
             List<Node> tempTileChildren = new ArrayList<>(tile.getChildren());
             for (Node child : tempTileChildren) {
                 if (!child.getClass().getName().equals("javafx.scene.control.Label"))

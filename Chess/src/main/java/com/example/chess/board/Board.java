@@ -1,5 +1,6 @@
 package com.example.chess.board;
 
+import com.example.chess.move.Castle;
 import com.example.chess.move.Move;
 import com.example.chess.piece.*;
 import com.example.chess.player.Player;
@@ -205,6 +206,40 @@ public class Board {
                     //System.out.println("Legal");
                 }
                 //System.out.println("-----------------------------------------");
+            }
+
+            // castling
+            if (!player.isChecked() && !player.getKing().hasMoved()) {
+                // king-side
+                boolean canCastleKingSide = false;
+                Piece rightRook = board.getTile(player.getKing().getPiecePosI(), Board.NUM_TILES_PER_ROW - 1).getPiece();
+                if (rightRook != null && rightRook.getPieceKind().equals(Piece.PieceKind.ROOK) && !rightRook.hasMoved()) {
+                    for (int j=player.getKing().getPiecePosJ()+1; j<=player.getKing().getPiecePosJ()+2; j++) {
+                        Tile t = board.getTile(player.getKing().getPiecePosI(), j);
+                        canCastleKingSide = t.getPiece() == null && Player.isAttackingOnTile(t, board.getOpponentPlayer().getAllLegalMoves()).isEmpty();
+                        if (!canCastleKingSide) break;
+                    }
+                }
+                if (canCastleKingSide) {
+                    legalMoves.add(new Castle(board, board.getTileByPiece(player.getKing()), board.getTile(player.getKing().getPiecePosI(), player.getKing().getPiecePosJ() + 2), player.getKing(), rightRook));
+                    System.out.println("Can castle king-side");
+                }
+
+                // queen-side
+                boolean canCastleQueenSide = false;
+                Piece leftRook = board.getTile(player.getKing().getPiecePosI(), 0).getPiece();
+                if (leftRook != null && leftRook.getPieceKind().equals(Piece.PieceKind.ROOK) && !leftRook.hasMoved()) {
+                    for (int j=player.getKing().getPiecePosJ()-1; j>=player.getKing().getPiecePosJ()-2; j--) {
+                        Tile t = board.getTile(player.getKing().getPiecePosI(), j);
+                        canCastleQueenSide = t.getPiece() == null && Player.isAttackingOnTile(t, board.getOpponentPlayer().getAllLegalMoves()).isEmpty();
+                        if (!canCastleQueenSide) break;
+                    }
+                    if (board.getTile(player.getKing().getPiecePosI(), player.getKing().getPiecePosJ()-3).getPiece() != null) canCastleQueenSide = false;
+                }
+                if (canCastleQueenSide) {
+                    legalMoves.add(new Castle(board, board.getTileByPiece(player.getKing()), board.getTile(player.getKing().getPiecePosI(), player.getKing().getPiecePosJ() - 2), player.getKing(), leftRook));
+                    System.out.println("Can castle queen-side");
+                }
             }
             //System.out.println(legalMoves);
 
