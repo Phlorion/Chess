@@ -46,6 +46,8 @@ public class Castle extends Move {
         rook.setHasMoved(true);
         builder.setPiece(rook);
 
+        builder.setLastMoveMade(this);
+
         // pass the turn to the opponent
         builder.setMoveMaker(board.getOpponentPlayer().getType());
 

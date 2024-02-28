@@ -18,16 +18,26 @@ public abstract class Player {
     protected Collection<Move> legalMoves;
     private boolean isCheckMated;
     private boolean isStaleMated;
+    private Move previousMove;
 
     public Player(Board board) {
         this.board = board;
         this.king = findKing(); // find king of player
         this.isCheckMated = false;
         this.isStaleMated = false;
+        this.previousMove = null;
     }
 
     public King getKing() {
         return king;
+    }
+
+    public Move getPreviousMove() {
+        return previousMove;
+    }
+
+    public void setPreviousMove(Move move) {
+        previousMove = move;
     }
 
     /**
@@ -104,11 +114,6 @@ public abstract class Player {
 
     public boolean isStaleMated() {
         return this.isStaleMated;
-    }
-
-    // TODO: implement below methods
-    public boolean isCastled() {
-        return false;
     }
 
     /**

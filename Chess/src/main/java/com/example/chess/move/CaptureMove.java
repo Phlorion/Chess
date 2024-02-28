@@ -44,6 +44,8 @@ public class CaptureMove extends Move {
         // remove the captured piece
         board.getOpponentPlayer().getActivePieces().remove(capturingPiece);
 
+        builder.setLastMoveMade(this);
+
         // pass the turn to the opponent
         builder.setMoveMaker(board.getOpponentPlayer().getType());
 

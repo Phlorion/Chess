@@ -39,6 +39,8 @@ public class RegularMove extends Move {
         if (!piece.hasMoved()) piece.setHasMoved(true);
         builder.setPiece(piece);
 
+        builder.setLastMoveMade(this);
+
         // pass the turn to the opponent
         builder.setMoveMaker(board.getOpponentPlayer().getType());
 

@@ -1,5 +1,6 @@
 package com.example.chess.board;
 
+import com.example.chess.move.CaptureMove;
 import com.example.chess.move.Castle;
 import com.example.chess.move.Move;
 import com.example.chess.piece.*;
@@ -33,6 +34,7 @@ public class Board {
         // get the current player
         this.currentPlayer = builder.nextMoveMaker.choosePlayer(playerWhite, playerBlack);
         this.opponentPlayer = builder.nextMoveMaker.chooseOpponent(playerWhite, playerBlack);
+        this.opponentPlayer.setPreviousMove(builder.lastMoveMade);
 
         if (!fake) {
             // set each player's legal moves
@@ -125,6 +127,7 @@ public class Board {
     public static class Builder {
         Map<Integer, Piece> boardConfig;
         PiecesType nextMoveMaker;
+        Move lastMoveMade;
 
         public Builder() {
             boardConfig = new HashMap<>();
@@ -137,6 +140,11 @@ public class Board {
 
         public Builder setMoveMaker(PiecesType nextMoveMaker) {
             this.nextMoveMaker = nextMoveMaker;
+            return this;
+        }
+
+        public Builder setLastMoveMade(Move move) {
+            this.lastMoveMade = move;
             return this;
         }
 
@@ -241,20 +249,22 @@ public class Board {
                     System.out.println("Can castle queen-side");
                 }
             }
-            //System.out.println(legalMoves);
 
-        } /*else if (player.equals(currentPlayer)) {
-            List<Move> tempLegalMoves = new ArrayList<>(legalMoves);
-            for (Move m : tempLegalMoves) {
-                if (m.getPiece().equals(player.getKing())) {
-                    if (!Player.isAttackingOnTile(m.getTo(), board.getOpponentPlayer().getAllLegalMoves()).isEmpty()) {
-                        legalMoves.remove(m);
+            // en passant
+            Move opponentPreviousMove = board.getOpponentPlayer().getPreviousMove();
+            if (opponentPreviousMove != null && opponentPreviousMove.getPiece().getPieceKind().equals(Piece.PieceKind.PAWN)) {
+                Piece opponentPawn = opponentPreviousMove.getPiece();
+                for (Piece p : player.getActivePieces()) {
+                    if (p.getPieceKind().equals(Piece.PieceKind.PAWN)) {
+                        if (opponentPawn.getMoves() == 1 && opponentPreviousMove.getTo().getI() == opponentPreviousMove.getFrom().getI() - 2*opponentPawn.getType().getDirection() && (opponentPreviousMove.getTo().getI() == p.getPiecePosI() && (opponentPreviousMove.getTo().getJ() == p.getPiecePosJ() - 1 || opponentPreviousMove.getTo().getJ() == p.getPiecePosJ() + 1))) {
+                            legalMoves.add(new CaptureMove(board, board.getTileByPiece(p), board.getTile(opponentPawn.getPiecePosI() + opponentPawn.getType().getDirection(), opponentPawn.getPiecePosJ()), p, opponentPawn));
+                        }
                     }
                 }
             }
 
-            System.out.println(legalMoves);
-        }*/
+
+        }
 
         // checkmate and stalemate
         if (legalMoves.isEmpty() && player.isChecked()) {

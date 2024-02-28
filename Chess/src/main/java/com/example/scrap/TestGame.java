@@ -13,7 +13,7 @@ public class TestGame {
 
     public static void main(String[] args) {
 
-        // Board board = Board.createStandardBoard();
+        Board board = Board.createStandardBoard();
         /*
         Board.Builder builder = new Board.Builder();
         builder.setPiece(new King(0, 4, PiecesType.BLACK));
@@ -26,6 +26,7 @@ public class TestGame {
         builder.setMoveMaker(PiecesType.WHITE);
         Board board = builder.build();
          */
+        /*
         Board.Builder builder = new Board.Builder();
         builder.setPiece(new Rook(0, 0, PiecesType.BLACK));
         builder.setPiece(new Rook(0, 7, PiecesType.BLACK));
@@ -38,7 +39,7 @@ public class TestGame {
         //builder.setPiece(new Knight(7, 2, PiecesType.WHITE));
         builder.setMoveMaker(PiecesType.WHITE);
         Board board = builder.build();
-
+         */
 
         System.out.println(board);
 
