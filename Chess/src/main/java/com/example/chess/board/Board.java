@@ -43,7 +43,7 @@ public class Board {
         }
     }
 
-    private Board(Board original) {
+    public Board(Board original) {
         this.board = new ArrayList<>(original.board);
         this.whitePieces = new ArrayList<>(original.whitePieces);
         this.blackPieces = new ArrayList<>(original.blackPieces);
