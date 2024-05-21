@@ -1,3 +1,3 @@
-## Chess AI
+## Chess
 
-A simple chess engine and AI using the MinMax algorithm.
+A simple chess engine.
