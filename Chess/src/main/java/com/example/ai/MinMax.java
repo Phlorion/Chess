@@ -13,7 +13,7 @@ public class MinMax {
     private Board board;
 
     public MinMax() {depth = 10;}
-    public MinMax(int depth) {this.depth = depth+1;}//Remove "+1"
+    public MinMax(int depth) {this.depth = depth;}
 
     public Move run() {
         // create tree
