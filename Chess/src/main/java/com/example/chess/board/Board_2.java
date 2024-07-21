@@ -3,6 +3,7 @@ package com.example.chess.board;
 import com.example.chess.move.Move;
 import com.example.chess.piece.*;
 import com.example.chess.player.Player;
+import com.example.chess.player.Player_2;
 
 import java.util.Collection;
 import java.util.List;
@@ -135,23 +136,56 @@ public class Board_2 {
     protected void makeMove(Move move){
 
     }
-    protected boolean isMyKingSafe(Player player, Tile[] testingBoard){
+    public boolean isMyKingSafe(Player_2 player, Tile[] testingBoard){
         //use currentPlayer
         PiecesType type = player.getType();
+        Collection<Piece> opponentPieces=null;
+        List<Move> opponentMoves = null;
         if(type == PiecesType.WHITE){
-            for (int i = 0; i < blackPieces.size(); i++) {
-                if(true){
-                    return false;
-                }
+            opponentPieces = getBlackPieces();
+            for(Piece piece : opponentPieces){
+                opponentMoves.addAll(piece.legalMoves());
             }
+
+            if(!Player.isAttackingOnTile_2(getTileByPiece(player.getKing()),opponentMoves).isEmpty()){
+                return false;
+            }
+//            for (int i = 0; i < blackPieces.size(); i++) {
+//                if(true){
+//                    return false;
+//                }
+//            }
         } else if (type == PiecesType.BLACK) {
-            for (int i = 0; i < whitePieces.size(); i++) {
-                if(true){
-                    return false;
-                }
-            }
+//            for (int i = 0; i < whitePieces.size(); i++) {
+//                if(true){
+//                    return false;
+//                }
+//            }
         }
         return true;
+    }
+
+    /**
+     * Finds the tile that contains the specific piece
+     * @param piece the piece
+     * @return the piece
+     */
+    public Tile getTileByPiece(Piece piece) {
+        for (Tile t : board) {
+            if (t.getPiece() != null && t.getPiece().equals(piece)) {
+                return t;
+            }
+        }
+        return null;
+    }
+    /**
+     * Finds the tile with the given coordinates
+     * @param i The i position
+     * @param j The j position
+     * @return The tile
+     */
+    public Tile getTile(int i, int j) {
+        return board[NUM_TILES_PER_ROW * i + j];
     }
     //Methods - END
 }

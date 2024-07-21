@@ -1,10 +1,10 @@
 package com.example.chess.piece;
 
 import com.example.chess.board.Board;
+import com.example.chess.board.Board_2;
 import com.example.chess.move.Move;
+import com.example.chess.move.Move_2;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +31,7 @@ public abstract class Piece {
      * @return All the legal moves of the piece
      */
     public abstract List<Move> legalMoves(final Board board);
+    public abstract List<Move_2> calculatePotentialMoves(final Board_2 board);
 
     public PiecesType getType() {
         return type;

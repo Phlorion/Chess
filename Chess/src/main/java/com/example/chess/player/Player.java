@@ -84,6 +84,21 @@ public abstract class Player {
         }
         return attacking;
     }
+    /**
+     * Get all the moves that are currently attacking this tile
+     * @param tile The tile that is getting attacked
+     * @param moves The moves we are examining
+     * @return The moves from the total set of legal moves that are attacking this tile
+     */
+    public static List<Move> isAttackingOnTile_2(Tile tile, List<Move> moves) {
+        List<Move> attacking = new ArrayList<>();
+        for (Move m : moves) {
+            if (tile.equals(m.getTo())) {
+                attacking.add(m);
+            }
+        }
+        return attacking;
+    }
 
     public boolean isLegalMove(Move move) {
         return getAllLegalMoves().contains(move);
