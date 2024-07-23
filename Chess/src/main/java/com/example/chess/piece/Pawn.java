@@ -70,7 +70,7 @@ public class Pawn extends Piece {
             candidateDestinationCoordinateJ = piecePosJ + current[1];
 
             // if the tile has valid coordinates
-            if (Board.isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
+            if (board.isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
                 Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinateI, candidateDestinationCoordinateJ);
 
                 // regular move

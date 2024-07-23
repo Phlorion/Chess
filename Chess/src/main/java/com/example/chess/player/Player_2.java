@@ -126,6 +126,21 @@ public abstract class Player_2 {
         return null;
     }
     /**
+     * Get all the moves that are currently attacking this tile
+     * @param tile The tile that is getting attacked
+     * @param moves The moves we are examining
+     * @return The moves from the total set of legal moves that are attacking this tile
+     */
+    public List<Move_2> isAttackingOnTile(Tile tile, List<Move_2> moves) {
+        List<Move_2> attacking = new ArrayList<>();
+        for (Move_2 m : moves) {
+            if (tile.equals(m.getTo())) {
+                attacking.add(m);
+            }
+        }
+        return attacking;
+    }
+    /**
      * Get all the pieces of this player that are still in the game
      * @return The pieces
      */

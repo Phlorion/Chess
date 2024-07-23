@@ -1,6 +1,7 @@
 package com.example.chess.board;
 
 import com.example.chess.move.Move;
+import com.example.chess.move.Move_2;
 import com.example.chess.piece.*;
 import com.example.chess.player.Player;
 import com.example.chess.player.Player_2;
@@ -15,15 +16,17 @@ public class Board_2 {
     private Tile[] board;
     private Collection<Piece> whitePieces;
     private Collection<Piece> blackPieces;
-    private Player currentPlayer;
-    private Player whitePlayer;
-    private Player blackPlayer;
-    private List<Move> movesHistory;
+    private Collection<Piece> whiteCapturedPieces;
+    private Collection<Piece> blackCapturedPieces;
+    private Player_2 currentPlayer;
+    private Player_2 whitePlayer;
+    private Player_2 blackPlayer;
+    private List<Move_2> movesHistory;
 
     //Constructor
 
     public Board_2(){
-
+        this.board = new Tile[NUM_TILES];
     }
 
     //Constructor - END
@@ -54,28 +57,52 @@ public class Board_2 {
         this.blackPieces = blackPieces;
     }
 
-    public Player getCurrentPlayer() {
+    public Player_2 getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
+    public void setCurrentPlayer(Player_2 currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
-    public Player getWhitePlayer() {
+    public Player_2 getWhitePlayer() {
         return whitePlayer;
     }
 
-    public void setWhitePlayer(Player whitePlayer) {
+    public void setWhitePlayer(Player_2 whitePlayer) {
         this.whitePlayer = whitePlayer;
     }
 
-    public Player getBlackPlayer() {
+    public Player_2 getBlackPlayer() {
         return blackPlayer;
     }
 
-    public void setBlackPlayer(Player blackPlayer) {
+    public void setBlackPlayer(Player_2 blackPlayer) {
         this.blackPlayer = blackPlayer;
+    }
+
+    public Collection<Piece> getWhiteCapturedPieces() {
+        return whiteCapturedPieces;
+    }
+
+    public void setWhiteCapturedPieces(Collection<Piece> whiteCapturedPieces) {
+        this.whiteCapturedPieces = whiteCapturedPieces;
+    }
+
+    public Collection<Piece> getBlackCapturedPieces() {
+        return blackCapturedPieces;
+    }
+
+    public void setBlackCapturedPieces(Collection<Piece> blackCapturedPieces) {
+        this.blackCapturedPieces = blackCapturedPieces;
+    }
+
+    public List<Move_2> getMovesHistory() {
+        return movesHistory;
+    }
+
+    public void setMovesHistory(List<Move_2> movesHistory) {
+        this.movesHistory = movesHistory;
     }
     //Getter + Setter - END
 
@@ -86,13 +113,15 @@ public class Board_2 {
      */
     private void setPieceOnBoard(Piece piece){
         try {
+            this.board[NUM_TILES_PER_ROW* piece.getPiecePosI() + piece.getPiecePosJ()].setI(piece.getPiecePosI());
+            this.board[NUM_TILES_PER_ROW* piece.getPiecePosI() + piece.getPiecePosJ()].setJ(piece.getPiecePosJ());
             this.board[NUM_TILES_PER_ROW* piece.getPiecePosI() + piece.getPiecePosJ()].setPiece(piece);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     /**
-     * Initialize the pieces to the board
+     * Initialize the pieces to the board, plus the (i,j) on the tiles without any piece on them.
      */
     private void setStartingPieces(){
         try {
@@ -108,6 +137,15 @@ public class Board_2 {
             setPieceOnBoard(new Rook(0, 7, PiecesType.BLACK));
             for (int j=0; j<NUM_TILES_PER_COL; j++) setPieceOnBoard(new Pawn(1, j, PiecesType.BLACK));
 
+            //set the (i,j) on the rest of the tiles
+            for (int i = 2; i <5 ; i++) {
+                for (int j = 0; j < 8; j++) {
+                    this.board[NUM_TILES_PER_ROW* i + j].setI(i);
+                    this.board[NUM_TILES_PER_ROW* i + j].setJ(j);
+                    //piece is already null - I think
+                }
+            }
+
             //set WHITE pieces
             setPieceOnBoard(new Rook(7, 0, PiecesType.WHITE));
             setPieceOnBoard(new Knight(7, 1, PiecesType.WHITE));
@@ -118,6 +156,7 @@ public class Board_2 {
             setPieceOnBoard(new Knight(7, 6, PiecesType.WHITE));
             setPieceOnBoard(new Rook(7, 7, PiecesType.WHITE));
             for (int j=0; j<NUM_TILES_PER_COL; j++) setPieceOnBoard(new Pawn(6, j, PiecesType.WHITE));
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -129,7 +168,7 @@ public class Board_2 {
      * @param j The j position
      * @return Boolean true / false
      */
-    protected boolean isValidCoordinate(int i, int j) {
+    public boolean isValidCoordinate(int i, int j) {
         return !(i < 0 || i > NUM_TILES_PER_ROW-1 || j < 0 || j > NUM_TILES_PER_COL-1);
     }
 
@@ -140,27 +179,17 @@ public class Board_2 {
         //use currentPlayer
         PiecesType type = player.getType();
         Collection<Piece> opponentPieces=null;
-        List<Move> opponentMoves = null;
+        List<Move_2> opponentMoves = null;
         if(type == PiecesType.WHITE){
             opponentPieces = getBlackPieces();
             for(Piece piece : opponentPieces){
-                opponentMoves.addAll(piece.legalMoves());
+                opponentMoves.addAll(piece.calculatePotentialMoves(this));
             }
 
-            if(!Player.isAttackingOnTile_2(getTileByPiece(player.getKing()),opponentMoves).isEmpty()){
+            if(!player.isAttackingOnTile(getTileByPiece(player.getKing()),opponentMoves).isEmpty()){
                 return false;
             }
-//            for (int i = 0; i < blackPieces.size(); i++) {
-//                if(true){
-//                    return false;
-//                }
-//            }
         } else if (type == PiecesType.BLACK) {
-//            for (int i = 0; i < whitePieces.size(); i++) {
-//                if(true){
-//                    return false;
-//                }
-//            }
         }
         return true;
     }
