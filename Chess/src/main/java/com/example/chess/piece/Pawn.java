@@ -72,7 +72,8 @@ public class Pawn extends Piece {
             // if the tile has valid coordinates
             if (board.isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
                 Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinateI, candidateDestinationCoordinateJ);
-
+//                System.out.println("Pawn candidate tile I"+candidateDestinationTile.getI());
+//                System.out.println("Pawn candidate tile J"+candidateDestinationTile.getJ());
                 // regular move
                 if (candidateDestinationTile.isEmpty() && current[0] == -1 && current[1] == 0) {
                     legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this,board.getBoard()));
@@ -85,6 +86,11 @@ public class Pawn extends Piece {
                 else if ((current[1] == -1 || current[1] == 1) &&
                         !candidateDestinationTile.isEmpty() && type != candidateDestinationTile.getPiece().getType()) {
                     legalMoves.add(new CaptureMove_2(currentTile, candidateDestinationTile, this, board.getBoard(), candidateDestinationTile.getPiece()));
+                }
+                if(!legalMoves.isEmpty()){
+                    Move_2 lastaddedmove = legalMoves.get(legalMoves.size()-1);
+//                    System.out.println("Pawn candidate tile I"+lastaddedmove.getTo().getI());
+//                    System.out.println("Pawn candidate tile J"+lastaddedmove.getTo().getJ());
                 }
             }
         }

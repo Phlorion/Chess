@@ -159,13 +159,11 @@ public class Board_2 {
             this.setBlackPieces(this.findAllActivePieces(this.board, PiecesType.BLACK));
 
             //set the (i,j) on the rest of the tiles
-            for (int i = 2; i <5 ; i++) {
+            for (int i = 2; i <6 ; i++) {
                 for (int j = 0; j < 8; j++) {
                     this.board[NUM_TILES_PER_ROW* i + j].setI(i);
                     this.board[NUM_TILES_PER_ROW* i + j].setJ(j);
                     //piece is already null - I think
-//                    System.out.println("setup starting tiles i"+this.board[NUM_TILES_PER_ROW* i + j].getI());
-//                    System.out.println("setup starting tiles j"+this.board[NUM_TILES_PER_ROW* i + j].getJ());
                 }
             }
 
