@@ -3,10 +3,7 @@ package com.example.chess.piece;
 import com.example.chess.board.Board;
 import com.example.chess.board.Board_2;
 import com.example.chess.board.Tile;
-import com.example.chess.move.CaptureMove;
-import com.example.chess.move.Move;
-import com.example.chess.move.Move_2;
-import com.example.chess.move.RegularMove;
+import com.example.chess.move.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,16 +75,16 @@ public class Pawn extends Piece {
 
                 // regular move
                 if (candidateDestinationTile.isEmpty() && current[0] == -1 && current[1] == 0) {
-                    legalMoves.add(new RegularMove(board, currentTile, candidateDestinationTile, this));
+                    legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this,board.getBoard()));
                 }
                 // if at starting rank can move 2 tiles
                 else if (!hasMoved && current[0] == -2 && candidateDestinationTile.isEmpty() && board.getTile(candidateDestinationCoordinateI + type.getDirection(), candidateDestinationCoordinateJ).isEmpty()) {
-                    legalMoves.add(new RegularMove(board, currentTile, candidateDestinationTile, this));
+                    legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this,board.getBoard()));
                 }
                 // if enemy piece near, can capture
                 else if ((current[1] == -1 || current[1] == 1) &&
                         !candidateDestinationTile.isEmpty() && type != candidateDestinationTile.getPiece().getType()) {
-                    legalMoves.add(new CaptureMove(board, currentTile, candidateDestinationTile, this, candidateDestinationTile.getPiece()));
+                    legalMoves.add(new CaptureMove_2(currentTile, candidateDestinationTile, this, board.getBoard(), candidateDestinationTile.getPiece()));
                 }
             }
         }

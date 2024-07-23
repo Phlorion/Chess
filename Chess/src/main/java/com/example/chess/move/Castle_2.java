@@ -12,8 +12,8 @@ public class Castle_2 extends Move_2{
     }
 
     @Override
-    public Tile[] makeMoveInBoard(Board_2 board) {
-        Tile[] existingBoard = board.getBoard();
+    public Tile[] makeMoveInBoard() {
+        Tile[] existingBoard = this.board;
         Tile[] newBoard = new Tile[existingBoard.length];
         for (int i = 0; i < existingBoard.length; i++) {
             //Don't copy the changing pieces (piece[king] and castlingRook)

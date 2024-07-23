@@ -104,7 +104,7 @@ public abstract class Player_2 {
         List<Move_2> playersLegalMoves = new ArrayList<>();
         Tile[] potentialBoard;
         for(Move_2 move: playersPotentialMoves){
-            potentialBoard = move.makeMoveInBoard(board);
+            potentialBoard = move.makeMoveInBoard();
             if(board.isMyKingSafe(this,potentialBoard)){
                 playersLegalMoves.add(move);
             }else{

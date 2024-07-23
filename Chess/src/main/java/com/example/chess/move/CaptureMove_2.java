@@ -12,8 +12,8 @@ public class CaptureMove_2 extends Move_2{
     }
 
     @Override
-    public Tile[] makeMoveInBoard(Board_2 board) {
-        Tile[] existingBoard = board.getBoard();
+    public Tile[] makeMoveInBoard() {
+        Tile[] existingBoard = this.board;
         Tile[] newBoard = new Tile[existingBoard.length];
         for (int i = 0; i < existingBoard.length; i++) {
             //Don't copy the changing pieces (attacking and capturing)
@@ -32,7 +32,7 @@ public class CaptureMove_2 extends Move_2{
         }
         newBoard[Board_2.NUM_TILES_PER_ROW*piece.getPiecePosI()+piece.getPiecePosJ()] = new Tile(piece.getPiecePosI(), piece.getPiecePosJ(),piece);
 
-        //Remove the captured piece from the Board afterward
+        //TODO Remove the captured piece from the Board afterward
         return newBoard;
     }
 }

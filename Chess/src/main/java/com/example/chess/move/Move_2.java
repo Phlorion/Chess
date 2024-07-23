@@ -63,10 +63,9 @@ public abstract class Move_2 {
     //Like the execute method in Move
     /**
      * Make the move by returning a Tile[]. Does not mean that the original board is updated.
-     * @param board The original board.
      * @return The new tiles.
      * */
-    public abstract Tile[] makeMoveInBoard(Board_2 board);
+    public abstract Tile[] makeMoveInBoard();
 
     @Override
     public boolean equals(Object o) {

@@ -3,10 +3,7 @@ package com.example.chess.piece;
 import com.example.chess.board.Board;
 import com.example.chess.board.Board_2;
 import com.example.chess.board.Tile;
-import com.example.chess.move.CaptureMove;
-import com.example.chess.move.Move;
-import com.example.chess.move.Move_2;
-import com.example.chess.move.RegularMove;
+import com.example.chess.move.*;
 import com.example.chess.player.Player;
 
 import java.util.ArrayList;
@@ -79,13 +76,13 @@ public class King extends Piece {
 
                 // if tile is not occupied
                 if (candidateDestinationTile.isEmpty()) {
-                    legalMoves.add(new RegularMove(board, currentTile, candidateDestinationTile, this)); // regular move
+                    legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this, board.getBoard())); // regular move
                 } else {
                     Piece pieceAtDestination = candidateDestinationTile.getPiece();
 
                     // if it is an enemy piece where we want to go
                     if (pieceAtDestination.getType() != this.type) {
-                        legalMoves.add(new CaptureMove(board, currentTile, candidateDestinationTile, this, candidateDestinationTile.getPiece())); // capture move
+                        legalMoves.add(new CaptureMove_2(currentTile, candidateDestinationTile, this, board.getBoard(), candidateDestinationTile.getPiece())); // capture move
                     }
                 }
             }
