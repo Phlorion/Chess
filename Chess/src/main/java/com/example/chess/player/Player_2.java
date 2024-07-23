@@ -17,13 +17,13 @@ import java.util.Objects;
 public abstract class Player_2 {
     //Variables
     protected Board_2 board;
-    protected Collection<Move> potentialMoves;
-    protected Collection<Move> legalMoves;
+    protected List<Move_2> potentialMoves;
+    protected List<Move_2> legalMoves;
     private boolean isCheckMated;
     private boolean isStaleMated;
     //Constructors
 
-    public Player_2(Board_2 board, Collection<Move> potentialMoves, Collection<Move> legalMoves, boolean isCheckMated, boolean isStaleMated) {
+    public Player_2(Board_2 board, List<Move_2> potentialMoves, List<Move_2> legalMoves, boolean isCheckMated, boolean isStaleMated) {
         this.board = board;
         this.potentialMoves = potentialMoves;
         this.legalMoves = legalMoves;
@@ -45,19 +45,19 @@ public abstract class Player_2 {
         this.board = board;
     }
 
-    public Collection<Move> getPotentialMoves() {
+    public Collection<Move_2> getPotentialMoves() {
         return potentialMoves;
     }
 
-    public void setPotentialMoves(Collection<Move> potentialMoves) {
+    public void setPotentialMoves(List<Move_2> potentialMoves) {
         this.potentialMoves = potentialMoves;
     }
 
-    public Collection<Move> getLegalMoves() {
+    public List<Move_2> getLegalMoves() {
         return legalMoves;
     }
 
-    public void setLegalMoves(Collection<Move> legalMoves) {
+    public void setLegalMoves(List<Move_2> legalMoves) {
         this.legalMoves = legalMoves;
     }
 
@@ -82,14 +82,13 @@ public abstract class Player_2 {
 
     /**
      * Calculate all the potential moves of the player
-     * @param board the board to which the moves are going to be calculated
      * */
-    protected List<Move_2> calculateAllPotentialMoves(Board_2 board){
+    public List<Move_2> calculateAllPotentialMoves(){
         Collection<Piece> pieces = getActivePieces();
         List<Move_2> potentialMoves = new ArrayList<>();
 
         for (Piece piece: pieces){
-            potentialMoves.addAll(piece.calculatePotentialMoves(board));
+            potentialMoves.addAll(piece.calculatePotentialMoves(this.board));
         }
 
         return potentialMoves;
@@ -97,15 +96,14 @@ public abstract class Player_2 {
 
     /**
      * Calculate all the legal moves of the player
-     * @param board the board to which the legal moves are going to be calculated
      * */
-    protected List<Move_2> calculateAllLegalMoves(Board_2 board){
-        List<Move_2> playersPotentialMoves = this.calculateAllPotentialMoves(board);
+    public List<Move_2> calculateAllLegalMoves(){
+        List<Move_2> playersPotentialMoves = this.calculateAllPotentialMoves();
         List<Move_2> playersLegalMoves = new ArrayList<>();
         Tile[] potentialBoard;
         for(Move_2 move: playersPotentialMoves){
             potentialBoard = move.makeMoveInBoard();
-            if(board.isMyKingSafe(this,potentialBoard)){
+            if(this.board.isMyKingSafe(this,potentialBoard)){
                 playersLegalMoves.add(move);
             }else{
                 System.out.println("Move: "+move.toString() +" not added.");
@@ -117,7 +115,7 @@ public abstract class Player_2 {
      * Get the piece king of this player
      * @return The piece
      */
-    private King findKing() {
+    public King findMyKing() {
         for (Piece p : getActivePieces()) {
             if (p.getPieceKind().equals(Piece.PieceKind.KING)) {
                 return (King) p;
