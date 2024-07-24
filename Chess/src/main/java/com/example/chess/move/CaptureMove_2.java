@@ -5,7 +5,7 @@ import com.example.chess.board.Tile;
 import com.example.chess.piece.Piece;
 
 public class CaptureMove_2 extends Move_2{
-    Piece capturingPiece;
+    private Piece capturingPiece;
     public CaptureMove_2(Tile from, Tile to, Piece piece, Tile[] board, Piece capturingPiece) {
         super(from, to, piece, board);
         this.capturingPiece = capturingPiece;
@@ -34,5 +34,13 @@ public class CaptureMove_2 extends Move_2{
 
         //TODO Remove the captured piece from the Board afterward
         return newBoard;
+    }
+
+    public Piece getCapturingPiece() {
+        return capturingPiece;
+    }
+
+    public void setCapturingPiece(Piece capturingPiece) {
+        this.capturingPiece = capturingPiece;
     }
 }

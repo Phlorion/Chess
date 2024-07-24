@@ -81,6 +81,11 @@ public abstract class Move_2 {
         result = 31 * result + Arrays.hashCode(board);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "from ("+from.getI()+", "+from.getJ()+") - to ("+to.getI()+", "+to.getJ()+") - Piece "+piece;
+    }
     //What is the CompareMoves method in Move?
 
     //Methods - END

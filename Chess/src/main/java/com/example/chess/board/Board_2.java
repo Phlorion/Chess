@@ -1,5 +1,6 @@
 package com.example.chess.board;
 
+import com.example.chess.move.CaptureMove_2;
 import com.example.chess.move.Move;
 import com.example.chess.move.Move_2;
 import com.example.chess.piece.*;
@@ -196,7 +197,51 @@ public class Board_2 {
         return !(i < 0 || i > NUM_TILES_PER_ROW-1 || j < 0 || j > NUM_TILES_PER_COL-1);
     }
 
-    protected void makeMove(Move_2 move){
+    public void makeMove(Move_2 move){
+        //Check if the move is from the current player
+        if(!move.getPiece().getType().equals(currentPlayer.getType())){
+            System.out.println("Tried to move opponent's piece.");
+            return;
+        }
+        //Find out what move is to be made
+        String moveType = move.getClass().getSimpleName();
+        //Change the board, because the move is valid
+        this.board = move.makeMoveInBoard();
+        switch (moveType){
+            case "RegularMove_2":
+                System.out.println("Regular move");
+                break;
+            case "CaptureMove_2":
+                System.out.println("Capture move");
+                //Remove the piece from the board and place it into the captured pieces
+                if(currentPlayer.getType().equals(PiecesType.WHITE)){
+                    this.blackPieces.remove(((CaptureMove_2) move).getCapturingPiece());
+                    this.blackCapturedPieces.add(((CaptureMove_2) move).getCapturingPiece());
+                }else {
+                    this.whitePieces.remove(((CaptureMove_2) move).getCapturingPiece());
+                    this.whiteCapturedPieces.add(((CaptureMove_2) move).getCapturingPiece());
+                }
+                break;
+            case "Castle_2":
+                System.out.println("Castle move");
+                break;
+            default:
+                System.out.println("Unknown move.");
+                break;
+        }
+        System.out.println(this);
+        //Change the board for the players
+        getWhitePlayer().setBoard(this);
+        getBlackPlayer().setBoard(this);
+        //Calculate the new legal moves for both players
+        getWhitePlayer().setLegalMoves(getWhitePlayer().calculateAllLegalMoves());
+        getBlackPlayer().setLegalMoves(getBlackPlayer().calculateAllLegalMoves());
+        //Change the current player
+        if(currentPlayer.getType().equals(PiecesType.WHITE)){
+            this.currentPlayer = this.getBlackPlayer();
+        } else if (currentPlayer.getType().equals(PiecesType.BLACK)) {
+            this.currentPlayer = this.getWhitePlayer();
+        }
 
     }
     public boolean isMyKingSafe(Player_2 player, Tile[] testingBoard){
@@ -215,11 +260,8 @@ public class Board_2 {
             opponentMoves.addAll(piece.calculatePotentialMoves(this));
         }
         //if any piece can attack the king of the examining player, return false
-        if(!player.isAttackingOnTile(getTileByPiece(player.findMyKing()),opponentMoves).isEmpty()){
-            return false;
-        }
         //otherwise the player's king is safe in this position
-        return true;
+        return player.isAttackingOnTile(getTileByPiece(player.findMyKing()), opponentMoves).isEmpty();
     }
 
     /**
