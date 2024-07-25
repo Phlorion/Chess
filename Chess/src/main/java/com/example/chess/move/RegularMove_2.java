@@ -16,6 +16,9 @@ public class RegularMove_2 extends Move_2{
         for (int i = 0; i < existingBoard.length; i++) {
             //Don't copy the changing piece
             if(this.piece.equals(existingBoard[i].getPiece())){
+                newBoard[i] = new Tile();
+                newBoard[i].setI(existingBoard[i].getI());
+                newBoard[i].setJ(existingBoard[i].getJ());
                 continue;
             }
             //Copy all the rest to the new board
@@ -30,6 +33,17 @@ public class RegularMove_2 extends Move_2{
         }
         newBoard[Board_2.NUM_TILES_PER_ROW*piece.getPiecePosI()+piece.getPiecePosJ()] = new Tile(piece.getPiecePosI(), piece.getPiecePosJ(),piece);
 
+//        System.out.println("\nExisting Board");
+//        for (int i = 0; i < existingBoard.length; i++) {
+//            if (i % 8 == 0) System.out.println();
+//            System.out.print(existingBoard[i]);
+//        }
+//        System.out.println("\nNew Board");
+//        for (int i = 0; i < newBoard.length; i++) {
+//            if (i % 8 == 0) System.out.println();
+//            System.out.print(newBoard[i]);
+//        }
+//        System.out.println();
         return newBoard;
     }
 }

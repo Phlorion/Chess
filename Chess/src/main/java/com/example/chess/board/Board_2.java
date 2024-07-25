@@ -1,10 +1,8 @@
 package com.example.chess.board;
 
 import com.example.chess.move.CaptureMove_2;
-import com.example.chess.move.Move;
 import com.example.chess.move.Move_2;
 import com.example.chess.piece.*;
-import com.example.chess.player.Player;
 import com.example.chess.player.PlayerBlack_2;
 import com.example.chess.player.PlayerWhite_2;
 import com.example.chess.player.Player_2;
@@ -147,7 +145,6 @@ public class Board_2 {
             //set BLACK pieces
             setPieceOnBoard(new Rook(0, 0, PiecesType.BLACK));
             setPieceOnBoard(new Knight(0, 1, PiecesType.BLACK));
-            setPieceOnBoard(new Rook(0, 0, PiecesType.BLACK));
             setPieceOnBoard(new Bishop(0, 2, PiecesType.BLACK));
             setPieceOnBoard(new Queen(0, 3, PiecesType.BLACK));
             setPieceOnBoard(new King(0, 4, PiecesType.BLACK));
@@ -207,6 +204,7 @@ public class Board_2 {
         String moveType = move.getClass().getSimpleName();
         //Change the board, because the move is valid
         this.board = move.makeMoveInBoard();
+
         switch (moveType){
             case "RegularMove_2":
                 System.out.println("Regular move");

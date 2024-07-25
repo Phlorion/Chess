@@ -1,8 +1,6 @@
 package com.example.chess.player;
 
-import com.example.chess.board.Board;
 import com.example.chess.board.Board_2;
-import com.example.chess.move.Move;
 import com.example.chess.move.Move_2;
 import com.example.chess.piece.Piece;
 import com.example.chess.piece.PiecesType;
