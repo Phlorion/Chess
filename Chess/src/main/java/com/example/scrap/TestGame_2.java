@@ -23,10 +23,10 @@ public class TestGame_2 {
         while(gameLoop) {
             System.out.println(board.getCurrentPlayer().getType() + "'s turn");
 
-            if (board.getCurrentPlayer().isCheckMated()) {
+            if (board.getCurrentPlayer().getCheckMated()) {
                 System.out.println(/*board.getOpponentPlayer() +*/ "Opponent WINS!");
                 break;
-            } else if (board.getCurrentPlayer().isStaleMated()) {
+            } else if (board.getCurrentPlayer().getStaleMated()) {
                 System.out.println("TIE");
                 break;
             }

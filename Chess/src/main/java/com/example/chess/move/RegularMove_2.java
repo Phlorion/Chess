@@ -38,12 +38,12 @@ public class RegularMove_2 extends Move_2{
 //            if (i % 8 == 0) System.out.println();
 //            System.out.print(existingBoard[i]);
 //        }
-//        System.out.println("\nNew Board");
-//        for (int i = 0; i < newBoard.length; i++) {
-//            if (i % 8 == 0) System.out.println();
-//            System.out.print(newBoard[i]);
-//        }
-//        System.out.println();
+        System.out.println("\nNew Board");
+        for (int i = 0; i < newBoard.length; i++) {
+            if (i % 8 == 0) System.out.println();
+            System.out.print(newBoard[i].getI()+","+newBoard[i].getJ()+"-"+newBoard[i].getPiece()+"\t\t\t.");
+        }
+        System.out.println();
         return newBoard;
     }
 }

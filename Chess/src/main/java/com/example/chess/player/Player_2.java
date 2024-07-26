@@ -1,9 +1,7 @@
 package com.example.chess.player;
 
-import com.example.chess.board.Board;
 import com.example.chess.board.Board_2;
 import com.example.chess.board.Tile;
-import com.example.chess.move.Move;
 import com.example.chess.move.Move_2;
 import com.example.chess.piece.King;
 import com.example.chess.piece.Piece;
@@ -60,16 +58,14 @@ public abstract class Player_2 {
     public void setLegalMoves(List<Move_2> legalMoves) {
         this.legalMoves = legalMoves;
     }
-
-    public boolean isCheckMated() {
+    public boolean getCheckMated() {
         return isCheckMated;
     }
 
     public void setCheckMated(boolean checkMated) {
         isCheckMated = checkMated;
     }
-
-    public boolean isStaleMated() {
+    public boolean getStaleMated() {
         return isStaleMated;
     }
 
