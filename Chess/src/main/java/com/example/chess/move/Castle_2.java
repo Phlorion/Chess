@@ -31,10 +31,10 @@ public class Castle_2 extends Move_2{
         //Move the piece[king]
 //        piece.setPiecePosI(to.getI());
 //        piece.setPiecePosJ(to.getJ());
-        piece.setMoves(piece.getMoves()+1);
-        if (!piece.hasMoved()){
-            piece.setHasMoved(true);
-        }
+//        piece.setMoves(piece.getMoves()+1);
+//        if (!piece.hasMoved()){
+//            piece.setHasMoved(true);
+//        }
         newBoard[Board_2.NUM_TILES_PER_ROW*to.getI()+to.getJ()] = new Tile(to.getI(),to.getJ(),piece);
 
         //Move the castlingRook
@@ -49,8 +49,16 @@ public class Castle_2 extends Move_2{
         }else{
             newBoard[Board_2.NUM_TILES_PER_ROW* to.getI()+ to.getJ()-1].setPiece(castlingRook);
         }
-        castlingRook.setMoves(castlingRook.getMoves() + 1);
-        castlingRook.setHasMoved(true);
+//        castlingRook.setMoves(castlingRook.getMoves() + 1);
+//        castlingRook.setHasMoved(true);
         return newBoard;
+    }
+
+    public Piece getCastlingRook() {
+        return castlingRook;
+    }
+
+    public Tile getCastlingRookTile() {
+        return castlingRookTile;
     }
 }

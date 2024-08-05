@@ -29,10 +29,10 @@ public class CaptureMove_2 extends Move_2{
         //Move the attacking piece
 //        piece.setPiecePosI(to.getI());
 //        piece.setPiecePosJ(to.getJ());
-        piece.setMoves(piece.getMoves()+1);
-        if (!piece.hasMoved()){
-            piece.setHasMoved(true);
-        }
+//        piece.setMoves(piece.getMoves()+1);
+//        if (!piece.hasMoved()){
+//            piece.setHasMoved(true);
+//        }
         newBoard[Board_2.NUM_TILES_PER_ROW*to.getI()+to.getJ()] = new Tile(to.getI(),to.getJ(),piece);
 
         //TODO Remove the captured piece from the Board afterward

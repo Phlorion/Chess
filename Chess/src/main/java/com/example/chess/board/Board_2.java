@@ -1,6 +1,7 @@
 package com.example.chess.board;
 
 import com.example.chess.move.CaptureMove_2;
+import com.example.chess.move.Castle_2;
 import com.example.chess.move.Move_2;
 import com.example.chess.piece.*;
 import com.example.chess.player.PlayerBlack_2;
@@ -44,6 +45,11 @@ public class Board_2 {
         this.setCurrentPlayer(this.getWhitePlayer());
         //set the move history
         this.setMovesHistory(new ArrayList<Move_2>());
+        //set the Pieces' Collections
+        this.setWhitePieces(new ArrayList<>());
+        this.setWhiteCapturedPieces(new ArrayList<>());
+        this.setBlackPieces(new ArrayList<>());
+        this.setBlackCapturedPieces(new ArrayList<>());
     }
 
     //Constructor - END
@@ -204,6 +210,10 @@ public class Board_2 {
         String moveType = move.getClass().getSimpleName();
         //Change the board, because the move is valid
         this.board = move.makeMoveInBoard();
+        move.getPiece().setMoves(move.getPiece().getMoves()+1);
+        if (!move.getPiece().hasMoved()){
+            move.getPiece().setHasMoved(true);
+        }
 
         switch (moveType){
             case "RegularMove_2":
@@ -222,6 +232,9 @@ public class Board_2 {
                 break;
             case "Castle_2":
                 System.out.println("Castle move");
+                Castle_2 castleMove = (Castle_2) move;
+                castleMove.getCastlingRook().setMoves(castleMove.getCastlingRook().getMoves() + 1);
+                castleMove.getCastlingRook().setHasMoved(true);
                 break;
             default:
                 System.out.println("Unknown move.");
@@ -240,6 +253,18 @@ public class Board_2 {
         } else if (currentPlayer.getType().equals(PiecesType.BLACK)) {
             this.currentPlayer = this.getWhitePlayer();
         }
+        if(this.getCurrentPlayer().getLegalMoves().isEmpty()){
+            System.out.println("1");
+            if(isMyKingSafe(this.getCurrentPlayer(),this.getBoard())){
+                System.out.println("2");
+                this.currentPlayer.setStaleMated(true);
+                System.out.println("3");
+            }else{
+                System.out.println("4");
+                this.currentPlayer.setCheckMated(true);
+                System.out.println("5");
+            }
+        }
 
     }
     public boolean isMyKingSafe(Player_2 player, Tile[] testingBoard){
@@ -248,15 +273,19 @@ public class Board_2 {
         Collection<Piece> opponentPieces = new ArrayList<>();
         List<Move_2> opponentMoves = new ArrayList<>();
         //find the pieces of the opponent -- use the testing board TODO
+        System.out.println("6");
         if(type == PiecesType.WHITE){
+            System.out.println("7");
             opponentPieces = getBlackPieces();
         } else if (type == PiecesType.BLACK) {
+            System.out.println("8");
             opponentPieces = getWhitePieces();
         }
         //calculate the potential moves of the opponent's pieces
         for(Piece piece : opponentPieces){
             opponentMoves.addAll(piece.calculatePotentialMoves(this));
         }
+        System.out.println("10");
         //if any piece can attack the king of the examining player, return false
         //otherwise the player's king is safe in this position
         return player.isAttackingOnTile(getTileByPiece(player.findMyKing()), opponentMoves).isEmpty();

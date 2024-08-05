@@ -27,10 +27,10 @@ public class RegularMove_2 extends Move_2{
         //Move the piece
 //        piece.setPiecePosI(to.getI());
 //        piece.setPiecePosJ(to.getJ());
-        piece.setMoves(piece.getMoves()+1);
-        if (!piece.hasMoved()){
-            piece.setHasMoved(true);
-        }
+//        piece.setMoves(piece.getMoves()+1);
+//        if (!piece.hasMoved()){
+//            piece.setHasMoved(true);
+//        }
         newBoard[Board_2.NUM_TILES_PER_ROW*to.getI()+to.getJ()] = new Tile(to.getI(),to.getJ(),piece);
 
 //        System.out.println("\nExisting Board");
