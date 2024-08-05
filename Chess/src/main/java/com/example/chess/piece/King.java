@@ -1,10 +1,10 @@
 package com.example.chess.piece;
 
-import com.example.chess.board.Board;
+//import com.example.chess.board.Board;
 import com.example.chess.board.Board_2;
 import com.example.chess.board.Tile;
 import com.example.chess.move.*;
-import com.example.chess.player.Player;
+//import com.example.chess.player.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,9 +13,13 @@ import java.util.List;
 public class King extends Piece {
     final int[][] CANDIDATE_MOVE_VECTOR_COORDINATES = {{0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}};
 
-    public King(int pos_i, int pos_j, PiecesType type) {
-        super(pos_i, pos_j, type);
+    public King(/*int pos_i, int pos_j,*/ PiecesType type) {
+        super(/*pos_i, pos_j,*/ type);
         pieceKind = PieceKind.KING;
+    }
+    public King(King other){
+        super(other);
+        this.pieceKind = PieceKind.KING;
     }
 
     /**
@@ -23,16 +27,17 @@ public class King extends Piece {
      * @param board The board in which the piece is placed
      * @return All the legal moves of the piece
      */
-    @Override
+    /*@Override
     public List<Move> legalMoves(Board board) {
         int candidateDestinationCoordinateI;
         int candidateDestinationCoordinateJ;
         List<Move> legalMoves = new ArrayList<>();
-        Tile currentTile = board.getTile(piecePosI, piecePosJ);
+//        Tile currentTile = board.getTile(piecePosI, piecePosJ);
+        Tile currentTile = board.getTileByPiece(this);
 
         for (int[] current : CANDIDATE_MOVE_VECTOR_COORDINATES) {
-            candidateDestinationCoordinateI = piecePosI + current[0];
-            candidateDestinationCoordinateJ = piecePosJ + current[1];
+            candidateDestinationCoordinateI = currentTile.getI() + current[0];
+            candidateDestinationCoordinateJ = currentTile.getJ() + current[1];
 
             // if the tile has valid coordinates
             if (Board.isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
@@ -53,7 +58,7 @@ public class King extends Piece {
         }
 
         return legalMoves;
-    }
+    }*/
     /**
      * Calculate all the legal moves for a piece
      * @param board The board in which the piece is placed
@@ -64,11 +69,12 @@ public class King extends Piece {
         int candidateDestinationCoordinateI;
         int candidateDestinationCoordinateJ;
         List<Move_2> legalMoves = new ArrayList<>();
-        Tile currentTile = board.getTile(piecePosI, piecePosJ);
+//        Tile currentTile = board.getTile(piecePosI, piecePosJ);
+        Tile currentTile = board.getTileByPiece(this);
 
         for (int[] current : CANDIDATE_MOVE_VECTOR_COORDINATES) {
-            candidateDestinationCoordinateI = piecePosI + current[0];
-            candidateDestinationCoordinateJ = piecePosJ + current[1];
+            candidateDestinationCoordinateI = currentTile.getI() + current[0];
+            candidateDestinationCoordinateJ = currentTile.getJ() + current[1];
 
             // if the tile has valid coordinates
             if (board.isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {

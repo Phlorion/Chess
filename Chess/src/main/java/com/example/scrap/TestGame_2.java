@@ -34,14 +34,14 @@ public class TestGame_2 {
             for (int i = 0; i < board.getCurrentPlayer().getLegalMoves().size(); i++) {
                 System.out.println("MOVE "+i+":"+board.getCurrentPlayer().getLegalMoves().get(i));
             }
-            System.out.println("White Player's Moves");
-            for (int i = 0; i < board.getCurrentPlayer().getLegalMoves().size(); i++) {
-                System.out.println("MOVE "+i+":"+board.getWhitePlayer().getLegalMoves().get(i));
-            }
-            System.out.println("Black Player's Moves");
-            for (int i = 0; i < board.getCurrentPlayer().getLegalMoves().size(); i++) {
-                System.out.println("MOVE "+i+":"+board.getBlackPlayer().getLegalMoves().get(i));
-            }
+//            System.out.println("White Player's Moves");
+//            for (int i = 0; i < board.getCurrentPlayer().getLegalMoves().size(); i++) {
+//                System.out.println("MOVE "+i+":"+board.getWhitePlayer().getLegalMoves().get(i));
+//            }
+//            System.out.println("Black Player's Moves");
+//            for (int i = 0; i < board.getCurrentPlayer().getLegalMoves().size(); i++) {
+//                System.out.println("MOVE "+i+":"+board.getBlackPlayer().getLegalMoves().get(i));
+//            }
             Scanner scanner = new Scanner(System.in);
             System.out.print("Choose a move: ");
 
@@ -64,7 +64,8 @@ public class TestGame_2 {
                 }
                 boolean validMove = false;
                 for (Move_2 m : board.getCurrentPlayer().getLegalMoves()) {
-                    System.out.println(m);
+                    System.out.print(m);
+                    System.out.println(m.getPiece().equals(movingPiece));
                     if (m.getFrom().equals(from) && m.getTo().equals(to) && m.getPiece().equals(movingPiece)) {
                         validMove = true;
                         board.makeMove(m);

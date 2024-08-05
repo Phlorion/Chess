@@ -11,7 +11,7 @@ public class TestBoard {
 
     public static void main(String args[]) {
         // pieces
-        Knight nBlack = new Knight(1, 1, PiecesType.BLACK);
+        /*Knight nBlack = new Knight(1, 1, PiecesType.BLACK);
         King kBlack = new King(0, 1, PiecesType.BLACK);
         Rook rWhite = new Rook(6, 5, PiecesType.WHITE);
         King kWhite = new King(7, 7, PiecesType.WHITE);
@@ -36,7 +36,7 @@ public class TestBoard {
         System.out.println(initBoard);
         System.out.println("\nNew board:");
         System.out.println(newBoard1);
-
+*/
     }
 
 }

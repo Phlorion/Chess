@@ -128,11 +128,11 @@ public class Board_2 {
      * Set a piece to the board
      * @param piece The piece to be set
      */
-    private void setPieceOnBoard(Piece piece){
+    private void setPieceOnBoard(Piece piece, int posI, int posJ){
         try {
-            this.board[NUM_TILES_PER_ROW* piece.getPiecePosI() + piece.getPiecePosJ()].setI(piece.getPiecePosI());
-            this.board[NUM_TILES_PER_ROW* piece.getPiecePosI() + piece.getPiecePosJ()].setJ(piece.getPiecePosJ());
-            this.board[NUM_TILES_PER_ROW* piece.getPiecePosI() + piece.getPiecePosJ()].setPiece(piece);
+            this.board[NUM_TILES_PER_ROW* posI + posJ].setI(posI);
+            this.board[NUM_TILES_PER_ROW* posI + posJ].setJ(posJ);
+            this.board[NUM_TILES_PER_ROW* posI + posJ].setPiece(piece);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -143,15 +143,15 @@ public class Board_2 {
     public void setStartingPieces(){
         try {
             //set BLACK pieces
-            setPieceOnBoard(new Rook(0, 0, PiecesType.BLACK));
-            setPieceOnBoard(new Knight(0, 1, PiecesType.BLACK));
-            setPieceOnBoard(new Bishop(0, 2, PiecesType.BLACK));
-            setPieceOnBoard(new Queen(0, 3, PiecesType.BLACK));
-            setPieceOnBoard(new King(0, 4, PiecesType.BLACK));
-            setPieceOnBoard(new Bishop(0, 5, PiecesType.BLACK));
-            setPieceOnBoard(new Knight(0, 6, PiecesType.BLACK));
-            setPieceOnBoard(new Rook(0, 7, PiecesType.BLACK));
-            for (int j=0; j<NUM_TILES_PER_COL; j++) setPieceOnBoard(new Pawn(1, j, PiecesType.BLACK));
+            setPieceOnBoard(new Rook(PiecesType.BLACK),0,0);
+            setPieceOnBoard(new Knight(PiecesType.BLACK),0,1);
+            setPieceOnBoard(new Bishop(PiecesType.BLACK),0,2);
+            setPieceOnBoard(new Queen(PiecesType.BLACK),0,3);
+            setPieceOnBoard(new King(PiecesType.BLACK),0,4);
+            setPieceOnBoard(new Bishop(PiecesType.BLACK),0,5);
+            setPieceOnBoard(new Knight(PiecesType.BLACK),0,6);
+            setPieceOnBoard(new Rook(PiecesType.BLACK),0,7);
+            for (int j=0; j<NUM_TILES_PER_COL; j++) setPieceOnBoard(new Pawn(PiecesType.BLACK),1,j);
 
             //set the black pieces in the collection
             this.setBlackPieces(this.findAllActivePieces(this.board, PiecesType.BLACK));
@@ -166,15 +166,15 @@ public class Board_2 {
             }
 
             //set WHITE pieces
-            setPieceOnBoard(new Rook(7, 0, PiecesType.WHITE));
-            setPieceOnBoard(new Knight(7, 1, PiecesType.WHITE));
-            setPieceOnBoard(new Bishop(7, 2, PiecesType.WHITE));
-            setPieceOnBoard(new Queen(7, 3, PiecesType.WHITE));
-            setPieceOnBoard(new King(7, 4, PiecesType.WHITE));
-            setPieceOnBoard(new Bishop(7, 5, PiecesType.WHITE));
-            setPieceOnBoard(new Knight(7, 6, PiecesType.WHITE));
-            setPieceOnBoard(new Rook(7, 7, PiecesType.WHITE));
-            for (int j=0; j<NUM_TILES_PER_COL; j++) setPieceOnBoard(new Pawn(6, j, PiecesType.WHITE));
+            setPieceOnBoard(new Rook(PiecesType.WHITE),7,0);
+            setPieceOnBoard(new Knight(PiecesType.WHITE),7,1);
+            setPieceOnBoard(new Bishop(PiecesType.WHITE),7,2);
+            setPieceOnBoard(new Queen(PiecesType.WHITE),7,3);
+            setPieceOnBoard(new King(PiecesType.WHITE),7,4);
+            setPieceOnBoard(new Bishop(PiecesType.WHITE),7,5);
+            setPieceOnBoard(new Knight(PiecesType.WHITE),7,6);
+            setPieceOnBoard(new Rook(PiecesType.WHITE),7,7);
+            for (int j=0; j<NUM_TILES_PER_COL; j++) setPieceOnBoard(new Pawn(PiecesType.WHITE),6,j);
 
             //set the white pieces in the collection
             this.setWhitePieces(this.findAllActivePieces(this.board, PiecesType.WHITE));
@@ -247,7 +247,7 @@ public class Board_2 {
         PiecesType type = player.getType();
         Collection<Piece> opponentPieces = new ArrayList<>();
         List<Move_2> opponentMoves = new ArrayList<>();
-        //find the pieces of the opponent
+        //find the pieces of the opponent -- use the testing board TODO
         if(type == PiecesType.WHITE){
             opponentPieces = getBlackPieces();
         } else if (type == PiecesType.BLACK) {

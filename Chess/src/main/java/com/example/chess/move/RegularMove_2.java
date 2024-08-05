@@ -25,25 +25,25 @@ public class RegularMove_2 extends Move_2{
             newBoard[i] = new Tile(existingBoard[i].getI(), existingBoard[i].getJ(),existingBoard[i].getPiece());
         }
         //Move the piece
-        piece.setPiecePosI(to.getI());
-        piece.setPiecePosJ(to.getJ());
+//        piece.setPiecePosI(to.getI());
+//        piece.setPiecePosJ(to.getJ());
         piece.setMoves(piece.getMoves()+1);
         if (!piece.hasMoved()){
             piece.setHasMoved(true);
         }
-        newBoard[Board_2.NUM_TILES_PER_ROW*piece.getPiecePosI()+piece.getPiecePosJ()] = new Tile(piece.getPiecePosI(), piece.getPiecePosJ(),piece);
+        newBoard[Board_2.NUM_TILES_PER_ROW*to.getI()+to.getJ()] = new Tile(to.getI(),to.getJ(),piece);
 
 //        System.out.println("\nExisting Board");
 //        for (int i = 0; i < existingBoard.length; i++) {
 //            if (i % 8 == 0) System.out.println();
 //            System.out.print(existingBoard[i]);
 //        }
-        System.out.println("\nNew Board");
-        for (int i = 0; i < newBoard.length; i++) {
-            if (i % 8 == 0) System.out.println();
-            System.out.print(newBoard[i].getI()+","+newBoard[i].getJ()+"-"+newBoard[i].getPiece()+"\t\t\t.");
-        }
-        System.out.println();
+//        System.out.println("\nNew Board");
+//        for (int i = 0; i < newBoard.length; i++) {
+//            if (i % 8 == 0) System.out.println();
+//            System.out.print(newBoard[i].getI()+","+newBoard[i].getJ()+"-"+newBoard[i].getPiece()+"\t\t\t.");
+//        }
+//        System.out.println();
         return newBoard;
     }
 }
