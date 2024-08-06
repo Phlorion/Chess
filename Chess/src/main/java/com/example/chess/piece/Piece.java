@@ -3,6 +3,7 @@ package com.example.chess.piece;
 //import com.example.chess.board.Board;
 import com.example.chess.board.Board_2;
 //import com.example.chess.move.Move;
+import com.example.chess.board.Tile;
 import com.example.chess.move.Move_2;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public abstract class Piece {
      * @return All the legal moves of the piece
      */
 //    public abstract List<Move> legalMoves(final Board board);
-    public abstract List<Move_2> calculatePotentialMoves(final Board_2 board);
+    public abstract List<Move_2> calculatePotentialMoves(final Tile[] board);
 
     public PiecesType getType() {
         return type;
@@ -129,5 +130,18 @@ public abstract class Piece {
         public String toString() {
             return this.pieceName;
         }
+    }
+
+    //Some methods that assist the calculateAllPotentialMoves and calculateAllLegalMoves
+    protected Tile getTileByPiece(Tile[] board, Piece piece){
+        for (Tile t : board) {
+            if (t.getPiece() != null && t.getPiece().equals(piece)) {
+                return t;
+            }
+        }
+        return null;
+    }
+    protected boolean isValidCoordinate(int i, int j) {
+        return !(i < 0 || i > Board_2.NUM_TILES_PER_ROW-1 || j < 0 || j > Board_2.NUM_TILES_PER_COL-1);
     }
 }

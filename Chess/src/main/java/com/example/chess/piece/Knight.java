@@ -64,11 +64,12 @@ public class Knight extends Piece {
      * @return All the legal moves of the piece
      */
     @Override
-    public List<Move_2> calculatePotentialMoves(Board_2 board) {
+    public List<Move_2> calculatePotentialMoves(Tile[] board) {
         int candidateDestinationCoordinateI;
         int candidateDestinationCoordinateJ;
 //        Tile currentTile = board.getTile(piecePosI, piecePosJ);
-        Tile currentTile = board.getTileByPiece(this);
+//        Tile currentTile = board.getTileByPiece(board.getBoard(),this);
+        Tile currentTile = getTileByPiece(board,this);
         List<Move_2> legalMoves = new ArrayList<>();
 
         // for every possible move this piece can make
@@ -77,18 +78,20 @@ public class Knight extends Piece {
             candidateDestinationCoordinateJ = currentTile.getJ() + current[1];
 
             // if the tile has valid coordinates
-            if (board.isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
-                Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinateI, candidateDestinationCoordinateJ);
+            if (isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
+//            if (board.isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
+                Tile candidateDestinationTile = board[Board_2.NUM_TILES_PER_ROW* candidateDestinationCoordinateI + candidateDestinationCoordinateJ];
+//                Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinateI, candidateDestinationCoordinateJ);
 
                 // if tile is not occupied
                 if (candidateDestinationTile.isEmpty()) {
-                    legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this, board.getBoard())); // regular move
+                    legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this, board)); // regular move
                 } else {
                     Piece pieceAtDestination = candidateDestinationTile.getPiece();
 
                     // if it is an enemy piece where we want to go
                     if (pieceAtDestination.getType() != this.type) {
-                        legalMoves.add(new CaptureMove_2(currentTile, candidateDestinationTile, this, board.getBoard(), candidateDestinationTile.getPiece())); // capture move
+                        legalMoves.add(new CaptureMove_2(currentTile, candidateDestinationTile, this, board, candidateDestinationTile.getPiece())); // capture move
                     }
                 }
             }

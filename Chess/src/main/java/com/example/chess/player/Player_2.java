@@ -79,12 +79,12 @@ public abstract class Player_2 {
     /**
      * Calculate all the potential moves of the player
      * */
-    public List<Move_2> calculateAllPotentialMoves(){
+    public List<Move_2> calculateAllPotentialMoves(Tile[] board){
         Collection<Piece> pieces = getActivePieces();
         List<Move_2> potentialMoves = new ArrayList<>();
 
         for (Piece piece: pieces){
-            potentialMoves.addAll(piece.calculatePotentialMoves(this.board));
+            potentialMoves.addAll(piece.calculatePotentialMoves(board));
         }
 
         return potentialMoves;
@@ -93,8 +93,8 @@ public abstract class Player_2 {
     /**
      * Calculate all the legal moves of the player
      * */
-    public List<Move_2> calculateAllLegalMoves(){
-        List<Move_2> playersPotentialMoves = this.calculateAllPotentialMoves();
+    public List<Move_2> calculateAllLegalMoves(Tile[] board){
+        List<Move_2> playersPotentialMoves = this.calculateAllPotentialMoves(board);
         List<Move_2> playersLegalMoves = new ArrayList<>();
         Tile[] potentialBoard;
         for(Move_2 move: playersPotentialMoves){
@@ -107,18 +107,18 @@ public abstract class Player_2 {
         }
         return playersLegalMoves;
     }
-    /**
-     * Get the piece king of this player
-     * @return The piece
-     */
-    public King findMyKing() {
-        for (Piece p : getActivePieces()) {
-            if (p.getPieceKind().equals(Piece.PieceKind.KING)) {
-                return (King) p;
-            }
-        }
-        return null;
-    }
+//    /**
+//     * Get the piece king of this player
+//     * @return The piece
+//     */
+//    public King findMyKing(Tile[] board) {
+//        for (Piece p : getActivePieces()) {
+//            if (p.getPieceKind().equals(Piece.PieceKind.KING)) {
+//                return (King) p;
+//            }
+//        }
+//        return null;
+//    }
     /**
      * Get all the moves that are currently attacking this tile
      * @param tile The tile that is getting attacked

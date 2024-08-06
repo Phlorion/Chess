@@ -66,36 +66,36 @@ public class Pawn extends Piece {
      * @return All the legal moves of the piece
      */
     @Override
-    public List<Move_2> calculatePotentialMoves(Board_2 board) {
+    public List<Move_2> calculatePotentialMoves(Tile[] board) {
         int candidateDestinationCoordinateI;
         int candidateDestinationCoordinateJ;
-//        Tile currentTile = board.getTile(piecePosI, piecePosJ);
-        Tile currentTile = board.getTileByPiece(this);
+        Tile currentTile = getTileByPiece(board,this);
+//        Tile currentTile = board.getTileByPiece(board.getBoard(),this);
         List<Move_2> legalMoves = new ArrayList<>();
 
         for (int[] current : CANDIDATE_MOVE_DESTINATION_COORDINATES) {
-//            candidateDestinationCoordinateI = piecePosI + (type.getDirection() * current[0]);
-//            candidateDestinationCoordinateJ = piecePosJ + current[1];
             candidateDestinationCoordinateI = currentTile.getI() + (type.getDirection() * current[0]);
             candidateDestinationCoordinateJ = currentTile.getJ() + current[1];
 
             // if the tile has valid coordinates
-            if (board.isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
-                Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinateI, candidateDestinationCoordinateJ);
+//            if (board.isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
+            if (isValidCoordinate(candidateDestinationCoordinateI, candidateDestinationCoordinateJ)) {
+//                Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinateI, candidateDestinationCoordinateJ);
+                Tile candidateDestinationTile = board[Board_2.NUM_TILES_PER_ROW* candidateDestinationCoordinateI + candidateDestinationCoordinateJ];
 //                System.out.println("Pawn candidate tile I"+candidateDestinationTile.getI());
 //                System.out.println("Pawn candidate tile J"+candidateDestinationTile.getJ());
                 // regular move
                 if (candidateDestinationTile.isEmpty() && current[0] == -1 && current[1] == 0) {
-                    legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this,board.getBoard()));
+                    legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this,board));
                 }
                 // if at starting rank can move 2 tiles
-                else if (!hasMoved && current[0] == -2 && candidateDestinationTile.isEmpty() && board.getTile(candidateDestinationCoordinateI + type.getDirection(), candidateDestinationCoordinateJ).isEmpty()) {
-                    legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this,board.getBoard()));
+                else if (!hasMoved && current[0] == -2 && candidateDestinationTile.isEmpty() && board[Board_2.NUM_TILES_PER_ROW*candidateDestinationCoordinateI + type.getDirection()+ candidateDestinationCoordinateJ].isEmpty()) {
+                    legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this,board));
                 }
                 // if enemy piece near, can capture
                 else if ((current[1] == -1 || current[1] == 1) &&
                         !candidateDestinationTile.isEmpty() && type != candidateDestinationTile.getPiece().getType()) {
-                    legalMoves.add(new CaptureMove_2(currentTile, candidateDestinationTile, this, board.getBoard(), candidateDestinationTile.getPiece()));
+                    legalMoves.add(new CaptureMove_2(currentTile, candidateDestinationTile, this, board, candidateDestinationTile.getPiece()));
                 }
                 if(!legalMoves.isEmpty()){
                     Move_2 lastaddedmove = legalMoves.get(legalMoves.size()-1);

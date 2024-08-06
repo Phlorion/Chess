@@ -245,8 +245,8 @@ public class Board_2 {
         getWhitePlayer().setBoard(this);
         getBlackPlayer().setBoard(this);
         //Calculate the new legal moves for both players
-        getWhitePlayer().setLegalMoves(getWhitePlayer().calculateAllLegalMoves());
-        getBlackPlayer().setLegalMoves(getBlackPlayer().calculateAllLegalMoves());
+        getWhitePlayer().setLegalMoves(getWhitePlayer().calculateAllLegalMoves(this.board));
+        getBlackPlayer().setLegalMoves(getBlackPlayer().calculateAllLegalMoves(this.board));
         //Change the current player
         if(currentPlayer.getType().equals(PiecesType.WHITE)){
             this.currentPlayer = this.getBlackPlayer();
@@ -254,15 +254,10 @@ public class Board_2 {
             this.currentPlayer = this.getWhitePlayer();
         }
         if(this.getCurrentPlayer().getLegalMoves().isEmpty()){
-            System.out.println("1");
             if(isMyKingSafe(this.getCurrentPlayer(),this.getBoard())){
-                System.out.println("2");
                 this.currentPlayer.setStaleMated(true);
-                System.out.println("3");
             }else{
-                System.out.println("4");
                 this.currentPlayer.setCheckMated(true);
-                System.out.println("5");
             }
         }
 
@@ -272,23 +267,22 @@ public class Board_2 {
         PiecesType type = player.getType();
         Collection<Piece> opponentPieces = new ArrayList<>();
         List<Move_2> opponentMoves = new ArrayList<>();
-        //find the pieces of the opponent -- use the testing board TODO
-        System.out.println("6");
+        //find the pieces of the opponent
         if(type == PiecesType.WHITE){
-            System.out.println("7");
-            opponentPieces = getBlackPieces();
+//            opponentPieces = getBlackPieces();
+            opponentPieces = findAllActivePieces(testingBoard,PiecesType.BLACK);
         } else if (type == PiecesType.BLACK) {
-            System.out.println("8");
-            opponentPieces = getWhitePieces();
+//            opponentPieces = getWhitePieces();
+            opponentPieces = findAllActivePieces(testingBoard,PiecesType.WHITE);
         }
         //calculate the potential moves of the opponent's pieces
         for(Piece piece : opponentPieces){
-            opponentMoves.addAll(piece.calculatePotentialMoves(this));
+            opponentMoves.addAll(piece.calculatePotentialMoves(testingBoard));
         }
-        System.out.println("10");
         //if any piece can attack the king of the examining player, return false
         //otherwise the player's king is safe in this position
-        return player.isAttackingOnTile(getTileByPiece(player.findMyKing()), opponentMoves).isEmpty();
+//        return player.isAttackingOnTile(getTileByPiece(player.findMyKing()), opponentMoves).isEmpty();
+        return player.isAttackingOnTile(getTileByPiece(testingBoard, findKingOnBoard(testingBoard,player)), opponentMoves).isEmpty();
     }
 
     /**
@@ -308,11 +302,23 @@ public class Board_2 {
     }
 
     /**
+     * Get the piece king of this player
+     * @return The piece
+     */
+    public King findKingOnBoard(Tile[] board, Player_2 player) {
+        for (Piece p : findAllActivePieces(board, player.getType())) {
+            if (p.getPieceKind().equals(Piece.PieceKind.KING)) {
+                return (King) p;
+            }
+        }
+        return null;
+    }
+    /**
      * Finds the tile that contains the specific piece
      * @param piece the piece
      * @return the piece
      */
-    public Tile getTileByPiece(Piece piece) {
+    public Tile getTileByPiece(Tile[] board, Piece piece) {
         for (Tile t : board) {
             if (t.getPiece() != null && t.getPiece().equals(piece)) {
                 return t;

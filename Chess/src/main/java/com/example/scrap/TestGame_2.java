@@ -12,10 +12,10 @@ public class TestGame_2 {
         Board_2 board = new Board_2();
         board.setStartingPieces();
 
-        board.getWhitePlayer().setPotentialMoves(board.getWhitePlayer().calculateAllPotentialMoves());
-        board.getBlackPlayer().setPotentialMoves(board.getBlackPlayer().calculateAllPotentialMoves());
-        board.getWhitePlayer().setLegalMoves(board.getWhitePlayer().calculateAllLegalMoves());
-        board.getBlackPlayer().setLegalMoves(board.getBlackPlayer().calculateAllLegalMoves());
+        board.getWhitePlayer().setPotentialMoves(board.getWhitePlayer().calculateAllPotentialMoves(board.getBoard()));
+        board.getBlackPlayer().setPotentialMoves(board.getBlackPlayer().calculateAllPotentialMoves(board.getBoard()));
+        board.getWhitePlayer().setLegalMoves(board.getWhitePlayer().calculateAllLegalMoves(board.getBoard()));
+        board.getBlackPlayer().setLegalMoves(board.getBlackPlayer().calculateAllLegalMoves(board.getBoard()));
         Move_2 move = board.getWhitePlayer().getLegalMoves().get(0);
 
         System.out.println(board);
