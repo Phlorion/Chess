@@ -200,6 +200,12 @@ public class Board_2 {
         return !(i < 0 || i > NUM_TILES_PER_ROW-1 || j < 0 || j > NUM_TILES_PER_COL-1);
     }
 
+    /**
+     * This method makes a move in the board by changing the Tile[] board,
+        updating the pieces involved in the move (Increasing the moves of the piece and its hasMoved param),
+        updating the moveHistory, and checking if we have a checkmate of stalemate.
+     * @param move The move to be made in the board.
+     * */
     public void makeMove(Move_2 move){
         //Check if the move is from the current player
         if(!move.getPiece().getType().equals(currentPlayer.getType())){
@@ -214,7 +220,8 @@ public class Board_2 {
         if (!move.getPiece().hasMoved()){
             move.getPiece().setHasMoved(true);
         }
-
+        //Add the move to the moveHistory
+        this.addMoveInMoveHistory(move);
         switch (moveType){
             case "RegularMove_2":
                 System.out.println("Regular move");
@@ -240,10 +247,10 @@ public class Board_2 {
                 System.out.println("Unknown move.");
                 break;
         }
-        System.out.println(this);
-        //Change the board for the players
-        getWhitePlayer().setBoard(this);
-        getBlackPlayer().setBoard(this);
+//        System.out.println(this);
+        //Change the board for the players -- I think it is not important. Because we already have the board in the player's constructor and we do all the changes in that board
+//        getWhitePlayer().setBoard(this);
+//        getBlackPlayer().setBoard(this);
         //Calculate the new legal moves for both players
         getWhitePlayer().setLegalMoves(getWhitePlayer().calculateAllLegalMoves(this.board));
         getBlackPlayer().setLegalMoves(getBlackPlayer().calculateAllLegalMoves(this.board));
@@ -262,6 +269,21 @@ public class Board_2 {
         }
 
     }
+    /**
+     * Add a move to the move history.
+     * @param move The move that will be added.
+     * */
+    private void addMoveInMoveHistory(Move_2 move){
+        this.getMovesHistory().add(move);
+    }
+    /**
+     * Check if the player's King is safe on a board.
+        We use this method to decide whether a move will set our king in danger.
+        If it does, we cannot perform this move.
+     * @param player The player whom King we will check
+     * @param testingBoard The testing board to which we will check the King's safety
+     * @return boolean True if player's King is safe, false otherwise
+     * */
     public boolean isMyKingSafe(Player_2 player, Tile[] testingBoard){
         //use currentPlayer
         PiecesType type = player.getType();

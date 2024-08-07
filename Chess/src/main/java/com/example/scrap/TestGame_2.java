@@ -77,5 +77,8 @@ public class TestGame_2 {
                 if (!validMove) System.out.println("Invalid move");
             }
         }
+        for (int i = 0; i < board.getMovesHistory().size(); i++) {
+            System.out.println(board.getMovesHistory().get(i));
+        }
     }
 }

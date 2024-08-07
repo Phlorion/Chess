@@ -89,7 +89,7 @@ public class Pawn extends Piece {
                     legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this,board));
                 }
                 // if at starting rank can move 2 tiles
-                else if (!hasMoved && current[0] == -2 && candidateDestinationTile.isEmpty() && board[Board_2.NUM_TILES_PER_ROW*candidateDestinationCoordinateI + type.getDirection()+ candidateDestinationCoordinateJ].isEmpty()) {
+                else if (!hasMoved && current[0] == -2 && candidateDestinationTile.isEmpty() && board[Board_2.NUM_TILES_PER_ROW*(candidateDestinationCoordinateI + type.getDirection())+ candidateDestinationCoordinateJ].isEmpty()) {
                     legalMoves.add(new RegularMove_2(currentTile, candidateDestinationTile, this,board));
                 }
                 // if enemy piece near, can capture
