@@ -35,7 +35,6 @@ public class CaptureMove extends Move {
 //        }
         newBoard[Board.NUM_TILES_PER_ROW*to.getI()+to.getJ()] = new Tile(to.getI(),to.getJ(),piece);
 
-        //TODO Remove the captured piece from the Board afterward
         return newBoard;
     }
 
