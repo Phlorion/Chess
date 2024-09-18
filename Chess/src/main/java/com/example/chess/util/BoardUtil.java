@@ -1,7 +1,5 @@
 package com.example.chess.util;
 
-import com.example.chess.board.Board;
-
 public class BoardUtil {
 
 //    public BoardUtil() {}

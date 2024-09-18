@@ -1,12 +1,5 @@
 package com.example.ai;
 
-import com.example.chess.board.Board;
-import com.example.chess.move.Move;
-import com.example.chess.piece.Piece;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class State {
 //    private Board root;
 //    private ArrayList<Board> childred;

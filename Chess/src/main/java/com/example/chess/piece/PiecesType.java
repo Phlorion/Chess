@@ -1,6 +1,6 @@
 package com.example.chess.piece;
 
-import com.example.chess.player.Player_2;
+import com.example.chess.player.Player;
 
 public enum PiecesType {
     WHITE {
@@ -10,12 +10,12 @@ public enum PiecesType {
         }
 
         @Override
-        public Player_2 choosePlayer(Player_2 whitePlayer, Player_2 blackPlayer) {
+        public Player choosePlayer(Player whitePlayer, Player blackPlayer) {
             return whitePlayer;
         }
 
         @Override
-        public Player_2 chooseOpponent(Player_2 whitePlayer, Player_2 blackPlayer) {
+        public Player chooseOpponent(Player whitePlayer, Player blackPlayer) {
             return blackPlayer;
         }
 
@@ -29,12 +29,12 @@ public enum PiecesType {
         public int getDirection() {return -1;}
 
         @Override
-        public Player_2 choosePlayer(Player_2 whitePlayer, Player_2 blackPlayer) {
+        public Player choosePlayer(Player whitePlayer, Player blackPlayer) {
             return blackPlayer;
         }
 
         @Override
-        public Player_2 chooseOpponent(Player_2 whitePlayer, Player_2 blackPlayer) {
+        public Player chooseOpponent(Player whitePlayer, Player blackPlayer) {
             return whitePlayer;
         }
 
@@ -45,6 +45,6 @@ public enum PiecesType {
     };
 
     public abstract int getDirection();
-    public abstract Player_2 choosePlayer(Player_2 whitePlayer, Player_2 blackPlayer);
-    public abstract Player_2 chooseOpponent(Player_2 whitePlayer, Player_2 blackPlayer);
+    public abstract Player choosePlayer(Player whitePlayer, Player blackPlayer);
+    public abstract Player chooseOpponent(Player whitePlayer, Player blackPlayer);
 }

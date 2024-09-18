@@ -1,106 +1,49 @@
 package com.example.chess.move;
 
 import com.example.chess.board.Board;
-import com.example.chess.piece.Piece;
 import com.example.chess.board.Tile;
-
-import java.util.List;
+import com.example.chess.piece.Piece;
 
 public class RegularMove extends Move {
+    public RegularMove(Tile from, Tile to, Piece piece, Tile[] board) {
+        super(from, to, piece, board);
+    }
 
-//    public RegularMove(Board board, Tile from, Tile to, Piece piece) {
-//        super(board, from, to, piece);
-//    }
-//
-//*
-//     * Executes the move. This means a new updated board is made.
-//     * @return The new board
-//
-//
-//    @Override
-//    public Board execute(Board board) {
-//        Board.Builder builder = new Board.Builder();
-//
-//        // set current player
-//        for (Piece p : board.getCurrentPlayer().getActivePieces()) {
-//            if (!this.piece.equals(p)) {
-//                builder.setPiece(p);
-//            }
-//        }
-//
-//        // set opponent player
-//        for (Piece p : board.getOpponentPlayer().getActivePieces()) {
-//            builder.setPiece(p);
-//        }
-//
-//        // move the moved piece
+    @Override
+    public Tile[] makeMoveInBoard() {
+        Tile[] existingBoard = this.board;
+        Tile[] newBoard = new Tile[existingBoard.length];
+        for (int i = 0; i < existingBoard.length; i++) {
+            //Don't copy the changing piece
+            if(this.piece.equals(existingBoard[i].getPiece())){
+                newBoard[i] = new Tile();
+                newBoard[i].setI(existingBoard[i].getI());
+                newBoard[i].setJ(existingBoard[i].getJ());
+                continue;
+            }
+            //Copy all the rest to the new board
+            newBoard[i] = new Tile(existingBoard[i].getI(), existingBoard[i].getJ(),existingBoard[i].getPiece());
+        }
+        //Move the piece
 //        piece.setPiecePosI(to.getI());
 //        piece.setPiecePosJ(to.getJ());
 //        piece.setMoves(piece.getMoves()+1);
-//        if (!piece.hasMoved()) piece.setHasMoved(true);
-//        builder.setPiece(piece);
-//
-//        builder.setLastMoveMade(this);
-//
-//        // pass the turn to the opponent
-//        builder.setMoveMaker(board.getOpponentPlayer().getType());
-//
-//        return builder.build();
-//    }
-//
-//    @Override
-//    public Board fakeExecute(Board board) {
-//        Board.Builder builder = new Board.Builder();
-//
-//        // set current player
-//        for (Piece p : board.getCurrentPlayer().getActivePieces()) {
-//            if (!this.piece.equals(p)) {
-//                builder.setPiece(p);
-//            }
+//        if (!piece.hasMoved()){
+//            piece.setHasMoved(true);
 //        }
-//
-//        // set opponent player
-//        for (Piece p : board.getOpponentPlayer().getActivePieces()) {
-//            builder.setPiece(p);
+        newBoard[Board.NUM_TILES_PER_ROW*to.getI()+to.getJ()] = new Tile(to.getI(),to.getJ(),piece);
+
+//        System.out.println("\nExisting Board");
+//        for (int i = 0; i < existingBoard.length; i++) {
+//            if (i % 8 == 0) System.out.println();
+//            System.out.print(existingBoard[i]);
 //        }
-//
-//        // move the moved piece
-//        piece.setPiecePosI(to.getI());
-//        piece.setPiecePosJ(to.getJ());
-//        piece.setMoves(piece.getMoves()+1);
-//        if (!piece.hasMoved()) piece.setHasMoved(true);
-//        builder.setPiece(piece);
-//
-//        // pass the turn to the opponent
-//        builder.setMoveMaker(board.getCurrentPlayer().getType());
-//
-//        return builder.fakeBuild();
-//    }
-//
-//    @Override
-//    public void reverseFakeExecute(Board board) {
-//        Board.Builder builder = new Board.Builder();
-//
-//        // set current player
-//        for (Piece p : board.getCurrentPlayer().getActivePieces()) {
-//            if (!this.piece.equals(p)) {
-//                builder.setPiece(p);
-//            }
+//        System.out.println("\nNew Board");
+//        for (int i = 0; i < newBoard.length; i++) {
+//            if (i % 8 == 0) System.out.println();
+//            System.out.print(newBoard[i].getI()+","+newBoard[i].getJ()+"-"+newBoard[i].getPiece()+"\t\t\t.");
 //        }
-//
-//        // set opponent player
-//        for (Piece p : board.getOpponentPlayer().getActivePieces()) {
-//            builder.setPiece(p);
-//        }
-//
-//        // move the moved piece
-//        piece.setPiecePosI(from.getI());
-//        piece.setPiecePosJ(from.getJ());
-//        piece.setMoves(piece.getMoves()-1);
-//        if (piece.getMoves() == 0) piece.setHasMoved(false);
-//        builder.setPiece(piece);
-//
-//        // pass the turn to the opponent
-//        builder.setMoveMaker(board.getCurrentPlayer().getType());
-//    }
+//        System.out.println();
+        return newBoard;
+    }
 }

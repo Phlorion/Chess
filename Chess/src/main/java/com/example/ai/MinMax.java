@@ -1,12 +1,5 @@
 package com.example.ai;
 
-import com.example.chess.board.Board;
-import com.example.chess.move.Move;
-import com.example.chess.piece.King;
-import com.example.chess.piece.Knight;
-import com.example.chess.piece.PiecesType;
-import com.example.chess.piece.Rook;
-
 public class MinMax {
 
 //    private int depth;

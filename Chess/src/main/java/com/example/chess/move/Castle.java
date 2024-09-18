@@ -5,63 +5,60 @@ import com.example.chess.board.Tile;
 import com.example.chess.piece.Piece;
 
 public class Castle extends Move {
-//    Piece rook;
-//
-//    public Castle(Board board, Tile from, Tile to, Piece piece, Piece rook) {
-//        super(board, from, to, piece);
-//        this.rook = rook;
-//    }
-//
-//*
-//     * Executes the move. This means a new updated board is made.
-//     * @return The new board
-//
-//
-//    @Override
-//    public Board execute(Board board) {
-//        Board.Builder builder = new Board.Builder();
-//
-//        // set current player
-//        for (Piece p : board.getCurrentPlayer().getActivePieces()) {
-//            if (!this.piece.equals(p) && !this.rook.equals(p)) {
-//                builder.setPiece(p);
-//            }
-//        }
-//
-//        // set opponent player
-//        for (Piece p : board.getOpponentPlayer().getActivePieces()) {
-//            builder.setPiece(p);
-//        }
-//
-//        // move the king and the rook
+    Piece castlingRook;
+    Tile castlingRookTile;
+    public Castle(Tile from, Tile to, Piece piece, Tile[] board, Tile castlingRookTile) {
+        super(from, to, piece, board);
+        this.castlingRookTile = castlingRookTile;
+        this.castlingRook = castlingRookTile.getPiece();
+    }
+
+    @Override
+    public Tile[] makeMoveInBoard() {
+        Tile[] existingBoard = this.board;
+        Tile[] newBoard = new Tile[existingBoard.length];
+        for (int i = 0; i < existingBoard.length; i++) {
+            //Don't copy the changing pieces (piece[king] and castlingRook)
+            if(this.piece.equals(existingBoard[i].getPiece()) || this.castlingRook.equals(existingBoard[i].getPiece())){
+                newBoard[i] = new Tile();
+                newBoard[i].setI(existingBoard[i].getI());
+                newBoard[i].setJ(existingBoard[i].getJ());
+                continue;
+            }
+            //Copy all the rest to the new board
+            newBoard[i] = new Tile(existingBoard[i].getI(), existingBoard[i].getJ(),existingBoard[i].getPiece());
+        }
+        //Move the piece[king]
 //        piece.setPiecePosI(to.getI());
 //        piece.setPiecePosJ(to.getJ());
 //        piece.setMoves(piece.getMoves()+1);
-//        if (!piece.hasMoved()) piece.setHasMoved(true);
-//        builder.setPiece(piece);
-//
-//        rook.setPiecePosI(to.getI());
-//        if (rook.getPiecePosJ() < from.getJ()) rook.setPiecePosJ(to.getJ() + 1);
-//        else rook.setPiecePosJ(to.getJ() - 1);
-//        rook.setMoves(rook.getMoves() + 1);
-//        rook.setHasMoved(true);
-//        builder.setPiece(rook);
-//
-//        builder.setLastMoveMade(this);
-//
-//        // pass the turn to the opponent
-//        builder.setMoveMaker(board.getOpponentPlayer().getType());
-//
-//        return builder.build();
-//    }
-//
-//    @Override
-//    public Board fakeExecute(Board board) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void reverseFakeExecute(Board board) {
-//
-//    }
+//        if (!piece.hasMoved()){
+//            piece.setHasMoved(true);
+//        }
+        newBoard[Board.NUM_TILES_PER_ROW*to.getI()+to.getJ()] = new Tile(to.getI(),to.getJ(),piece);
+
+        //Move the castlingRook
+//        castlingRook.setPiecePosI(to.getI());
+//        if (castlingRook.getPiecePosJ() < from.getJ()){
+//            castlingRook.setPiecePosJ(to.getJ() + 1);
+//        }else {
+//            castlingRook.setPiecePosJ(to.getJ() - 1);
+//        }
+        if(castlingRookTile.getJ() < from.getJ()){
+            newBoard[Board.NUM_TILES_PER_ROW* to.getI()+ to.getJ()+1].setPiece(castlingRook);
+        }else{
+            newBoard[Board.NUM_TILES_PER_ROW* to.getI()+ to.getJ()-1].setPiece(castlingRook);
+        }
+//        castlingRook.setMoves(castlingRook.getMoves() + 1);
+//        castlingRook.setHasMoved(true);
+        return newBoard;
+    }
+
+    public Piece getCastlingRook() {
+        return castlingRook;
+    }
+
+    public Tile getCastlingRookTile() {
+        return castlingRookTile;
+    }
 }

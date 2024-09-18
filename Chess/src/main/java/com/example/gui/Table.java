@@ -1,33 +1,5 @@
 package com.example.gui;
 
-import com.example.chess.board.Board;
-import com.example.chess.board.Tile;
-import com.example.chess.move.Move;
-import com.example.chess.piece.Piece;
-import com.example.chess.piece.PiecesType;
-import com.example.chess.util.BoardUtil;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.*;
-
 public class Table {
 
 //    final static int BOARD_WIDTH = 512;

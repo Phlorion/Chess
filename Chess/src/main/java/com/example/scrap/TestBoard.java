@@ -1,12 +1,5 @@
 package com.example.scrap;
 
-import com.example.chess.board.Board;
-import com.example.chess.move.RegularMove;
-import com.example.chess.piece.King;
-import com.example.chess.piece.Knight;
-import com.example.chess.piece.PiecesType;
-import com.example.chess.piece.Rook;
-
 public class TestBoard {
 
     public static void main(String args[]) {

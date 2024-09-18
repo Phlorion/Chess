@@ -1,23 +1,5 @@
 package com.example.gui;
 
-import com.example.Game;
-import com.example.chess.board.Board;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-
-import java.io.FileNotFoundException;
-
 public abstract class EndGame {
 
 //    String s;

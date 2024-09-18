@@ -1,10 +1,10 @@
 package com.example.chess.piece;
 
 //import com.example.chess.board.Board;
-import com.example.chess.board.Board_2;
+import com.example.chess.board.Board;
 //import com.example.chess.move.Move;
 import com.example.chess.board.Tile;
-import com.example.chess.move.Move_2;
+import com.example.chess.move.Move;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +45,7 @@ public abstract class Piece {
      * @return All the legal moves of the piece
      */
 //    public abstract List<Move> legalMoves(final Board board);
-    public abstract List<Move_2> calculatePotentialMoves(final Tile[] board);
+    public abstract List<Move> calculatePotentialMoves(final Tile[] board);
 
     public PiecesType getType() {
         return type;
@@ -54,22 +54,6 @@ public abstract class Piece {
     public void setType(PiecesType type) {
         this.type = type;
     }
-
-//    public int getPiecePosI() {
-//        return piecePosI;
-//    }
-//
-//    public void setPiecePosI(int piecePosI) {
-//        this.piecePosI = piecePosI;
-//    }
-//
-//    public int getPiecePosJ() {
-//        return piecePosJ;
-//    }
-//
-//    public void setPiecePosJ(int piecePosJ) {
-//        this.piecePosJ = piecePosJ;
-//    }
 
     public PieceKind getPieceKind() {
         return pieceKind;
@@ -142,6 +126,6 @@ public abstract class Piece {
         return null;
     }
     protected boolean isValidCoordinate(int i, int j) {
-        return !(i < 0 || i > Board_2.NUM_TILES_PER_ROW-1 || j < 0 || j > Board_2.NUM_TILES_PER_COL-1);
+        return !(i < 0 || i > Board.NUM_TILES_PER_ROW-1 || j < 0 || j > Board.NUM_TILES_PER_COL-1);
     }
 }

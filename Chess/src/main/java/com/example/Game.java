@@ -1,8 +1,5 @@
 package com.example;
 
-import com.example.chess.board.Board;
-import com.example.chess.piece.*;
-import com.example.gui.Table;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
