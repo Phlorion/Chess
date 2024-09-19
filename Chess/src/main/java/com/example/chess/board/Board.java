@@ -22,6 +22,7 @@ public class Board {
     private Collection<Piece> whiteCapturedPieces;
     private Collection<Piece> blackCapturedPieces;
     private Player currentPlayer;
+    private Player opponentPlayer;
     private Player whitePlayer;
     private Player blackPlayer;
     private List<Move> movesHistory;
@@ -43,6 +44,8 @@ public class Board {
         this.setBlackPlayer(new PlayerBlack(this));
         //current player
         this.setCurrentPlayer(this.getWhitePlayer());
+        //opponent player
+        this.setOpponentPlayer(this.getBlackPlayer());
         //set the move history
         this.setMovesHistory(new ArrayList<Move>());
         //set the Pieces' Collections
@@ -87,6 +90,10 @@ public class Board {
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
+
+    public Player getOpponentPlayer() {return opponentPlayer;}
+
+    public void setOpponentPlayer(Player opponentPlayer) {this.opponentPlayer = opponentPlayer;}
 
     public Player getWhitePlayer() {
         return whitePlayer;
@@ -220,8 +227,12 @@ public class Board {
         if (!move.getPiece().hasMoved()){
             move.getPiece().setHasMoved(true);
         }
+
+        /**
+         * Add the move to the moveHistory
+         */
         //Add the move to the moveHistory
-        this.addMoveInMoveHistory(move);
+        /*this.addMoveInMoveHistory(move);
         switch (moveType){
             case "RegularMove":
                 System.out.println("Regular move");
@@ -246,11 +257,8 @@ public class Board {
             default:
                 System.out.println("Unknown move.");
                 break;
-        }
-//        System.out.println(this);
-        //Change the board for the players -- I think it is not important. Because we already have the board in the player's constructor and we do all the changes in that board
-//        getWhitePlayer().setBoard(this);
-//        getBlackPlayer().setBoard(this);
+        }*/
+
         //Calculate the new legal moves for both players
         getWhitePlayer().setLegalMoves(getWhitePlayer().calculateAllLegalMoves(this.board));
         getBlackPlayer().setLegalMoves(getBlackPlayer().calculateAllLegalMoves(this.board));

@@ -12,6 +12,8 @@ module com.example.chess {
     opens com.example.chess.move to javafx.fxml;
     opens com.example to javafx.fxml;
     exports com.example to javafx.graphics;
-    exports com.example.scrap;
-    opens com.example.scrap to javafx.fxml;
+    exports com.example.scrap.other;
+    opens com.example.scrap.other to javafx.fxml;
+    exports com.example.scrap.game;
+    opens com.example.scrap.game to javafx.fxml;
 }

@@ -1,32 +1,39 @@
-package com.example.scrap;
+package com.example.scrap.game;
 
 import com.example.chess.board.Board;
 import com.example.chess.board.Tile;
 import com.example.chess.move.Move;
 import com.example.chess.piece.Piece;
+import com.example.chess.player.Player;
 
 import java.util.Scanner;
 
-public class TestGame {
-    public static void main(String[] args) {
+public class PvPTestGame implements TestGame {
+
+    public void startGameLoop() {
         Board board = new Board();
         board.setStartingPieces();
 
-        board.getWhitePlayer().setPotentialMoves(board.getWhitePlayer().calculateAllPotentialMoves(board.getBoard()));
-        board.getBlackPlayer().setPotentialMoves(board.getBlackPlayer().calculateAllPotentialMoves(board.getBoard()));
-        board.getWhitePlayer().setLegalMoves(board.getWhitePlayer().calculateAllLegalMoves(board.getBoard()));
-        board.getBlackPlayer().setLegalMoves(board.getBlackPlayer().calculateAllLegalMoves(board.getBoard()));
-        Move move = board.getWhitePlayer().getLegalMoves().get(0);
+        Player whitePlayer = board.getWhitePlayer();
+        Player blackPlayer = board.getBlackPlayer();
+
+        whitePlayer.setPotentialMoves(whitePlayer.calculateAllPotentialMoves(board.getBoard()));
+        blackPlayer.setPotentialMoves(blackPlayer.calculateAllPotentialMoves(board.getBoard()));
+        whitePlayer.setLegalMoves(whitePlayer.calculateAllLegalMoves(board.getBoard()));
+        blackPlayer.setLegalMoves(blackPlayer.calculateAllLegalMoves(board.getBoard()));
+        //Move move = whitePlayer.getLegalMoves().get(0);
 
         System.out.println(board);
         boolean gameLoop = true;
         while(gameLoop) {
-            System.out.println(board.getCurrentPlayer().getType() + "'s turn");
+            Player currentPlayer = board.getCurrentPlayer();
+            Player opponentPlayer = board.getOpponentPlayer();
+            System.out.println(currentPlayer.getType() + "'s turn");
 
-            if (board.getCurrentPlayer().getCheckMated()) {
-                System.out.println(/*board.getOpponentPlayer() +*/ "Opponent WINS!");
+            if (currentPlayer.getCheckMated()) {
+                System.out.println(opponentPlayer.getType() + "wins");
                 break;
-            } else if (board.getCurrentPlayer().getStaleMated()) {
+            } else if (currentPlayer.getStaleMated()) {
                 System.out.println("TIE");
                 break;
             }
@@ -34,18 +41,10 @@ public class TestGame {
             for (int i = 0; i < board.getCurrentPlayer().getLegalMoves().size(); i++) {
                 System.out.println("MOVE "+i+":"+board.getCurrentPlayer().getLegalMoves().get(i));
             }
-//            System.out.println("White Player's Moves");
-//            for (int i = 0; i < board.getCurrentPlayer().getLegalMoves().size(); i++) {
-//                System.out.println("MOVE "+i+":"+board.getWhitePlayer().getLegalMoves().get(i));
-//            }
-//            System.out.println("Black Player's Moves");
-//            for (int i = 0; i < board.getCurrentPlayer().getLegalMoves().size(); i++) {
-//                System.out.println("MOVE "+i+":"+board.getBlackPlayer().getLegalMoves().get(i));
-//            }
             Scanner scanner = new Scanner(System.in);
             System.out.print("Choose a move: ");
-
             String input = scanner.nextLine().toLowerCase();
+
             if (input.equals("stop")) {
                 gameLoop = false;
             }else {
@@ -77,8 +76,9 @@ public class TestGame {
                 if (!validMove) System.out.println("Invalid move");
             }
         }
-        for (int i = 0; i < board.getMovesHistory().size(); i++) {
+        // Print moves history
+        /*for (int i = 0; i < board.getMovesHistory().size(); i++) {
             System.out.println(board.getMovesHistory().get(i));
-        }
+        }*/
     }
 }

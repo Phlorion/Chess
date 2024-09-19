@@ -1,4 +1,4 @@
-package com.example.scrap;
+package com.example.scrap.other;
 
 public class TestBoard {
 
