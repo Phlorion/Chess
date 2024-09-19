@@ -9,7 +9,7 @@ import com.example.chess.player.Player;
 import java.util.Scanner;
 
 public class PvPTestGame implements TestGame {
-
+    @Override
     public void startGameLoop() {
         Board board = new Board();
         board.setStartingPieces();
@@ -21,9 +21,9 @@ public class PvPTestGame implements TestGame {
         blackPlayer.setPotentialMoves(blackPlayer.calculateAllPotentialMoves(board.getBoard()));
         whitePlayer.setLegalMoves(whitePlayer.calculateAllLegalMoves(board.getBoard()));
         blackPlayer.setLegalMoves(blackPlayer.calculateAllLegalMoves(board.getBoard()));
-        //Move move = whitePlayer.getLegalMoves().get(0);
 
         System.out.println(board);
+
         boolean gameLoop = true;
         while(gameLoop) {
             Player currentPlayer = board.getCurrentPlayer();
@@ -41,6 +41,7 @@ public class PvPTestGame implements TestGame {
             for (int i = 0; i < board.getCurrentPlayer().getLegalMoves().size(); i++) {
                 System.out.println("MOVE "+i+":"+board.getCurrentPlayer().getLegalMoves().get(i));
             }
+
             Scanner scanner = new Scanner(System.in);
             System.out.print("Choose a move: ");
             String input = scanner.nextLine().toLowerCase();
