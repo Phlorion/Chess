@@ -17,8 +17,6 @@ public class PvPTestGame implements TestGame {
         Player whitePlayer = board.getWhitePlayer();
         Player blackPlayer = board.getBlackPlayer();
 
-        whitePlayer.setPotentialMoves(whitePlayer.calculateAllPotentialMoves(board.getBoard()));
-        blackPlayer.setPotentialMoves(blackPlayer.calculateAllPotentialMoves(board.getBoard()));
         whitePlayer.setLegalMoves(whitePlayer.calculateAllLegalMoves(board.getBoard()));
         blackPlayer.setLegalMoves(blackPlayer.calculateAllLegalMoves(board.getBoard()));
 
@@ -31,7 +29,7 @@ public class PvPTestGame implements TestGame {
             System.out.println(currentPlayer.getType() + "'s turn");
 
             if (currentPlayer.getCheckMated()) {
-                System.out.println(opponentPlayer.getType() + "wins");
+                System.out.println(opponentPlayer.getType() + " wins");
                 break;
             } else if (currentPlayer.getStaleMated()) {
                 System.out.println("TIE");
