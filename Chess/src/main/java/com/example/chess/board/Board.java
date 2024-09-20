@@ -55,6 +55,63 @@ public class Board {
         this.setBlackCapturedPieces(new ArrayList<>());
     }
 
+    // Copy Constructor
+    public Board(Board original) {
+        //set the board/tiles
+        this.board = new Tile[NUM_TILES];
+        // copy the pieces
+        ArrayList<Piece> whites = new ArrayList<>();
+        ArrayList<Piece> blacks = new ArrayList<>();
+        for (int i = 0; i < this.board.length; i++) {
+            Tile originalTile = original.getTile(i / NUM_TILES_PER_ROW, i % NUM_TILES_PER_ROW);
+            Piece originalPiece = originalTile.getPiece();
+            // if there is no piece in this tile skip
+            if (originalPiece == null) {
+                this.board[i] = new Tile(originalTile.getI(), originalTile.getJ(), null);
+                continue;
+            }
+
+            // if piece != null find piece kind and copy it
+            Piece copiedPiece = switch (originalPiece.getPieceKind()) {
+                case KING -> new King((King) originalPiece);
+                case ROOK -> new Rook((Rook) originalPiece);
+                case QUEEN -> new Queen((Queen) originalPiece);
+                case KNIGHT -> new Knight((Knight) originalPiece);
+                case BISHOP -> new Bishop((Bishop) originalPiece);
+                default -> new Pawn((Pawn) originalPiece);
+            };
+            this.board[i] = new Tile(originalTile.getI(), originalTile.getJ(), copiedPiece);
+            // add it to the corresponding array based on its type
+            if (copiedPiece.getType().equals(PiecesType.WHITE))
+                whites.add(copiedPiece);
+            else
+                blacks.add(copiedPiece);
+        }
+        //set the players
+        //white
+        this.setWhitePlayer(new PlayerWhite(this));
+        //black
+        this.setBlackPlayer(new PlayerBlack(this));
+        //current player && opponent player
+        if (original.getCurrentPlayer().getType().equals(PiecesType.WHITE)) {
+            this.setCurrentPlayer(this.getWhitePlayer());
+            this.setOpponentPlayer(this.getBlackPlayer());
+        }
+        else {
+            this.setCurrentPlayer(this.getBlackPlayer());
+            this.setOpponentPlayer(this.getWhitePlayer());
+        }
+
+        //set the move history
+        this.setMovesHistory(new ArrayList<Move>());
+
+        //set the Pieces' Collections
+        this.setWhitePieces(new ArrayList<>());
+        this.setWhiteCapturedPieces(original.getWhiteCapturedPieces());
+        this.setBlackPieces(new ArrayList<>());
+        this.setBlackCapturedPieces(original.getBlackCapturedPieces());
+    }
+
     //Constructor - END
 
 
