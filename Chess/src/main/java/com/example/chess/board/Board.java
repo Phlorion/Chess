@@ -106,9 +106,9 @@ public class Board {
         this.setMovesHistory(new ArrayList<Move>());
 
         //set the Pieces' Collections
-        this.setWhitePieces(new ArrayList<>());
+        this.setWhitePieces(whites);
         this.setWhiteCapturedPieces(original.getWhiteCapturedPieces());
-        this.setBlackPieces(new ArrayList<>());
+        this.setBlackPieces(blacks);
         this.setBlackCapturedPieces(original.getBlackCapturedPieces());
     }
 

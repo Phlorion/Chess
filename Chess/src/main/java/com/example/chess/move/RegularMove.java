@@ -22,7 +22,7 @@ public class RegularMove extends Move {
                 continue;
             }
             //Copy all the rest to the new board
-            newBoard[i] = new Tile(existingBoard[i].getI(), existingBoard[i].getJ(),existingBoard[i].getPiece());
+            newBoard[i] = new Tile(existingBoard[i].getI(), existingBoard[i].getJ(), existingBoard[i].getPiece());
         }
         //Move the piece
 //        piece.setPiecePosI(to.getI());

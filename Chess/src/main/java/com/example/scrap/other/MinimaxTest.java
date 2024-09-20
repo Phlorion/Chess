@@ -1,12 +1,10 @@
 package com.example.scrap.other;
 
 import com.example.ai.MiniMax;
-import com.example.ai.State;
 import com.example.chess.board.Board;
 import com.example.chess.move.Move;
 import com.example.chess.player.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MinimaxTest {
@@ -22,20 +20,50 @@ public class MinimaxTest {
         System.out.println(board + "\n--------------------------------------------------------");
 
         int i = 0;
-        List<Move> legalMoves = board.getCurrentPlayer().getLegalMoves();
-        for (Move m : legalMoves) {
-            Board copy = new Board(board);
+        Board copy = new Board(board);
+        Player copyWhitePlayer = copy.getWhitePlayer();
+        Player copyBlackPlayer = copy.getBlackPlayer();
+        copyWhitePlayer.setLegalMoves(copyWhitePlayer.calculateAllLegalMoves(copy.getBoard()));
+        copyBlackPlayer.setLegalMoves(copyBlackPlayer.calculateAllLegalMoves(copy.getBoard()));
+        List<Move> copyLegalMoves = copy.getCurrentPlayer().getLegalMoves();
+        for (Move m : copyLegalMoves) {
+            copy = new Board(board);
             copy.makeMove(m);
             System.out.println(i + "\n" + copy);
             i++;
         }
 
+        List<Move> legalMoves = board.getCurrentPlayer().getLegalMoves();
         board.makeMove(legalMoves.get(0));
+        System.out.println(board + "\n--------------------------------------------------------");
 
         i = 0;
+        copy = new Board(board);
+        copyWhitePlayer = copy.getWhitePlayer();
+        copyBlackPlayer = copy.getBlackPlayer();
+        copyWhitePlayer.setLegalMoves(copyWhitePlayer.calculateAllLegalMoves(copy.getBoard()));
+        copyBlackPlayer.setLegalMoves(copyBlackPlayer.calculateAllLegalMoves(copy.getBoard()));
+        copyLegalMoves = copy.getCurrentPlayer().getLegalMoves();
+        for (Move m : copyLegalMoves) {
+            copy = new Board(board);
+            copy.makeMove(m);
+            System.out.println(i + "\n" + copy);
+            i++;
+        }
+
         legalMoves = board.getCurrentPlayer().getLegalMoves();
-        for (Move m : legalMoves) {
-            Board copy = new Board(board);
+        board.makeMove(legalMoves.get(0));
+        System.out.println(board + "\n--------------------------------------------------------");
+
+        i = 0;
+        copy = new Board(board);
+        copyWhitePlayer = copy.getWhitePlayer();
+        copyBlackPlayer = copy.getBlackPlayer();
+        copyWhitePlayer.setLegalMoves(copyWhitePlayer.calculateAllLegalMoves(copy.getBoard()));
+        copyBlackPlayer.setLegalMoves(copyBlackPlayer.calculateAllLegalMoves(copy.getBoard()));
+        copyLegalMoves = copy.getCurrentPlayer().getLegalMoves();
+        for (Move m : copyLegalMoves) {
+            copy = new Board(board);
             copy.makeMove(m);
             System.out.println(i + "\n" + copy);
             i++;
