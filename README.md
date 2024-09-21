@@ -22,6 +22,6 @@ A simple chess engine made with Java and JavaFX. Made for a casual, fan game of 
 <ul>
     <li>File saving and loading</li>
     <li>Choosing side</li>
-    <li>AI with MinMax</li>
+    <li>AI with MiniMax</li>
     <li>LAN game (with sockets)</li>
 </ul>
