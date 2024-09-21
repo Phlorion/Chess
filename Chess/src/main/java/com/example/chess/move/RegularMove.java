@@ -9,6 +9,10 @@ public class RegularMove extends Move {
         super(from, to, piece, board);
     }
 
+    public RegularMove(Move move, Tile[] board) {
+        super(move, board);
+    }
+
     @Override
     public Tile[] makeMoveInBoard() {
         Tile[] existingBoard = this.board;

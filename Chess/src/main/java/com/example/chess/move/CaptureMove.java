@@ -11,6 +11,11 @@ public class CaptureMove extends Move {
         this.capturingPiece = capturingPiece;
     }
 
+    public CaptureMove(Move move, Tile[] board) {
+        super(move, board);
+        this.capturingPiece = this.board[8*move.getTo().getI() + move.getTo().getJ()].getPiece();
+    }
+
     @Override
     public Tile[] makeMoveInBoard() {
         Tile[] existingBoard = this.board;
