@@ -13,6 +13,17 @@ public class Castle extends Move {
         this.castlingRook = castlingRookTile.getPiece();
     }
 
+    public Castle(Castle move, Tile[] board) {
+        super(move, board);
+        // get the copy of the castling rook piece
+        for (Tile t : this.board) {
+            if (t.getPiece().equals(move.getCastlingRook())) {
+                this.castlingRook = this.board[Board.NUM_TILES_PER_ROW*t.getI() + t.getJ()].getPiece();
+                this.castlingRookTile = this.board[Board.NUM_TILES_PER_ROW*t.getI() + t.getJ()];
+            }
+        }
+    }
+
     @Override
     public Tile[] makeMoveInBoard() {
         Tile[] existingBoard = this.board;
@@ -44,9 +55,9 @@ public class Castle extends Move {
 //        }else {
 //            castlingRook.setPiecePosJ(to.getJ() - 1);
 //        }
-        if(castlingRookTile.getJ() < from.getJ()){
+        if(castlingRookTile.getJ() < from.getJ()) {
             newBoard[Board.NUM_TILES_PER_ROW* to.getI()+ to.getJ()+1].setPiece(castlingRook);
-        }else{
+        }else {
             newBoard[Board.NUM_TILES_PER_ROW* to.getI()+ to.getJ()-1].setPiece(castlingRook);
         }
 //        castlingRook.setMoves(castlingRook.getMoves() + 1);

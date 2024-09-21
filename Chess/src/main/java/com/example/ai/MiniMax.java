@@ -20,6 +20,10 @@ public class MiniMax {
 
     public void miniMax(State state, PiecesType max) {}
 
+    private void buildTree(State root) {
+
+    }
+
     private int maxValue(State state) {
         if (!state.hasChildren())
             return utility(state);

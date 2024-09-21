@@ -1,6 +1,7 @@
 package com.example.chess.move;
 
 //import com.example.chess.board.Board;
+import com.example.chess.board.Board;
 import com.example.chess.board.Tile;
 import com.example.chess.piece.Piece;
 
@@ -28,9 +29,9 @@ public abstract class Move {
 
     public Move(Move move, Tile[] board) {
         this.board = board;
-        this.piece = this.board[8*move.getFrom().getI() + move.getFrom().getJ()].getPiece();
-        this.from = this.board[8*move.getFrom().getI() + move.getFrom().getJ()];
-        this.to = this.board[8*move.getTo().getI() + move.getTo().getJ()];
+        this.piece = this.board[Board.NUM_TILES_PER_ROW*move.getFrom().getI() + move.getFrom().getJ()].getPiece();
+        this.from = this.board[Board.NUM_TILES_PER_ROW*move.getFrom().getI() + move.getFrom().getJ()];
+        this.to = this.board[Board.NUM_TILES_PER_ROW*move.getTo().getI() + move.getTo().getJ()];
         uid = move.getUid();
     }
 

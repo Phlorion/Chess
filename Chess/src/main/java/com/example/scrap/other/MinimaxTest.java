@@ -3,6 +3,7 @@ package com.example.scrap.other;
 import com.example.ai.MiniMax;
 import com.example.chess.board.Board;
 import com.example.chess.move.CaptureMove;
+import com.example.chess.move.Castle;
 import com.example.chess.move.Move;
 import com.example.chess.move.RegularMove;
 import com.example.chess.player.Player;
@@ -47,7 +48,9 @@ public class MinimaxTest {
             if (m.getClass().getName().contains("RegularMove"))
                 copyMove = new RegularMove(m, copy.getBoard());
             else if (m.getClass().getName().contains("CaptureMove"))
-                copyMove = new CaptureMove(m, copy.getBoard());
+                copyMove = new CaptureMove((CaptureMove) m, copy.getBoard());
+            else if (m.getClass().getName().contains("Castle"))
+                copyMove = new Castle((Castle) m, copy.getBoard());
             copiedLegalMoves.add(copyMove);
         }
         for (Move m : copiedLegalMoves) {
@@ -69,7 +72,9 @@ public class MinimaxTest {
             if (m.getClass().getName().contains("RegularMove"))
                 copyMove = new RegularMove(m, copy.getBoard());
             else if (m.getClass().getName().contains("CaptureMove"))
-                copyMove = new CaptureMove(m, copy.getBoard());
+                copyMove = new CaptureMove((CaptureMove) m, copy.getBoard());
+            else if (m.getClass().getName().contains("Castle"))
+                copyMove = new Castle((Castle) m, copy.getBoard());
             copiedLegalMoves.add(copyMove);
         }
         for (Move m : copiedLegalMoves) {
@@ -91,7 +96,9 @@ public class MinimaxTest {
             if (m.getClass().getName().contains("RegularMove"))
                 copyMove = new RegularMove(m, copy.getBoard());
             else if (m.getClass().getName().contains("CaptureMove"))
-                copyMove = new CaptureMove(m, copy.getBoard());
+                copyMove = new CaptureMove((CaptureMove) m, copy.getBoard());
+            else if (m.getClass().getName().contains("Castle"))
+                copyMove = new Castle((Castle) m, copy.getBoard());
             copiedLegalMoves.add(copyMove);
         }
         for (Move m : copiedLegalMoves) {

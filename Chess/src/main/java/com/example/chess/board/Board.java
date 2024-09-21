@@ -231,7 +231,7 @@ public class Board {
                 for (int j = 0; j < 8; j++) {
                     this.board[NUM_TILES_PER_ROW* i + j].setI(i);
                     this.board[NUM_TILES_PER_ROW* i + j].setJ(j);
-                    //piece is already null - I think
+                    //piece is already null
                 }
             }
 
@@ -325,6 +325,7 @@ public class Board {
         } else if (currentPlayer.getType().equals(PiecesType.BLACK)) {
             this.currentPlayer = this.getWhitePlayer();
         }
+
         if(this.getCurrentPlayer().getLegalMoves().isEmpty()){
             if(isMyKingSafe(this.getCurrentPlayer(),this.getBoard())){
                 this.currentPlayer.setStaleMated(true);
