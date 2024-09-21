@@ -13,15 +13,33 @@ public abstract class Move {
     Piece piece;
     Tile[] board;
 
+    private static int counter = 0;
+    private final int uid;
+
     //Constructor
     public Move(Tile from, Tile to, Piece piece, Tile[] board) {
+        counter++;
+        uid = counter;
         this.from = from;
         this.to = to;
         this.piece = piece;
         this.board = board;
     }
 
+    public Move(Move move, Tile[] board) {
+        this.board = board;
+        this.piece = this.board[8*move.getFrom().getI() + move.getFrom().getJ()].getPiece();
+        this.from = this.board[8*move.getFrom().getI() + move.getFrom().getJ()];
+        this.to = this.board[8*move.getTo().getI() + move.getTo().getJ()];
+        uid = move.getUid();
+    }
+
     //Getters && Setters
+
+
+    public int getUid() {
+        return uid;
+    }
 
     public Tile getFrom() {
         return from;
