@@ -3,7 +3,7 @@ package com.example.scrap.game;
 import com.example.chess.board.Board;
 import com.example.chess.board.Tile;
 import com.example.chess.move.Move;
-import com.example.chess.piece.Piece;
+import com.example.chess.piece.*;
 import com.example.chess.player.Player;
 
 import java.util.Scanner;
@@ -12,10 +12,25 @@ public class PvPTestGame implements TestGame {
     @Override
     public void startGameLoop() {
         Board board = new Board();
-        board.setStartingPieces();
+//        board.setStartingPieces();
+        board.setPieceOnBoard(new Rook(PiecesType.BLACK),0,0);
+        board.setPieceOnBoard(new Rook(PiecesType.BLACK),0,2);
+        board.setPieceOnBoard(new Rook(PiecesType.BLACK),0,7);
+        board.setPieceOnBoard(new Knight(PiecesType.BLACK),0,1);
+        board.setPieceOnBoard(new King(PiecesType.BLACK),0,4);
+        board.setPieceOnBoard(new Queen(PiecesType.BLACK),1,4);
+        board.setPieceOnBoard(new King(PiecesType.WHITE),7,4);
+        board.setPieceOnBoard(new Rook(PiecesType.WHITE),7,0);
+        board.setPieceOnBoard(new Rook(PiecesType.WHITE),7,7);
 
         Player whitePlayer = board.getWhitePlayer();
         Player blackPlayer = board.getBlackPlayer();
+
+        board.setBlackPieces(board.findAllActivePieces(board.getBoard(), PiecesType.BLACK));
+        board.setWhitePieces(board.findAllActivePieces(board.getBoard(), PiecesType.WHITE));
+        //For castle
+        whitePlayer.setPotentialMoves(whitePlayer.calculateAllPotentialMoves(board.getBoard()));
+        blackPlayer.setPotentialMoves(blackPlayer.calculateAllPotentialMoves(board.getBoard()));
 
         whitePlayer.setLegalMoves(whitePlayer.calculateAllLegalMoves(board.getBoard()));
         blackPlayer.setLegalMoves(blackPlayer.calculateAllLegalMoves(board.getBoard()));

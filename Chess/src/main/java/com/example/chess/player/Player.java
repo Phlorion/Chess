@@ -2,7 +2,10 @@ package com.example.chess.player;
 
 import com.example.chess.board.Board;
 import com.example.chess.board.Tile;
+import com.example.chess.move.CaptureMove;
+import com.example.chess.move.Castle;
 import com.example.chess.move.Move;
+import com.example.chess.piece.King;
 import com.example.chess.piece.Piece;
 import com.example.chess.piece.PiecesType;
 
@@ -10,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+
+import static com.example.chess.board.Board.NUM_TILES_PER_COL;
+import static com.example.chess.board.Board.NUM_TILES_PER_ROW;
 
 public abstract class Player {
     //Variables
@@ -104,20 +110,84 @@ public abstract class Player {
                 System.out.println("Move: "+move.toString() +" not added.");
             }
         }
+        //Castle
+        List<Move> opponentMoves;
+        //        Your king does not pass through check!
+        //        No pieces between the king and rook!
+        King myKing = this.findMyKing(this.board.getBoard());
+        if(this.board.isMyKingSafe(this,this.board.getBoard()) && !myKing.hasMoved()){//Your king is NOT in check && Your king has not moved!
+            //Short
+            boolean canCastleKingSide = false;
+            Tile kingsTile = this.board.getTileByPiece(this.getBoard().getBoard(), myKing);
+            Tile rightRookTile = this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI() + NUM_TILES_PER_ROW-1];//NUM_COL * King's I + NUM_ROW-1
+            Piece rightRook = rightRookTile.getPiece();
+            if(rightRook != null && rightRook.getPieceKind().equals(Piece.PieceKind.ROOK) && !rightRook.hasMoved()){//Your rook have not moved!
+                for (int j = kingsTile.getJ()+1; j <= kingsTile.getJ()+2; j++) {
+                    if(this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI() + j].getPiece() != null){//If other piece on tile
+                        canCastleKingSide = false;
+                        break;
+                    }
+                    if(this.getType().equals(PiecesType.WHITE)){
+                        opponentMoves = (List<Move>) this.board.getBlackPlayer().getPotentialMoves();
+                    }else{
+                        opponentMoves = (List<Move>) this.board.getWhitePlayer().getPotentialMoves();
+                    }
+                    if(this.isAttackingOnTile(this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI() + j],opponentMoves).isEmpty()){
+                        canCastleKingSide = true;
+                    }else {
+                        canCastleKingSide = false;
+                        break;
+                    }
+                }
+                if(canCastleKingSide){
+                    playersLegalMoves.add(new Castle(this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI() + kingsTile.getJ()],this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI() + kingsTile.getJ()+2],myKing,this.getBoard().getBoard(), rightRookTile));
+                }
+            }
+            //Long
+            boolean canCastleQueenSide = false;
+            kingsTile = this.board.getTileByPiece(this.getBoard().getBoard(), myKing);
+            Tile leftRookTile = this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI()];//NUM_COL * King's I + 0
+            Piece leftRook = leftRookTile.getPiece();
+            if(leftRook != null && leftRook.getPieceKind().equals(Piece.PieceKind.ROOK) && !leftRook.hasMoved()){//Your rook have not moved!
+                for (int j = kingsTile.getJ()-3; j <= kingsTile.getJ()-1; j++) {
+                    if(this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI() + j].getPiece() != null){//If other piece on tile
+                        canCastleQueenSide = false;
+                        break;
+                    }
+                    if(j==1){
+                        continue;
+                    }
+                    if(this.getType().equals(PiecesType.WHITE)){
+                        opponentMoves = (List<Move>) this.board.getBlackPlayer().getPotentialMoves();
+                    }else{
+                        opponentMoves = (List<Move>) this.board.getWhitePlayer().getPotentialMoves();
+                    }
+                    if(this.isAttackingOnTile(this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI() + j],opponentMoves).isEmpty()){
+                        canCastleQueenSide = true;
+                    }else {
+                        canCastleQueenSide = false;
+                        break;
+                    }
+                }
+                if(canCastleQueenSide){
+                    playersLegalMoves.add(new Castle(this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI() + kingsTile.getJ()],this.board.getBoard()[NUM_TILES_PER_COL * kingsTile.getI() + kingsTile.getJ()-2],myKing,this.getBoard().getBoard(), leftRookTile));
+                }
+            }
+        }
         return playersLegalMoves;
     }
-//    /**
-//     * Get the piece king of this player
-//     * @return The piece
-//     */
-//    public King findMyKing(Tile[] board) {
-//        for (Piece p : getActivePieces()) {
-//            if (p.getPieceKind().equals(Piece.PieceKind.KING)) {
-//                return (King) p;
-//            }
-//        }
-//        return null;
-//    }
+    /**
+     * Get the piece King of this player
+     * @return The piece
+     */
+    public King findMyKing(Tile[] board) {
+        for (Piece p : getActivePieces()) {
+            if (p.getPieceKind().equals(Piece.PieceKind.KING)) {
+                return (King) p;
+            }
+        }
+        return null;
+    }
     /**
      * Get all the moves that are currently attacking this tile
      * @param tile The tile that is getting attacked

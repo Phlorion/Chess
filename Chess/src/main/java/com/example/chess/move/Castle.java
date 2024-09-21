@@ -7,6 +7,7 @@ import com.example.chess.piece.Piece;
 public class Castle extends Move {
     Piece castlingRook;
     Tile castlingRookTile;
+
     public Castle(Tile from, Tile to, Piece piece, Tile[] board, Tile castlingRookTile) {
         super(from, to, piece, board);
         this.castlingRookTile = castlingRookTile;

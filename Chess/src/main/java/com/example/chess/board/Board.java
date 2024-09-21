@@ -33,9 +33,7 @@ public class Board {
         //set the board/ tiles
         this.board = new Tile[NUM_TILES];
         for (int i = 0; i < this.board.length; i++) {
-            this.board[i] = new Tile();
-//            System.out.println("Constructor board2 tile I"+this.board[i].getI());
-//            System.out.println("Constructor board2 tile J"+this.board[i].getJ());
+            this.board[i] = new Tile(i/NUM_TILES_PER_ROW ,i%NUM_TILES_PER_ROW,null);
         }
         //set the players
         //white
@@ -198,7 +196,7 @@ public class Board {
      * Set a piece to the board
      * @param piece The piece to be set
      */
-    private void setPieceOnBoard(Piece piece, int posI, int posJ){
+    public void setPieceOnBoard(Piece piece, int posI, int posJ){
         try {
             this.board[NUM_TILES_PER_ROW* posI + posJ].setI(posI);
             this.board[NUM_TILES_PER_ROW* posI + posJ].setJ(posJ);
@@ -225,15 +223,6 @@ public class Board {
 
             //set the black pieces in the collection
             this.setBlackPieces(this.findAllActivePieces(this.board, PiecesType.BLACK));
-
-            //set the (i,j) on the rest of the tiles
-            for (int i = 2; i <6 ; i++) {
-                for (int j = 0; j < 8; j++) {
-                    this.board[NUM_TILES_PER_ROW* i + j].setI(i);
-                    this.board[NUM_TILES_PER_ROW* i + j].setJ(j);
-                    //piece is already null
-                }
-            }
 
             //set WHITE pieces
             setPieceOnBoard(new Rook(PiecesType.WHITE),7,0);
@@ -289,7 +278,7 @@ public class Board {
          * Add the move to the moveHistory
          */
         //Add the move to the moveHistory
-        /*this.addMoveInMoveHistory(move);
+        this.addMoveInMoveHistory(move);
         switch (moveType){
             case "RegularMove":
                 System.out.println("Regular move");
@@ -314,8 +303,11 @@ public class Board {
             default:
                 System.out.println("Unknown move.");
                 break;
-        }*/
+        }
 
+        //Calculate the new potential moves for both players - for castle
+        getWhitePlayer().setPotentialMoves(getWhitePlayer().calculateAllPotentialMoves(this.board));
+        getBlackPlayer().setPotentialMoves(getBlackPlayer().calculateAllPotentialMoves(this.board));
         //Calculate the new legal moves for both players
         getWhitePlayer().setLegalMoves(getWhitePlayer().calculateAllLegalMoves(this.board));
         getBlackPlayer().setLegalMoves(getBlackPlayer().calculateAllLegalMoves(this.board));
@@ -325,7 +317,6 @@ public class Board {
         } else if (currentPlayer.getType().equals(PiecesType.BLACK)) {
             this.currentPlayer = this.getWhitePlayer();
         }
-
         if(this.getCurrentPlayer().getLegalMoves().isEmpty()){
             if(isMyKingSafe(this.getCurrentPlayer(),this.getBoard())){
                 this.currentPlayer.setStaleMated(true);
@@ -379,7 +370,7 @@ public class Board {
      * @param type Black or White
      * @return All the active pieces of the given type
      */
-    private Collection<Piece> findAllActivePieces(Tile[] board, PiecesType type) {
+    public Collection<Piece> findAllActivePieces(Tile[] board, PiecesType type) {
         List<Piece> activePieces = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
             if (board[i].getPiece() != null && board[i].getPiece().getType().equals(type)) {
