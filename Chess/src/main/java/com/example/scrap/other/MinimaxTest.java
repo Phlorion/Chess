@@ -1,11 +1,13 @@
 package com.example.scrap.other;
 
 import com.example.ai.MiniMax;
+import com.example.ai.State;
 import com.example.chess.board.Board;
 import com.example.chess.move.CaptureMove;
 import com.example.chess.move.Castle;
 import com.example.chess.move.Move;
 import com.example.chess.move.RegularMove;
+import com.example.chess.piece.*;
 import com.example.chess.player.Player;
 
 import java.util.ArrayList;
@@ -17,95 +19,27 @@ public class MinimaxTest {
 
         Board board = new Board();
         board.setStartingPieces();
+        /*board.setPieceOnBoard(new King(PiecesType.BLACK),0,4);
+        board.setPieceOnBoard(new King(PiecesType.WHITE),7,4);
+        board.setPieceOnBoard(new Pawn(PiecesType.BLACK),1,2);
+        board.setPieceOnBoard(new Pawn(PiecesType.WHITE),6,5);*/
+
         Player whitePlayer = board.getWhitePlayer();
         Player blackPlayer = board.getBlackPlayer();
+        /*board.setBlackPieces(board.findAllActivePieces(board.getBoard(), PiecesType.BLACK));
+        board.setWhitePieces(board.findAllActivePieces(board.getBoard(), PiecesType.WHITE));*/
+        whitePlayer.setPotentialMoves(whitePlayer.calculateAllPotentialMoves(board.getBoard()));
+        blackPlayer.setPotentialMoves(blackPlayer.calculateAllPotentialMoves(board.getBoard()));
         whitePlayer.setLegalMoves(whitePlayer.calculateAllLegalMoves(board.getBoard()));
         blackPlayer.setLegalMoves(blackPlayer.calculateAllLegalMoves(board.getBoard()));
         System.out.println(board + "\n--------------------------------------------------------");
 
-        /*Board copy = new Board(board);
-
-        List<Move> legalMoves = board.getCurrentPlayer().getLegalMoves();
-        List<Move> temp = new ArrayList<>();
-        for (Move m : legalMoves) {
-            Move copyMove = null;
-            if (m.getClass().getName().contains("RegularMove"))
-                copyMove = new RegularMove(m, copy.getBoard());
-            else if (m.getClass().getName().contains("CaptureMove"))
-                copyMove = new CaptureMove(m, copy.getBoard());
-            temp.add(copyMove);
-        }
-        for (Move m : legalMoves) System.out.print(m.getUid() + " ");
-        System.out.println();
-        for (Move m : temp) System.out.print(m.getUid() + " ");*/
-
-        int i = 0;
         Board copy = new Board(board);
-        List<Move> legalMoves = board.getCurrentPlayer().getLegalMoves();
-        List<Move> copiedLegalMoves = new ArrayList<>();
-        for (Move m : legalMoves) {
-            Move copyMove = null;
-            if (m.getClass().getName().contains("RegularMove"))
-                copyMove = new RegularMove(m, copy.getBoard());
-            else if (m.getClass().getName().contains("CaptureMove"))
-                copyMove = new CaptureMove((CaptureMove) m, copy.getBoard());
-            else if (m.getClass().getName().contains("Castle"))
-                copyMove = new Castle((Castle) m, copy.getBoard());
-            copiedLegalMoves.add(copyMove);
-        }
-        for (Move m : copiedLegalMoves) {
-            copy = new Board(board);
-            copy.makeMove(m);
-            System.out.println(i + "\n" + copy);
-            i++;
-        }
+        System.out.println(copy);
+        State start = new State(copy);
+        // call minimax
+        mm.buildTree(start, 0);
 
-        board.makeMove(legalMoves.get(0));
-        System.out.println(board + "\n--------------------------------------------------------");
 
-        i = 0;
-        copy = new Board(board);
-        legalMoves = board.getCurrentPlayer().getLegalMoves();
-        copiedLegalMoves = new ArrayList<>();
-        for (Move m : legalMoves) {
-            Move copyMove = null;
-            if (m.getClass().getName().contains("RegularMove"))
-                copyMove = new RegularMove(m, copy.getBoard());
-            else if (m.getClass().getName().contains("CaptureMove"))
-                copyMove = new CaptureMove((CaptureMove) m, copy.getBoard());
-            else if (m.getClass().getName().contains("Castle"))
-                copyMove = new Castle((Castle) m, copy.getBoard());
-            copiedLegalMoves.add(copyMove);
-        }
-        for (Move m : copiedLegalMoves) {
-            copy = new Board(board);
-            copy.makeMove(m);
-            System.out.println(i + "\n" + copy);
-            i++;
-        }
-
-        board.makeMove(legalMoves.get(0));
-        System.out.println(board + "\n--------------------------------------------------------");
-
-        i = 0;
-        copy = new Board(board);
-        legalMoves = board.getCurrentPlayer().getLegalMoves();
-        copiedLegalMoves = new ArrayList<>();
-        for (Move m : legalMoves) {
-            Move copyMove = null;
-            if (m.getClass().getName().contains("RegularMove"))
-                copyMove = new RegularMove(m, copy.getBoard());
-            else if (m.getClass().getName().contains("CaptureMove"))
-                copyMove = new CaptureMove((CaptureMove) m, copy.getBoard());
-            else if (m.getClass().getName().contains("Castle"))
-                copyMove = new Castle((Castle) m, copy.getBoard());
-            copiedLegalMoves.add(copyMove);
-        }
-        for (Move m : copiedLegalMoves) {
-            copy = new Board(board);
-            copy.makeMove(m);
-            System.out.println(i + "\n" + copy);
-            i++;
-        }
     }
 }

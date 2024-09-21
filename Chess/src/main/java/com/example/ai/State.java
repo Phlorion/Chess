@@ -5,16 +5,22 @@ import com.example.chess.move.Move;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class State {
 
     Board board;
     Move move;
     int score;
-    Collection<State> successors;
+    List<State> successors;
 
     public State(Board board) {
         this.board = board;
+        successors = new ArrayList<>();
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
     public int getScore() {
@@ -33,7 +39,7 @@ public class State {
         return successors;
     }
 
-    public void setSuccessors(Collection<State> successors) {
+    public void setSuccessors(List<State> successors) {
         this.successors = successors;
     }
 

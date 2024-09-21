@@ -15,6 +15,7 @@ public class CaptureMove extends Move {
         super(move, board);
         // get the copy of the capturing piece
         for (Tile t : this.board) {
+            if (t.getPiece() == null) continue;
             if (t.getPiece().equals(move.getCapturingPiece())) {
                 this.capturingPiece = this.board[Board.NUM_TILES_PER_ROW*t.getI() + t.getJ()].getPiece();
             }

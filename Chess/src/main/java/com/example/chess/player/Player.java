@@ -203,6 +203,16 @@ public abstract class Player {
         }
         return attacking;
     }
+
+    public Move getMoveByID(int uid) {
+        for (Move m : legalMoves) {
+            if (m.getUid() == uid) {
+                return m;
+            }
+        }
+        return null;
+    }
+
     /**
      * Get all the pieces of this player that are still in the game
      * @return The pieces

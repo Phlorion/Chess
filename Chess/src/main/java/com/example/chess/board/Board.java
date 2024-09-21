@@ -3,6 +3,7 @@ package com.example.chess.board;
 import com.example.chess.move.CaptureMove;
 import com.example.chess.move.Castle;
 import com.example.chess.move.Move;
+import com.example.chess.move.RegularMove;
 import com.example.chess.piece.*;
 import com.example.chess.player.PlayerBlack;
 import com.example.chess.player.PlayerWhite;
@@ -108,6 +109,64 @@ public class Board {
         this.setWhiteCapturedPieces(original.getWhiteCapturedPieces());
         this.setBlackPieces(blacks);
         this.setBlackCapturedPieces(original.getBlackCapturedPieces());
+
+        // COPY POTENTIAL AND LEGAL MOVES FOR CURRENT PLAYER AND OPPONENT
+        // Potential for current
+        List<Move> copiedPotentialMoves = new ArrayList<>();
+        for (Move m : original.getCurrentPlayer().getPotentialMoves()) {
+            Move copyMove = null;
+            if (m.getClass().getName().contains("RegularMove"))
+                copyMove = new RegularMove(m, this.getBoard());
+            else if (m.getClass().getName().contains("CaptureMove"))
+                copyMove = new CaptureMove((CaptureMove) m, this.getBoard());
+            else if (m.getClass().getName().contains("Castle"))
+                copyMove = new Castle((Castle) m, this.getBoard());
+            copiedPotentialMoves.add(copyMove);
+        }
+        this.getCurrentPlayer().setPotentialMoves(copiedPotentialMoves);
+
+        // potential for opponent
+        copiedPotentialMoves = new ArrayList<>();
+        for (Move m : original.getOpponentPlayer().getPotentialMoves()) {
+            Move copyMove = null;
+            if (m.getClass().getName().contains("RegularMove"))
+                copyMove = new RegularMove(m, this.getBoard());
+            else if (m.getClass().getName().contains("CaptureMove"))
+                copyMove = new CaptureMove((CaptureMove) m, this.getBoard());
+            else if (m.getClass().getName().contains("Castle"))
+                copyMove = new Castle((Castle) m, this.getBoard());
+            copiedPotentialMoves.add(copyMove);
+        }
+        this.getOpponentPlayer().setPotentialMoves(copiedPotentialMoves);
+
+        // legal for current
+        List<Move> copiedLegalMoves = new ArrayList<>();
+        for (Move m : original.getCurrentPlayer().getLegalMoves()) {
+            Move copyMove = null;
+            if (m.getClass().getName().contains("RegularMove"))
+                copyMove = new RegularMove(m, this.getBoard());
+            else if (m.getClass().getName().contains("CaptureMove"))
+                copyMove = new CaptureMove((CaptureMove) m, this.getBoard());
+            else if (m.getClass().getName().contains("Castle"))
+                copyMove = new Castle((Castle) m, this.getBoard());
+            copiedLegalMoves.add(copyMove);
+        }
+        this.getCurrentPlayer().setLegalMoves(copiedLegalMoves);
+
+        // legal for opponent
+        copiedLegalMoves = new ArrayList<>();
+        for (Move m : original.getOpponentPlayer().getLegalMoves()) {
+            Move copyMove = null;
+            if (m.getClass().getName().contains("RegularMove"))
+                copyMove = new RegularMove(m, this.getBoard());
+            else if (m.getClass().getName().contains("CaptureMove"))
+                copyMove = new CaptureMove((CaptureMove) m, this.getBoard());
+            else if (m.getClass().getName().contains("Castle"))
+                copyMove = new Castle((Castle) m, this.getBoard());
+            copiedLegalMoves.add(copyMove);
+        }
+        this.getOpponentPlayer().setLegalMoves(copiedLegalMoves);
+
     }
 
     //Constructor - END
