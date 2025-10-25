@@ -1,0 +1,156 @@
+package dev.phlorion.chess;
+
+import dev.phlorion.chess.misc.BoardReader;
+import dev.phlorion.chess.misc.Vector2;
+import dev.phlorion.chess.pieces.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Board {
+    Piece[][] board;
+    Player pWhite;
+    Player pBlack;
+    Player currentPlayer;
+
+    public Board(String path) {
+        BoardReader boardReader = new BoardReader();
+        try {
+            setBoard(boardReader.read(path));
+        } catch (IOException e) {
+            System.err.println(e);
+        }
+
+        pWhite = new Player(PieceColor.WHITE);
+        pWhite.setPieces(getPieces(PieceColor.WHITE));
+        pBlack = new Player(PieceColor.BLACK);
+        pBlack.setPieces(getPieces(PieceColor.BLACK));
+        currentPlayer = pWhite;
+    }
+
+    public Piece[][] standardBoard() {
+        Piece[][] temp = new Piece[8][8];
+        // white
+        temp[7][0] = new Rook(7, 0, PieceColor.WHITE);
+        temp[7][7] = new Rook(7, 7, PieceColor.WHITE);
+        temp[7][1] = new Knight(7, 1, PieceColor.WHITE);
+        temp[7][6] = new Knight(7, 6, PieceColor.WHITE);
+        temp[7][2] = new Bishop(7, 2, PieceColor.WHITE);
+        temp[7][5] = new Bishop(7, 5, PieceColor.WHITE);
+        temp[7][3] = new Queen(7, 3, PieceColor.WHITE);
+        temp[7][4] = new King(7, 5, PieceColor.WHITE);
+        for (int j=0; j<temp[6].length; j++) {
+            temp[6][j] = new Pawn(6, j, PieceColor.WHITE);
+        }
+
+        // black
+        temp[0][0] = new Rook(0, 0, PieceColor.BLACK);
+        temp[0][7] = new Rook(0, 7, PieceColor.BLACK);
+        temp[0][1] = new Knight(0, 1, PieceColor.BLACK);
+        temp[0][6] = new Knight(0, 6, PieceColor.BLACK);
+        temp[0][2] = new Bishop(0, 2, PieceColor.BLACK);
+        temp[0][5] = new Bishop(0, 5, PieceColor.BLACK);
+        temp[0][3] = new Queen(0, 3, PieceColor.BLACK);
+        temp[0][4] = new King(0, 5, PieceColor.BLACK);
+        for (int j=0; j<temp[1].length; j++) {
+            temp[1][j] = new Pawn(1, j, PieceColor.BLACK);
+        }
+
+        return temp;
+    }
+
+    public void flip() {
+        int rows = board.length;
+        int columns = board[0].length;
+        Piece[][] temp = new Piece[rows][columns];
+        for (int i=rows-1; i>=0; i--) {
+            for (int j=columns-1; j>=0; j--) {
+                Piece currentPiece = board[i][j];
+                if (currentPiece != null) // let piece know it has changed position
+                    currentPiece.setPosition(new Vector2(rows-1 - i, columns-1 - j));
+                temp[rows-1 - i][columns-1 - j] = board[i][j]; // change the position of the piece on the board
+            }
+        }
+
+        board = temp;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(PieceColor color) {
+        if (color.equals(PieceColor.WHITE))
+            currentPlayer = pWhite;
+        else
+            currentPlayer = pBlack;
+    }
+
+    public void setOnBoard(Vector2 position, Piece piece) {
+        board[position.x][position.y] = piece;
+    }
+
+    public void setBoard(Piece[][] other) {
+        board = other;
+    }
+
+    public Piece[][] getBoard() {
+        return board;
+    }
+
+    public Piece getPieceAt(Vector2 position) {
+        return board[position.x][position.y];
+    }
+
+    public List<Piece> getPieces(PieceColor color) {
+        List<Piece> pieces = new ArrayList<>();
+        for (Piece[] row : board) {
+            for (Piece p : row) {
+                if (p != null && p.getPieceColor().equals(color))
+                    pieces.add(p);
+            }
+        }
+
+        return pieces;
+    }
+
+    public Piece findKing(PieceColor color) {
+        for (Piece[] row : board) {
+            for (Piece p : row) {
+                if (p != null && p.getPieceKind().equals(PieceKind.KING) && p.getPieceColor().equals(color))
+                    return p;
+            }
+        }
+
+        return null;
+    }
+
+    public boolean inBounds(Vector2 position) {
+        return position.x >=0 &&
+                position.x < board[0].length &&
+                position.y >= 0 &&
+                position.y < board.length;
+    }
+
+    public boolean isOccupied(Vector2 position, PieceColor color) {
+        Piece occupier = board[position.x][position.y];
+        return occupier != null && occupier.getPieceColor() == color; // must be allied piece to be considered occupied
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+        for (Piece[] pieces : board) {
+            for (Piece piece : pieces) {
+                if (piece == null)
+                    res.append("- ");
+                else
+                    res.append(piece.toString()).append(" ");
+            }
+            res.append("\n");
+        }
+
+        return res.toString();
+    }
+}
