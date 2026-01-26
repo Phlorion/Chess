@@ -32,21 +32,32 @@ public class Player {
     public List<Move> getPlayerLegalMoves(Board board) {
         List<Move> allLegalsMoves = new ArrayList<>();
         for (Piece p : pieces) {
-            allLegalsMoves.addAll(p.legalMoves(board));
+            List<Move> pieceLegalMoves = p.legalMoves(board);
+            pieceLegalMoves.removeIf(m -> !isKingSafeAfterMove(board, m)); // make sure the move doesn't leave the king in check
+            allLegalsMoves.addAll(pieceLegalMoves);
         }
 
         return allLegalsMoves;
     }
 
     public boolean isKingChecked(Board board, Player opponent) {
-        King king = (King) board.findKing(type);
-        for (Move m : opponent.getPlayerLegalMoves(board)) {
-            if (m.getTargetedPos().equals(king.getPosition())) {
-                return true;
-            }
-        }
+        Vector2 kingPos = board.findKingPositionOnBoard(this.type);
+        return board.isPositionAttacked(opponent, kingPos);
+    }
 
-        return false;
+    private boolean isKingSafeAfterMove(Board board, Move move) {
+        // fake execute the move
+        move.execute(board);
+
+        // check if the king is exposed
+        Player opponent = board.getOpponentPlayer();
+        Vector2 kingPos = board.findKingPositionOnBoard(this.type);
+        boolean isKingSafe = !board.isPositionAttacked(opponent, kingPos);
+
+        // redo the move execution
+        move.redo(board);
+
+        return isKingSafe;
     }
 
     public Move makeMove(Board board, Piece piece, Vector2 targetPosition) {

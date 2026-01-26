@@ -2,6 +2,7 @@ package dev.phlorion.chess;
 
 import dev.phlorion.chess.misc.BoardReader;
 import dev.phlorion.chess.misc.Vector2;
+import dev.phlorion.chess.move.Move;
 import dev.phlorion.chess.pieces.*;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ public class Board {
     Player pWhite;
     Player pBlack;
     Player currentPlayer;
+    Player opponentPlayer;
 
     public Board(String path) {
         BoardReader boardReader = new BoardReader();
@@ -27,6 +29,15 @@ public class Board {
         pBlack = new Player(PieceColor.BLACK);
         pBlack.setPieces(getPieces(PieceColor.BLACK));
         currentPlayer = pWhite;
+        opponentPlayer = pBlack;
+    }
+
+    public Board(Board other) {
+        board = other.getBoard().clone(); // The reference of the pieces is copied, so be carful not to change the pieces attributes
+        pWhite = other.pWhite;
+        pBlack = other.pBlack;
+        currentPlayer = other.currentPlayer;
+        opponentPlayer = other.opponentPlayer;
     }
 
     public Piece[][] standardBoard() {
@@ -79,12 +90,17 @@ public class Board {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+    public Player getOpponentPlayer() {return opponentPlayer;}
 
     public void setCurrentPlayer(PieceColor color) {
-        if (color.equals(PieceColor.WHITE))
+        if (color.equals(PieceColor.WHITE)) {
             currentPlayer = pWhite;
-        else
+            opponentPlayer = pBlack;
+        }
+        else {
             currentPlayer = pBlack;
+            opponentPlayer =  pWhite;
+        }
     }
 
     public void setOnBoard(Vector2 position, Piece piece) {
@@ -115,15 +131,28 @@ public class Board {
         return pieces;
     }
 
-    public Piece findKing(PieceColor color) {
-        for (Piece[] row : board) {
-            for (Piece p : row) {
+    public Vector2 findKingPositionOnBoard(PieceColor color) {
+        for (int i=0; i<board.length; i++) {
+            for (int j=0; j<board[i].length; j++) {
+                Piece p = board[i][j];
                 if (p != null && p.getPieceKind().equals(PieceKind.KING) && p.getPieceColor().equals(color))
-                    return p;
+                    return new Vector2(i, j);
             }
         }
 
         return null;
+    }
+
+    public boolean isPositionAttacked(Player player, Vector2 position) {
+        for (Piece piece : player.getPieces()) {
+            for (Move m : piece.legalMoves(this)) {
+                if (m.getTargetedPos().equals(position)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public boolean inBounds(Vector2 position) {
@@ -136,6 +165,10 @@ public class Board {
     public boolean isOccupied(Vector2 position, PieceColor color) {
         Piece occupier = board[position.x][position.y];
         return occupier != null && occupier.getPieceColor() == color; // must be allied piece to be considered occupied
+    }
+
+    public Vector2 getBoardShape() {
+        return new Vector2(board.length, board[0].length);
     }
 
     @Override

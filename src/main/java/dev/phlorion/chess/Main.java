@@ -1,15 +1,13 @@
 package dev.phlorion.chess;
 
-import dev.phlorion.chess.misc.BoardReader;
 import dev.phlorion.chess.misc.Vector2;
 import dev.phlorion.chess.pieces.*;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Board board = new Board("/home/phlorion/Java/Chess/src/main/resources/test3");
+        Board board = new Board("src/main/resources/test3");
         System.out.println(board);
 
         boolean endGame = false;
@@ -17,8 +15,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         while (!endGame) {
             Player currentPlayer = board.getCurrentPlayer();
-            currentPlayer.setPieces(board.getPieces(currentPlayer.getType()));
 
+            System.out.println(currentPlayer.getPlayerLegalMoves(board));
             System.out.println(currentPlayer + ": ");
             Vector2 currentPos = new Vector2(scanner.nextInt(), scanner.nextInt());
             Vector2 targetPos = new Vector2(scanner.nextInt(), scanner.nextInt());

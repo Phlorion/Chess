@@ -7,40 +7,29 @@ import dev.phlorion.chess.move.Move;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bishop extends Piece {
-    private List<Vector2> CANDIDATE_VECTOR_MOVE_COORDINATES = new ArrayList<>(List.of(
-       new Vector2(-1, -1),
-       new Vector2(-1, 1),
-       new Vector2(1, -1),
-       new Vector2(1, 1)
-    ));
+public class Bishop extends SlidingPiece {
 
     public Bishop() {
         super();
         pieceKind = PieceKind.BISHOP;
+
+        CANDIDATE_VECTOR_MOVE_COORDINATES = new ArrayList<>(List.of(
+                new Vector2(-1, -1),
+                new Vector2(-1, 1),
+                new Vector2(1, -1),
+                new Vector2(1, 1)
+        ));
     }
 
     public Bishop(int x, int y, PieceColor color) {
         super(x, y, color);
         pieceKind = PieceKind.BISHOP;
-    }
 
-    @Override
-    public List<Move> legalMoves(Board board) {
-        List<Move> possibleMoves = new ArrayList<>();
-        for (Vector2 dir : CANDIDATE_VECTOR_MOVE_COORDINATES) {
-            Vector2 targetPos = Vector2.add(position, dir);
-            // while we can travel to that direction keep adding to the possible moves list
-            while (board.inBounds(targetPos) && !board.isOccupied(targetPos, pieceColor)) {
-                possibleMoves.add(new Move(this, targetPos));
-                // if we capture an enemy piece then stop
-                if (board.isOccupied(targetPos, pieceColor.getOpposite()))
-                    break;
-
-                targetPos = Vector2.add(targetPos, dir); // move to the next tile in this direction
-            }
-        }
-
-        return possibleMoves;
+        CANDIDATE_VECTOR_MOVE_COORDINATES = new ArrayList<>(List.of(
+                new Vector2(-1, -1),
+                new Vector2(-1, 1),
+                new Vector2(1, -1),
+                new Vector2(1, 1)
+        ));
     }
 }
