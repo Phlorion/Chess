@@ -30,6 +30,7 @@ public class GridPanel extends JPanel {
             int col = i % rows;
             Piece piece = board.getPieceAt(new Vector2(row, col));
             Cell cell = new Cell(row, col);
+            cell.setPiecePanel(Game.pieceToPanel.get(piece));
             add(cell);
             cell.addMouseListener(new MouseAdapter() {
                 @Override
