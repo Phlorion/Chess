@@ -9,22 +9,26 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GridPanel extends JPanel {
+    private final int width;
+    private final int height;
     private final int rows;
     private final int columns;
     private Cell[] cells;
 
     private ArrayList<Cell> currentMoveCandidates = new ArrayList<>();
 
-    public GridPanel(Board board) {
+    public GridPanel(Board board, int width, int height) {
         this.rows = board.getBoardShape().x;
         this.columns = board.getBoardShape().y;
         this.cells = new Cell[rows*columns];
+        this.width = width;
+        this.height = height;
 
         initializeGrid(board);
     }
 
     private void initializeGrid(Board board) {
-        int cellSize = Game.WIDTH / this.columns;
+        int cellSize = this.width / this.columns;
         setBackground(Color.white);
         setLayout(new GridLayout(rows, columns));
         for (int i = 0; i < rows*columns; i++) {
@@ -67,6 +71,6 @@ public class GridPanel extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(Game.WIDTH, Game.HEIGHT);
+        return new Dimension(width, height);
     }
 }
