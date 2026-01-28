@@ -71,22 +71,6 @@ public class Board {
         return temp;
     }
 
-    public void flip() {
-        int rows = board.length;
-        int columns = board[0].length;
-        Piece[][] temp = new Piece[rows][columns];
-        for (int i=rows-1; i>=0; i--) {
-            for (int j=columns-1; j>=0; j--) {
-                Piece currentPiece = board[i][j];
-                if (currentPiece != null) // let piece know it has changed position
-                    currentPiece.setPosition(new Vector2(rows-1 - i, columns-1 - j));
-                temp[rows-1 - i][columns-1 - j] = board[i][j]; // change the position of the piece on the board
-            }
-        }
-
-        board = temp;
-    }
-
     public Player getCurrentPlayer() {
         return currentPlayer;
     }

@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Board board = new Board("src/main/resources/test3");
+        Board board = new Board("src/main/resources/test4");
         System.out.println(board);
 
         boolean endGame = false;
@@ -38,7 +38,6 @@ public class Main {
             // after making the move, change player turn
             board.setCurrentPlayer(currentPlayer.getType().getOpposite());
 
-            board.flip();
             System.out.println("\n" + board);
         }
     }

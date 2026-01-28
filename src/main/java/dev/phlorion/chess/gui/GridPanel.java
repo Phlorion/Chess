@@ -6,44 +6,63 @@ import dev.phlorion.chess.pieces.Piece;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class GridPanel extends JPanel {
     private final int rows;
     private final int columns;
-    private Board board;
+    private Cell[] cells;
+
+    private ArrayList<Cell> currentMoveCandidates = new ArrayList<>();
 
     public GridPanel(Board board) {
-        this.board = board;
         this.rows = board.getBoardShape().x;
         this.columns = board.getBoardShape().y;
+        this.cells = new Cell[rows*columns];
 
-        initializeGrid();
+        initializeGrid(board);
     }
 
-    private void initializeGrid() {
+    private void initializeGrid(Board board) {
+        int cellSize = Game.WIDTH / this.columns;
         setBackground(Color.white);
         setLayout(new GridLayout(rows, columns));
         for (int i = 0; i < rows*columns; i++) {
             int row = i / columns;
             int col = i % rows;
             Piece piece = board.getPieceAt(new Vector2(row, col));
-            Cell cell = new Cell(row, col);
-            cell.setPiecePanel(Game.pieceToPanel.get(piece));
+            Cell cell = new Cell(row, col, cellSize);
+            if (piece != null)
+                cell.setPiecePanel(Game.pieceToPanel.get(piece));
+            cells[i] = cell;
             add(cell);
-            cell.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    cell.setBackground(cell.getOriginalColor().brighter());
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    cell.setBackground(cell.getOriginalColor());
-                }
-            });
         }
+    }
+
+    public Cell[] getCells() {
+        return cells;
+    }
+
+    public Cell getCell(int row, int col) {
+        return cells[row*columns+col];
+    }
+
+    public void addCandidates(ArrayList<Cell> candidates) {
+        currentMoveCandidates.addAll(candidates);
+        for (Cell cell : candidates) {
+            cell.setMarked(true);
+        }
+        revalidate();
+        repaint();
+    }
+
+    public void flushCandidates() {
+        for  (Cell cell : currentMoveCandidates) {
+            cell.setMarked(false);
+        }
+        currentMoveCandidates.clear();
+        revalidate();
+        repaint();
     }
 
     @Override

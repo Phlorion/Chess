@@ -5,6 +5,7 @@ import dev.phlorion.chess.move.Move;
 import dev.phlorion.chess.pieces.King;
 import dev.phlorion.chess.pieces.Piece;
 import dev.phlorion.chess.pieces.PieceColor;
+import dev.phlorion.chess.pieces.PieceKind;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +41,6 @@ public class Player {
         return allLegalsMoves;
     }
 
-    public boolean isKingChecked(Board board, Player opponent) {
-        Vector2 kingPos = board.findKingPositionOnBoard(this.type);
-        return board.isPositionAttacked(opponent, kingPos);
-    }
-
     private boolean isKingSafeAfterMove(Board board, Move move) {
         // fake execute the move
         move.execute(board);
@@ -58,6 +54,15 @@ public class Player {
         move.redo(board);
 
         return isKingSafe;
+    }
+
+    public boolean isKingChecked(Board board, Player opponent) {
+        Vector2 kingPos = board.findKingPositionOnBoard(this.type);
+        return board.isPositionAttacked(opponent, kingPos);
+    }
+
+    public boolean isCheckMated(Board board, Player opponent) {
+        return isKingChecked(board, opponent) && getPlayerLegalMoves(board).isEmpty();
     }
 
     public Move makeMove(Board board, Piece piece, Vector2 targetPosition) {

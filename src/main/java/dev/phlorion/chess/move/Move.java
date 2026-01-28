@@ -37,7 +37,6 @@ public class Move {
         // set pieces on both players
         board.getCurrentPlayer().setPieces(board.getPieces(board.getCurrentPlayer().getType()));
         board.getOpponentPlayer().setPieces(board.getPieces(board.getOpponentPlayer().getType()));
-
     }
 
     public void redo(Board board) {
@@ -55,13 +54,12 @@ public class Move {
         board.getOpponentPlayer().setPieces(board.getPieces(board.getOpponentPlayer().getType()));
     }
 
-    public void fakeExecute(Board board) {
-        board.setOnBoard(previousPos, null);
-        board.setOnBoard(targetedPos, piece);
-    }
-
     public Vector2 getTargetedPos() {
         return targetedPos;
+    }
+
+    public Piece getPiece() {
+        return piece;
     }
 
     @Override

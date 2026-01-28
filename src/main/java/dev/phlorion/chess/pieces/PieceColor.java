@@ -15,4 +15,8 @@ public enum PieceColor {
     };
 
     public abstract PieceColor getOpposite();
+
+    public int getDirection() {
+        return (this == PieceColor.WHITE) ? -1 : 1;
+    }
 }

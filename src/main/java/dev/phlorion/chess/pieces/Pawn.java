@@ -8,28 +8,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn extends Piece {
-    private final Vector2 CANDIDATE_MOVE_COORDINATES = new Vector2(-1, 0);
+    private final int direction;
+    private final Vector2 CANDIDATE_MOVE_COORDINATES;
 
-    private final List<Vector2> CANDIDATE_ATTACK_COORDINATES = new ArrayList<>(List.of(
-            new Vector2(-1, -1),
-            new Vector2(-1, 1)
-    ));
+    private final List<Vector2> CANDIDATE_ATTACK_COORDINATES;
 
-    private final Vector2 CANDIDATE_JUMP_MOVE_COORDINATES = new Vector2(-2, 0);
-
-    private final List<Vector2> CANDIDATE_JUMP_ATTACK_COORDINATES = new ArrayList<>(List.of(
-            new Vector2(-2, -1),
-            new Vector2(-2, 1)
-    ));
+    private final Vector2 CANDIDATE_JUMP_MOVE_COORDINATES;
 
     public Pawn() {
         super();
         pieceKind = PieceKind.PAWN;
+        direction = getPieceColor().getDirection();
+        CANDIDATE_MOVE_COORDINATES = new Vector2(direction, 0);
+        CANDIDATE_ATTACK_COORDINATES = new ArrayList<>(List.of(
+                new Vector2(direction, -1),
+                new Vector2(direction, 1)
+        ));
+        CANDIDATE_JUMP_MOVE_COORDINATES = new Vector2(direction * 2, 0);
     }
 
     public Pawn(int x, int y, PieceColor color) {
         super(x, y, color);
         pieceKind = PieceKind.PAWN;
+        direction = getPieceColor().getDirection();
+        CANDIDATE_MOVE_COORDINATES = new Vector2(direction, 0);
+        CANDIDATE_ATTACK_COORDINATES = new ArrayList<>(List.of(
+                new Vector2(direction, -1),
+                new Vector2(direction, 1)
+        ));
+        CANDIDATE_JUMP_MOVE_COORDINATES = new Vector2(direction * 2, 0);
     }
 
     @Override
@@ -39,7 +46,7 @@ public class Pawn extends Piece {
         Vector2 targetPos;
         // check basic pawn move
         targetPos = Vector2.add(position, CANDIDATE_MOVE_COORDINATES);
-        if (board.inBounds(targetPos) && !board.isOccupied(targetPos, pieceColor))
+        if (board.inBounds(targetPos) && !board.isOccupied(targetPos, pieceColor) && !board.isOccupied(targetPos, pieceColor.getOpposite()))
             possibleMoves.add(new Move(this, targetPos));
 
         // check if pawn can attack
@@ -52,14 +59,13 @@ public class Pawn extends Piece {
         // check if pawn can jump (meaning it hasn't moved yet)
         if (!hasMoved) {
             targetPos = Vector2.add(position, CANDIDATE_JUMP_MOVE_COORDINATES);
-            if (board.inBounds(targetPos) && !board.isOccupied(targetPos, pieceColor))
+            Vector2 previousTile = Vector2.add(position, CANDIDATE_MOVE_COORDINATES);
+            if (board.inBounds(targetPos) &&
+                    !board.isOccupied(previousTile, pieceColor) &&
+                    !board.isOccupied(previousTile, pieceColor.getOpposite()) &&
+                    !board.isOccupied(targetPos, pieceColor) &&
+                    !board.isOccupied(targetPos, pieceColor.getOpposite()))
                 possibleMoves.add(new Move(this, targetPos));
-
-            for (Vector2 candidateMove : CANDIDATE_JUMP_ATTACK_COORDINATES) {
-                targetPos = Vector2.add(position, candidateMove);
-                if (board.inBounds(targetPos) && board.isOccupied(targetPos, pieceColor.getOpposite()))
-                    possibleMoves.add(new Move(this, targetPos));
-            }
         }
 
         return possibleMoves;

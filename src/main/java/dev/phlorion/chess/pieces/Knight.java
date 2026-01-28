@@ -16,7 +16,7 @@ public class Knight extends Piece {
             new Vector2(-1, -2),
             new Vector2(-1, 2),
             new Vector2(1, -2),
-            new Vector2(1, 1)
+            new Vector2(1, 2)
     ));
 
     public Knight() {
