@@ -65,17 +65,8 @@ public class Player {
         return isKingChecked(board, opponent) && getPlayerLegalMoves(board).isEmpty();
     }
 
-    public Move makeMove(Board board, Piece piece, Vector2 targetPosition) {
-        Move attemptedMove = new Move(piece, targetPosition);
-
-        for (Move m : getPlayerLegalMoves(board)) {
-            if (m.equals(attemptedMove)) {
-                m.execute(board);
-                return m;
-            }
-        }
-
-        return null;
+    public void makeMove(Board board, Move move) {
+        move.execute(board);
     }
 
     @Override

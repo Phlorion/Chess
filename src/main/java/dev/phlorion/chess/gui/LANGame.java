@@ -1,6 +1,9 @@
 package dev.phlorion.chess.gui;
 
 import dev.phlorion.chess.Board;
+import dev.phlorion.chess.engine.EnginePlayer;
+import dev.phlorion.chess.engine.GameEngine;
+import dev.phlorion.chess.engine.HumanProvider;
 import dev.phlorion.chess.misc.Vector2;
 import dev.phlorion.chess.move.Move;
 import dev.phlorion.chess.pieces.Piece;
@@ -19,6 +22,11 @@ public class LANGame extends Game {
         Game game = new LANGame();
 
         Board board = new Board("src/main/resources/test4");
+
+        EnginePlayer white = new EnginePlayer(board.getCurrentPlayer(), new HumanProvider());
+        EnginePlayer black = new EnginePlayer(board.getOpponentPlayer(), new HumanProvider());
+        GameEngine engine = new GameEngine(board, white, black);
+        engine.start();
 
         JFrame frame = game.initializeFrame();
         GridPanel grid = (GridPanel) game.loadGame(frame, board);
@@ -44,7 +52,7 @@ public class LANGame extends Game {
 
                     Piece selectedPiece = cell.getPiecePanel().getPieceReference();
                     this.holdingPiece = selectedPiece;
-                    List<Move> moves = board.getCurrentPlayer().getPlayerLegalMoves(board)
+                    List<Move> moves = engine.getCurrentPlayer().getPlayer().getPlayerLegalMoves(engine.getBoard())
                             .stream()
                             .filter(m -> m.getPiece().equals(selectedPiece))
                             .toList();
@@ -70,15 +78,13 @@ public class LANGame extends Game {
                     Cell targetCell = grid.getCell(row, column);
 
                     if (cellToMove.containsKey(targetCell)) {
-                        board.getCurrentPlayer().makeMove(board, holdingPiece, cellToMove.get(targetCell).getTargetedPos());
+                        ((HumanProvider) engine.getCurrentPlayer().getMoveProvider()).submitMove(cellToMove.get(targetCell));
                         cell.removePiecePanel();
                         targetCell.setPiecePanel(pieceToPanel.get(holdingPiece));
 
-                        board.setCurrentPlayer(board.getOpponentPlayer().getType());
-
                         // check if check mated
-                        if (board.getCurrentPlayer().isCheckMated(board, board.getOpponentPlayer())) {
-                            System.out.println(board.getOpponentPlayer() + " WON!");
+                        if (engine.isCheckmated()) {
+                            System.out.println(engine.getBoard().getOpponentPlayer() + " WON!");
                             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
                         }
                     }

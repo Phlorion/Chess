@@ -22,14 +22,14 @@ public class Move {
     }
 
     public void execute(Board board) {
+        // check if we captured a piece
+        capturedPiece = board.getPieceAt(targetedPos);
+
         piece.setPosition(targetedPos);
         if (!piece.hasMoved())  {
             piece.setHasMoved(true); // if piece's first move
             firstMoveExecuted = true;
         }
-
-        // check if we captured a piece
-        capturedPiece = board.getPieceAt(targetedPos);
 
         board.setOnBoard(previousPos, null);
         board.setOnBoard(targetedPos, piece);
