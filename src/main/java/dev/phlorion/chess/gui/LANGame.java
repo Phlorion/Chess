@@ -21,7 +21,7 @@ public class LANGame extends Game {
     public static void main(String[] args) {
         Game game = new LANGame();
 
-        Board board = new Board("src/main/resources/test4");
+        Board board = new Board("src/main/resources/test1");
 
         EnginePlayer white = new EnginePlayer(board.getCurrentPlayer(), new HumanProvider());
         EnginePlayer black = new EnginePlayer(board.getOpponentPlayer(), new HumanProvider());
@@ -85,6 +85,9 @@ public class LANGame extends Game {
                         // check if check mated
                         if (engine.isCheckmated()) {
                             System.out.println(engine.getBoard().getOpponentPlayer() + " WON!");
+                            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+                        } else if (engine.isStaleMated()) {
+                            System.out.println("TIE!");
                             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
                         }
                     }

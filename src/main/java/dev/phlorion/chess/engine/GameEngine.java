@@ -1,6 +1,7 @@
 package dev.phlorion.chess.engine;
 
 import dev.phlorion.chess.Board;
+import dev.phlorion.chess.Player;
 import dev.phlorion.chess.move.Move;
 
 import java.awt.event.WindowEvent;
@@ -21,6 +22,7 @@ public class GameEngine {
 
     public void start() {
         System.out.println("Engine: Starting game. Waiting for " + currentPlayer.getPlayer().getType());
+        System.out.println(board);
         requestCurrentPlayerMove();
     }
 
@@ -41,6 +43,10 @@ public class GameEngine {
 
     public boolean isCheckmated() {
         return this.getCurrentPlayer().getPlayer().isCheckMated(board, board.getOpponentPlayer());
+    }
+
+    public boolean isStaleMated() {
+        return this.getCurrentPlayer().getPlayer().isStaleMated(board, board.getOpponentPlayer());
     }
 
     public EnginePlayer getCurrentPlayer() {

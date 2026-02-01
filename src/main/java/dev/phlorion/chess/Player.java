@@ -65,6 +65,10 @@ public class Player {
         return isKingChecked(board, opponent) && getPlayerLegalMoves(board).isEmpty();
     }
 
+    public boolean isStaleMated(Board board, Player opponent) {
+        return !isKingChecked(board, opponent) && getPlayerLegalMoves(board).isEmpty();
+    }
+
     public void makeMove(Board board, Move move) {
         move.execute(board);
     }
