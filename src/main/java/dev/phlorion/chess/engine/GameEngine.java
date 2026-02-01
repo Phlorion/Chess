@@ -5,6 +5,7 @@ import dev.phlorion.chess.Player;
 import dev.phlorion.chess.gui.GridPanel;
 import dev.phlorion.chess.move.CastlingMove;
 import dev.phlorion.chess.move.Move;
+import dev.phlorion.chess.pieces.Pawn;
 
 import javax.sound.sampled.*;
 import java.awt.event.WindowEvent;
@@ -55,6 +56,9 @@ public class GameEngine {
             // log
             System.out.println(board);
             System.out.println("Last move performed: " + board.getLastMove());
+            if (board.getLastMove().getPiece() instanceof Pawn) {
+                System.out.println("Can promote pawn? " + ((Pawn) board.getLastMove().getPiece()).canPromote(board));
+            }
 
             // update UI
             grid.updateUI(board);

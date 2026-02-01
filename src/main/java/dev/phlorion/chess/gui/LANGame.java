@@ -25,7 +25,7 @@ public class LANGame extends Game {
     public static void main(String[] args) {
         Game game = new LANGame();
 
-        Board board = new Board("src/main/resources/test_castle");
+        Board board = new Board("src/main/resources/test4");
 
         JFrame frame = game.initializeFrame();
         GridPanel grid = (GridPanel) game.loadGame(frame, board);
