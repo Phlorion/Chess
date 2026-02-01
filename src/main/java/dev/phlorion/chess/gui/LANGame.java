@@ -21,15 +21,15 @@ public class LANGame extends Game {
     public static void main(String[] args) {
         Game game = new LANGame();
 
-        Board board = new Board("src/main/resources/test1");
-
-        EnginePlayer white = new EnginePlayer(board.getCurrentPlayer(), new HumanProvider());
-        EnginePlayer black = new EnginePlayer(board.getOpponentPlayer(), new HumanProvider());
-        GameEngine engine = new GameEngine(board, white, black);
-        engine.start();
+        Board board = new Board("src/main/resources/test4");
 
         JFrame frame = game.initializeFrame();
         GridPanel grid = (GridPanel) game.loadGame(frame, board);
+
+        EnginePlayer white = new EnginePlayer(board.getCurrentPlayer(), new HumanProvider());
+        EnginePlayer black = new EnginePlayer(board.getOpponentPlayer(), new HumanProvider());
+        GameEngine engine = new GameEngine(board, grid, white, black);
+        engine.start();
 
         for (Cell cell : grid.getCells()) {
             cell.addMouseListener(new MouseAdapter() {
@@ -79,8 +79,6 @@ public class LANGame extends Game {
 
                     if (cellToMove.containsKey(targetCell)) {
                         ((HumanProvider) engine.getCurrentPlayer().getMoveProvider()).submitMove(cellToMove.get(targetCell));
-                        cell.removePiecePanel();
-                        targetCell.setPiecePanel(pieceToPanel.get(holdingPiece));
 
                         // check if check mated
                         if (engine.isCheckmated()) {

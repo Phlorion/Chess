@@ -2,6 +2,7 @@ package dev.phlorion.chess.engine;
 
 import dev.phlorion.chess.Board;
 import dev.phlorion.chess.Player;
+import dev.phlorion.chess.gui.GridPanel;
 import dev.phlorion.chess.move.Move;
 
 import java.awt.event.WindowEvent;
@@ -11,11 +12,13 @@ public class GameEngine {
     private EnginePlayer blackPlayer;
     private EnginePlayer currentPlayer;
     private Board board;
+    private GridPanel grid;
 
-    public GameEngine(Board board, EnginePlayer whitePlayer, EnginePlayer blackPlayer) {
+    public GameEngine(Board board, GridPanel grid, EnginePlayer whitePlayer, EnginePlayer blackPlayer) {
         this.whitePlayer = whitePlayer;
         this.blackPlayer = blackPlayer;
         this.board = board;
+        this.grid = grid;
 
         this.currentPlayer = this.whitePlayer;
     }
@@ -37,6 +40,7 @@ public class GameEngine {
         this.currentPlayer.getMoveProvider().requestMove(this.board, (move) -> {
             currentPlayer.getPlayer().makeMove(board, move);
             System.out.println(board);
+            grid.updateUI(board);
             nextTurn();
         });
     }

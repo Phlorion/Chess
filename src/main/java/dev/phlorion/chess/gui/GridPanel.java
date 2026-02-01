@@ -69,6 +69,24 @@ public class GridPanel extends JPanel {
         repaint();
     }
 
+    public void updateUI(Board board) {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
+                Cell cell = getCell(r, c);
+                Piece piece = board.getPieceAt(new Vector2(r, c));
+
+                // clear the existing piece and add the new one
+                cell.removePiecePanel();
+                if (piece != null) {
+                    cell.setPiecePanel(new PiecePanel(piece));
+                }
+            }
+        }
+
+        revalidate();
+        repaint();
+    }
+
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(width, height);
