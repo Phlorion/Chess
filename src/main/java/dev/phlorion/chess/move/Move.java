@@ -34,6 +34,9 @@ public class Move {
         board.setOnBoard(previousPos, null);
         board.setOnBoard(targetedPos, piece);
 
+        // save move performed
+        board.addMoveToHistory(this);
+
         // set pieces on both players
         board.getCurrentPlayer().setPieces(board.getPieces(board.getCurrentPlayer().getType()));
         board.getOpponentPlayer().setPieces(board.getPieces(board.getOpponentPlayer().getType()));
@@ -49,6 +52,9 @@ public class Move {
         board.setOnBoard(previousPos, piece);
         board.setOnBoard(targetedPos, capturedPiece);
 
+        // remove last moved performed from history
+        board.removeLastMove();
+
         // set pieces on both players
         board.getCurrentPlayer().setPieces(board.getPieces(board.getCurrentPlayer().getType()));
         board.getOpponentPlayer().setPieces(board.getPieces(board.getOpponentPlayer().getType()));
@@ -56,6 +62,14 @@ public class Move {
 
     public Vector2 getTargetedPos() {
         return targetedPos;
+    }
+
+    public Vector2 getPreviousPos() {
+        return previousPos;
+    }
+
+    public Piece getCapturedPiece() {
+        return capturedPiece;
     }
 
     public Piece getPiece() {

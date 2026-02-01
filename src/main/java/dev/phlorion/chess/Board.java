@@ -16,6 +16,8 @@ public class Board {
     Player currentPlayer;
     Player opponentPlayer;
 
+    List<Move> moveHistory;
+
     public Board(String path) {
         BoardReader boardReader = new BoardReader();
         try {
@@ -30,6 +32,8 @@ public class Board {
         pBlack.setPieces(getPieces(PieceColor.BLACK));
         currentPlayer = pWhite;
         opponentPlayer = pBlack;
+
+        moveHistory = new ArrayList<>();
     }
 
     public Board(Board other) {
@@ -38,6 +42,8 @@ public class Board {
         pBlack = other.pBlack;
         currentPlayer = other.currentPlayer;
         opponentPlayer = other.opponentPlayer;
+
+        moveHistory = new ArrayList<>(other.moveHistory);
     }
 
     public Piece[][] standardBoard() {
@@ -97,6 +103,22 @@ public class Board {
 
     public Piece[][] getBoard() {
         return board;
+    }
+
+    public void addMoveToHistory(Move m) {
+        moveHistory.add(m);
+    }
+
+    public List<Move> getMoveHistory() {
+        return moveHistory;
+    }
+
+    public Move getLastMove() {
+        return moveHistory.getLast();
+    }
+
+    public void removeLastMove() {
+        moveHistory.removeLast();
     }
 
     public Piece getPieceAt(Vector2 position) {

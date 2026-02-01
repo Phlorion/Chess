@@ -3,9 +3,17 @@ package dev.phlorion.chess.engine;
 import dev.phlorion.chess.Board;
 import dev.phlorion.chess.Player;
 import dev.phlorion.chess.gui.GridPanel;
+import dev.phlorion.chess.move.CastlingMove;
 import dev.phlorion.chess.move.Move;
 
+import javax.sound.sampled.*;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Objects;
 
 public class GameEngine {
     private EnginePlayer whitePlayer;
@@ -38,11 +46,45 @@ public class GameEngine {
 
     private void requestCurrentPlayerMove() {
         this.currentPlayer.getMoveProvider().requestMove(this.board, (move) -> {
+            // make move
             currentPlayer.getPlayer().makeMove(board, move);
+
+            // play sound
+            playSound();
+
+            // log
             System.out.println(board);
+            System.out.println("Last move performed: " + board.getLastMove());
+
+            // update UI
             grid.updateUI(board);
+
+            // start next turn
             nextTurn();
         });
+    }
+
+    private void playSound() {
+        // determine the sound
+        URL soundName;
+        if (board.getOpponentPlayer().isKingChecked(board, board.getCurrentPlayer())) {
+            soundName = getClass().getResource("/sounds/move-check.wav");
+        } else if (board.getLastMove() instanceof CastlingMove) {
+            soundName = getClass().getResource("/sounds/castle.wav");
+        } else if (board.getLastMove().getCapturedPiece() != null) {
+            soundName = getClass().getResource("/sounds/capture.wav");
+        } else {
+            soundName = getClass().getResource("/sounds/move-self.wav");
+        }
+
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName.toURI()).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (URISyntaxException | UnsupportedAudioFileException | LineUnavailableException | IOException exception) {
+            System.err.println(exception.getMessage());
+        }
     }
 
     public boolean isCheckmated() {

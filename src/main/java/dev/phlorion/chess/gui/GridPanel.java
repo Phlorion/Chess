@@ -2,6 +2,7 @@ package dev.phlorion.chess.gui;
 
 import dev.phlorion.chess.Board;
 import dev.phlorion.chess.misc.Vector2;
+import dev.phlorion.chess.move.Move;
 import dev.phlorion.chess.pieces.Piece;
 
 import javax.swing.*;
@@ -54,7 +55,7 @@ public class GridPanel extends JPanel {
     public void addCandidates(ArrayList<Cell> candidates) {
         currentMoveCandidates.addAll(candidates);
         for (Cell cell : candidates) {
-            cell.setMarked(true);
+            cell.setPlaceholder(true);
         }
         revalidate();
         repaint();
@@ -62,7 +63,7 @@ public class GridPanel extends JPanel {
 
     public void flushCandidates() {
         for  (Cell cell : currentMoveCandidates) {
-            cell.setMarked(false);
+            cell.setPlaceholder(false);
         }
         currentMoveCandidates.clear();
         revalidate();
@@ -76,12 +77,23 @@ public class GridPanel extends JPanel {
                 Piece piece = board.getPieceAt(new Vector2(r, c));
 
                 // clear the existing piece and add the new one
+                cell.setMarked(false);
                 cell.removePiecePanel();
                 if (piece != null) {
                     cell.setPiecePanel(new PiecePanel(piece));
                 }
             }
         }
+
+        // mark the last move origin and final position
+        Move lastMove = board.getLastMove();
+        Vector2 moveOrigin = lastMove.getPreviousPos();
+        Vector2 finalMovePosition = lastMove.getTargetedPos();
+        Cell originCell = getCell(moveOrigin.x, moveOrigin.y);
+        Cell targetCell = getCell(finalMovePosition.x, finalMovePosition.y);
+
+        originCell.setMarked(true);
+        targetCell.setMarked(true);
 
         revalidate();
         repaint();

@@ -9,6 +9,7 @@ public class Cell extends JPanel {
     private final int cellSize;
     private final Color originalColor;
     private PiecePanel piecePanel;
+    private boolean placeholder = false;
     private boolean marked = false;
 
     private final Color lightColor = new Color(238, 238, 210);
@@ -52,16 +53,29 @@ public class Cell extends JPanel {
         this.piecePanel = null;
     }
 
-    public void brighten() {
-        setBackground(getOriginalColor().brighter());
+    public void setPlaceholder(boolean placeholder) {
+        this.placeholder = placeholder;
     }
 
-    public void setMarked(boolean marked) {
-        this.marked = marked;
+    public boolean isPlaceHolderActive() {
+        return placeholder;
     }
 
     public boolean isMarked() {
         return marked;
+    }
+
+    public void setMarked(boolean marked) {
+        this.marked = marked;
+        if (this.marked) {
+            if (getOriginalColor().equals(lightColor)) {
+                setBackground(new Color(245, 246, 130));
+            } else {
+                setBackground(new Color(185, 202, 67));
+            }
+        } else {
+            setBackground(getOriginalColor());
+        }
     }
 
     @Override
@@ -71,12 +85,12 @@ public class Cell extends JPanel {
         Graphics2D g2 =  (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2.setColor(new Color(0, 0, 0, 120));
 
-        if (marked && piecePanel != null) {
-            g2.setColor(new Color(255, 251, 0, 80));
-            g2.fillRect(0, 0, getWidth(), getHeight());
-        } else if (marked) {
-            g2.setColor(new Color(0, 0, 0, 120));
+        if (placeholder && piecePanel != null) {
+            g2.setStroke(new BasicStroke(5));
+            g2.drawOval(cellSize / 8, cellSize / 8, 3*cellSize / 4, 3*cellSize / 4);
+        } else if (placeholder) {
             g2.fillOval(cellSize / 3, cellSize / 3, cellSize / 3, cellSize / 3);
         }
     }

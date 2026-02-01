@@ -36,6 +36,9 @@ public class CastlingMove extends Move {
         board.setOnBoard(rookPreviousPos, null);
         board.setOnBoard(rookTargetPosition, rook);
 
+        // save move performed
+        board.addMoveToHistory(this);
+
         // set pieces on both players
         board.getCurrentPlayer().setPieces(board.getPieces(board.getCurrentPlayer().getType()));
         board.getOpponentPlayer().setPieces(board.getPieces(board.getOpponentPlayer().getType()));

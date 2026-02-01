@@ -8,11 +8,15 @@ import dev.phlorion.chess.misc.Vector2;
 import dev.phlorion.chess.move.Move;
 import dev.phlorion.chess.pieces.Piece;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +25,7 @@ public class LANGame extends Game {
     public static void main(String[] args) {
         Game game = new LANGame();
 
-        Board board = new Board("src/main/resources/test4");
+        Board board = new Board("src/main/resources/test_castle");
 
         JFrame frame = game.initializeFrame();
         GridPanel grid = (GridPanel) game.loadGame(frame, board);
@@ -33,17 +37,17 @@ public class LANGame extends Game {
 
         for (Cell cell : grid.getCells()) {
             cell.addMouseListener(new MouseAdapter() {
-                private Piece holdingPiece = null;
                 private final HashMap<Cell, Move> cellToMove = new HashMap<>();
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    cell.brighten();
+                    if (cell.getPiecePanel() != null)
+                        cell.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    cell.setBackground(cell.getOriginalColor());
+                    grid.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
 
                 @Override
@@ -51,7 +55,6 @@ public class LANGame extends Game {
                     if (cell.getPiecePanel() == null) return;
 
                     Piece selectedPiece = cell.getPiecePanel().getPieceReference();
-                    this.holdingPiece = selectedPiece;
                     List<Move> moves = engine.getCurrentPlayer().getPlayer().getPlayerLegalMoves(engine.getBoard())
                             .stream()
                             .filter(m -> m.getPiece().equals(selectedPiece))
@@ -90,7 +93,6 @@ public class LANGame extends Game {
                         }
                     }
 
-                    holdingPiece = null;
                     cellToMove.clear();
                     grid.flushCandidates();
                 }
