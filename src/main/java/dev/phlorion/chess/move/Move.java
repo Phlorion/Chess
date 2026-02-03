@@ -2,7 +2,7 @@ package dev.phlorion.chess.move;
 
 import dev.phlorion.chess.Board;
 import dev.phlorion.chess.misc.Vector2;
-import dev.phlorion.chess.pieces.Piece;
+import dev.phlorion.chess.pieces.*;
 
 import java.util.Objects;
 
@@ -12,6 +12,7 @@ public class Move {
     boolean firstMoveExecuted;
     Piece piece;
     Piece capturedPiece;
+    PieceKind promotionPiece;
 
     public Move(Piece piece, Vector2 targetedPosition) {
         this.piece = piece;
@@ -33,6 +34,21 @@ public class Move {
 
         board.setOnBoard(previousPos, null);
         board.setOnBoard(targetedPos, piece);
+
+        if (promotionPiece != null) {
+            // Create the new piece at the target position
+            Piece promotedPiece = null;
+            switch (promotionPiece) {
+                case ROOK -> promotedPiece = new Rook(targetedPos.x, targetedPos.y, piece.getPieceColor());
+                case KNIGHT -> promotedPiece = new Knight(targetedPos.x, targetedPos.y, piece.getPieceColor());
+                case BISHOP -> promotedPiece = new Bishop(targetedPos.x, targetedPos.y, piece.getPieceColor());
+                default -> promotedPiece = new Queen(targetedPos.x, targetedPos.y, piece.getPieceColor());
+            }
+
+            // Remove the pawn and put the new piece on the board
+            board.setOnBoard(targetedPos, null);
+            board.setOnBoard(targetedPos, promotedPiece);
+        }
 
         // save move performed
         board.addMoveToHistory(this);
@@ -74,6 +90,14 @@ public class Move {
 
     public Piece getPiece() {
         return piece;
+    }
+
+    public void setPromotionPiece(PieceKind kind) {
+        this.promotionPiece = kind;
+    }
+
+    public PieceKind getPromotionPiece() {
+        return promotionPiece;
     }
 
     @Override

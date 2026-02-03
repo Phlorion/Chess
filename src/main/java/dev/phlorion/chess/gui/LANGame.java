@@ -25,13 +25,13 @@ public class LANGame extends Game {
     public static void main(String[] args) {
         Game game = new LANGame();
 
-        Board board = new Board("src/main/resources/test4");
+        Board board = new Board("src/main/resources/test3");
 
         JFrame frame = game.initializeFrame();
         GridPanel grid = (GridPanel) game.loadGame(frame, board);
 
-        EnginePlayer white = new EnginePlayer(board.getCurrentPlayer(), new HumanProvider());
-        EnginePlayer black = new EnginePlayer(board.getOpponentPlayer(), new HumanProvider());
+        EnginePlayer white = new EnginePlayer(board.getCurrentPlayer(), new HumanProvider(grid));
+        EnginePlayer black = new EnginePlayer(board.getOpponentPlayer(), new HumanProvider(grid));
         GameEngine engine = new GameEngine(board, grid, white, black);
         engine.start();
 
@@ -52,49 +52,22 @@ public class LANGame extends Game {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    if (cell.getPiecePanel() == null) return;
-
-                    Piece selectedPiece = cell.getPiecePanel().getPieceReference();
-                    List<Move> moves = engine.getCurrentPlayer().getPlayer().getPlayerLegalMoves(engine.getBoard())
-                            .stream()
-                            .filter(m -> m.getPiece().equals(selectedPiece))
-                            .toList();
-
-                    ArrayList<Cell> candidates = new ArrayList<>();
-                    for (Move m : moves) {
-                        Vector2 targetPos = m.getTargetedPos();
-                        Cell targetCell = grid.getCell(targetPos.x, targetPos.y);
-                        candidates.add(targetCell);
-                        cellToMove.put(targetCell, m);
-                    }
-                    grid.addCandidates(candidates);
+                    if (grid.isShowingOverlay()) return;
+                    ((HumanProvider) engine.getCurrentPlayer().getMoveProvider()).mousePressed(e, cell, cellToMove, engine);
                 }
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    // get the cell where the mouse was released
-                    Point p = e.getPoint();
-                    Point gridPoint = SwingUtilities.convertPoint(cell, p, grid);
+                    ((HumanProvider) engine.getCurrentPlayer().getMoveProvider()).mouseReleased(e, cell, cellToMove, engine);
 
-                    int column = gridPoint.x / cell.getWidth();
-                    int row = gridPoint.y / cell.getHeight();
-                    Cell targetCell = grid.getCell(row, column);
-
-                    if (cellToMove.containsKey(targetCell)) {
-                        ((HumanProvider) engine.getCurrentPlayer().getMoveProvider()).submitMove(cellToMove.get(targetCell));
-
-                        // check if check mated
-                        if (engine.isCheckmated()) {
-                            System.out.println(engine.getBoard().getOpponentPlayer() + " WON!");
-                            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-                        } else if (engine.isStaleMated()) {
-                            System.out.println("TIE!");
-                            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-                        }
+                    // check if check mated
+                    if (engine.isCheckmated()) {
+                        System.out.println(engine.getBoard().getOpponentPlayer() + " WON!");
+                        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+                    } else if (engine.isStaleMated()) {
+                        System.out.println("TIE!");
+                        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
                     }
-
-                    cellToMove.clear();
-                    grid.flushCandidates();
                 }
             });
         }

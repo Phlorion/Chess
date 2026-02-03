@@ -4,10 +4,13 @@ import dev.phlorion.chess.Board;
 import dev.phlorion.chess.misc.Vector2;
 import dev.phlorion.chess.move.Move;
 import dev.phlorion.chess.pieces.Piece;
+import dev.phlorion.chess.pieces.PieceColor;
+import dev.phlorion.chess.pieces.PieceKind;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class GridPanel extends JPanel {
     private final int width;
@@ -16,7 +19,12 @@ public class GridPanel extends JPanel {
     private final int columns;
     private Cell[] cells;
 
+    private JLayeredPane layeredPane;
+    private JPanel chessBoard;
+
     private ArrayList<Cell> currentMoveCandidates = new ArrayList<>();
+
+    private PromotionOverlay activeOverlay;
 
     public GridPanel(Board board, int width, int height) {
         this.rows = board.getBoardShape().x;
@@ -30,17 +38,24 @@ public class GridPanel extends JPanel {
 
     private void initializeGrid(Board board) {
         int cellSize = this.width / this.columns;
-        setBackground(Color.white);
-        setLayout(new GridLayout(rows, columns));
+        setBackground(Color.WHITE);
+        setLayout(new BorderLayout());
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(width, height));
+        chessBoard = new JPanel(new GridLayout(rows, columns));
+        chessBoard.setBounds(0, 0, width, height);
+        layeredPane.add(chessBoard, JLayeredPane.DEFAULT_LAYER);
+        add(layeredPane, BorderLayout.CENTER);
+
         for (int i = 0; i < rows*columns; i++) {
             int row = i / columns;
             int col = i % rows;
             Piece piece = board.getPieceAt(new Vector2(row, col));
             Cell cell = new Cell(row, col, cellSize);
             if (piece != null)
-                cell.setPiecePanel(Game.pieceToPanel.get(piece));
+                cell.setPiecePanel(new PiecePanel(piece));
             cells[i] = cell;
-            add(cell);
+            chessBoard.add(cell);
         }
     }
 
@@ -62,7 +77,7 @@ public class GridPanel extends JPanel {
     }
 
     public void flushCandidates() {
-        for  (Cell cell : currentMoveCandidates) {
+        for (Cell cell : currentMoveCandidates) {
             cell.setPlaceholder(false);
         }
         currentMoveCandidates.clear();
@@ -97,6 +112,28 @@ public class GridPanel extends JPanel {
 
         revalidate();
         repaint();
+    }
+
+    public void showPromotionOverlay(PieceColor color, Consumer<PieceKind> onSelect) {
+        activeOverlay = new PromotionOverlay(color, cells[0].getWidth(), onSelect);
+        activeOverlay.setBounds(0, 0, chessBoard.getWidth() / 8, chessBoard.getHeight() / 2);
+
+        layeredPane.add(activeOverlay, JLayeredPane.POPUP_LAYER); // Add to the top layer
+        revalidate();
+        repaint();
+    }
+
+    public void hidePromotionOverlay() {
+        if (activeOverlay != null) {
+            layeredPane.remove(activeOverlay);
+            activeOverlay = null;
+            revalidate();
+            repaint();
+        }
+    }
+
+    public boolean isShowingOverlay() {
+        return activeOverlay != null;
     }
 
     @Override

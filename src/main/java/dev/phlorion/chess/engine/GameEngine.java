@@ -57,7 +57,7 @@ public class GameEngine {
             System.out.println(board);
             System.out.println("Last move performed: " + board.getLastMove());
             if (board.getLastMove().getPiece() instanceof Pawn) {
-                System.out.println("Can promote pawn? " + ((Pawn) board.getLastMove().getPiece()).canPromote(board));
+                System.out.println("Can promote pawn? " + ((Pawn) board.getLastMove().getPiece()).canPromote(board, move));
             }
 
             // update UI
@@ -105,5 +105,9 @@ public class GameEngine {
 
     public Board getBoard() {
         return board;
+    }
+
+    public GridPanel getGrid() {
+        return grid;
     }
 }

@@ -21,8 +21,6 @@ public class Game {
     public final int width;
     public final int height;
 
-    public static HashMap<Piece, PiecePanel> pieceToPanel = new HashMap<>();
-
     public Game() {
         name = "Chess";
         width = 600;
@@ -45,11 +43,6 @@ public class Game {
 
     protected JPanel loadGame(JFrame frame, Board board) {
         board.setCurrentPlayer(PieceColor.WHITE);
-
-        for (Piece p : board.getPieces(PieceColor.WHITE))
-            pieceToPanel.put(p, new PiecePanel(p));
-        for (Piece p : board.getPieces(PieceColor.BLACK))
-            pieceToPanel.put(p, new PiecePanel(p));
 
         GridPanel grid = new GridPanel(board, width, height);
         frame.add(grid);

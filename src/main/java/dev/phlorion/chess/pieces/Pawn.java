@@ -39,8 +39,8 @@ public class Pawn extends Piece {
         CANDIDATE_JUMP_MOVE_COORDINATES = new Vector2(direction * 2, 0);
     }
 
-    public boolean canPromote(Board board) {
-        return (direction == 1 && position.x == board.getBoardShape().x - 1) || (direction == -1 && position.x == 0);
+    public boolean canPromote(Board board, Move move) {
+        return (direction == 1 && move.getTargetedPos().x == board.getBoardShape().x - 1) || (direction == -1 && move.getTargetedPos().x == 0);
     }
 
     @Override
