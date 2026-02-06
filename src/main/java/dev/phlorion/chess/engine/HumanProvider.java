@@ -19,6 +19,7 @@ import java.util.List;
 public class HumanProvider implements MoveProvider {
     private MoveCallback pendingCallback;
     private final GridPanel grid;
+    private Cell lastTargetCell;
 
     public HumanProvider(GridPanel grid) {
         this.grid = grid;
@@ -33,7 +34,7 @@ public class HumanProvider implements MoveProvider {
         if (pendingCallback == null) return;
 
         if (move.getPiece() instanceof Pawn && ((Pawn) move.getPiece()).canPromote(board, move)) {
-            grid.showPromotionOverlay(move.getPiece().getPieceColor(), (choice) -> {
+            grid.showPromotionOverlay(lastTargetCell, move.getPiece().getPieceColor(), (choice) -> {
                 move.setPromotionPiece(choice);
                 grid.hidePromotionOverlay();
                 pendingCallback.onMoveSelected(move);
@@ -74,6 +75,7 @@ public class HumanProvider implements MoveProvider {
         Cell targetCell = grid.getCell(row, column);
 
         if (cellToMove.containsKey(targetCell)) {
+            lastTargetCell = targetCell;
             this.submitMove(engine.getBoard(), cellToMove.get(targetCell));
         }
 

@@ -13,12 +13,12 @@ public class PromotionOverlay extends JPanel {
 
     public PromotionOverlay(PieceColor color, int promotionCellSize, Consumer<PieceKind> onSelect) {
         setLayout(new GridBagLayout());
-        setOpaque(false);
 
         this.promotionCellSize = promotionCellSize;
 
         JPanel selectionBox = new JPanel(new GridLayout(4, 1, 0, 0));
-        selectionBox.setBackground(new Color(255, 255, 255, 220));
+        selectionBox.setOpaque(false);
+        selectionBox.setBackground(new Color(255, 255, 255, 255));
 
         addButton(PieceKind.QUEEN, color, onSelect, selectionBox);
         addButton(PieceKind.ROOK, color, onSelect, selectionBox);
@@ -53,6 +53,11 @@ public class PromotionOverlay extends JPanel {
 
         String path = "/pieces/Chess_" + resourceString + ".png";
         JButton button = new JButton(getResizedIcon(path, promotionCellSize, promotionCellSize));
+        button.setContentAreaFilled(false); // Removes the default grey background
+        button.setBorderPainted(false);     // Removes the button border
+        button.setFocusPainted(false);      // Removes the "ring" when clicked
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         button.addActionListener(e -> onSelect.accept(kind));
         selectionBox.add(button);
     }
@@ -61,7 +66,7 @@ public class PromotionOverlay extends JPanel {
         ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource(resourcePath)));
 
         Image img = icon.getImage();
-        Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        Image resizedImg = img.getScaledInstance(width - 10, height - 10, Image.SCALE_SMOOTH);
 
         return new ImageIcon(resizedImg);
     }

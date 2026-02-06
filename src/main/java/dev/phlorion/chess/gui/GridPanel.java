@@ -114,9 +114,22 @@ public class GridPanel extends JPanel {
         repaint();
     }
 
-    public void showPromotionOverlay(PieceColor color, Consumer<PieceKind> onSelect) {
+    public void showPromotionOverlay(Cell cell, PieceColor color, Consumer<PieceKind> onSelect) {
+        int x, y;
+        if (cell.getX() < width / 2) {
+            x = cell.getX() + cell.getWidth();
+        } else {
+            x = cell.getX() - cell.getWidth();
+        }
+
+        if (cell.getY() < height / 2) {
+            y = 0;
+        } else {
+            y = height - 4 * cell.getHeight();
+        }
+
         activeOverlay = new PromotionOverlay(color, cells[0].getWidth(), onSelect);
-        activeOverlay.setBounds(0, 0, chessBoard.getWidth() / 8, chessBoard.getHeight() / 2);
+        activeOverlay.setBounds(x, y, chessBoard.getWidth() / 8, chessBoard.getHeight() / 2);
 
         layeredPane.add(activeOverlay, JLayeredPane.POPUP_LAYER); // Add to the top layer
         revalidate();
