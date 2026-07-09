@@ -18,7 +18,6 @@ public class PromotionOverlay extends JPanel {
 
         JPanel selectionBox = new JPanel(new GridLayout(4, 1, 0, 0));
         selectionBox.setOpaque(false);
-        selectionBox.setBackground(new Color(255, 255, 255, 255));
 
         addButton(PieceKind.QUEEN, color, onSelect, selectionBox);
         addButton(PieceKind.ROOK, color, onSelect, selectionBox);
@@ -66,7 +65,7 @@ public class PromotionOverlay extends JPanel {
         ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource(resourcePath)));
 
         Image img = icon.getImage();
-        Image resizedImg = img.getScaledInstance(width - 10, height - 10, Image.SCALE_SMOOTH);
+        Image resizedImg = img.getScaledInstance(width - 15, height - 15, Image.SCALE_SMOOTH);
 
         return new ImageIcon(resizedImg);
     }
