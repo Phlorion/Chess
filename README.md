@@ -1,4 +1,4 @@
-# Chess Engine & Swing GUI
+# Chess Engine
 
 A feature-complete, modular Chess engine and interactive Swing application built in Java 21. Featuring an AI opponent powered by Minimax search with Alpha-Beta Pruning, sound effects, custom ASCII board state loading, legal move verification, castling, pawn promotion, and check/checkmate/stalemate detection.
 
@@ -44,7 +44,6 @@ A feature-complete, modular Chess engine and interactive Swing application built
 src/main/java/dev/phlorion/chess/
 ├── Board.java                    # 8x8 grid, piece tracking, turn history, attack checking
 ├── Player.java                   # Player representation (White/Black) & move validation
-├── Main.java                     # CLI test runner / experimental entry point
 │
 ├── ai/
 │   ├── Algorithm.java            # Interface for move selection algorithms
