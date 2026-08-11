@@ -68,7 +68,7 @@ public class GameEngine {
         });
     }
 
-    private void playSound() {
+    private void _playSound() {
         // determine the sound
         URL soundName;
         if (board.getOpponentPlayer().isKingChecked(board, board.getCurrentPlayer())) {
@@ -87,6 +87,59 @@ public class GameEngine {
             clip.open(audioInputStream);
             clip.start();
         } catch (URISyntaxException | UnsupportedAudioFileException | LineUnavailableException | IOException exception) {
+            System.err.println(exception.getMessage());
+        }
+    }
+
+    private void playSound() {
+        // determine the sound
+        URL soundName;
+        if (board.getOpponentPlayer().isKingChecked(board, board.getCurrentPlayer())) {
+            soundName = getClass().getResource("/sounds/move-check.wav");
+        } else if (board.getLastMove() instanceof CastlingMove) {
+            soundName = getClass().getResource("/sounds/castle.wav");
+        } else if (board.getLastMove().getCapturedPiece() != null) {
+            soundName = getClass().getResource("/sounds/capture.wav");
+        } else {
+            soundName = getClass().getResource("/sounds/move-self.wav");
+        }
+
+        // 1. Guard against case-sensitivity issues on Linux
+        if (soundName == null) {
+            System.err.println("Sound resource not found! Check your folder/file case sensitivity.");
+            return; // Or handle the missing sound gracefully
+        }
+
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundName);
+
+            // 1. Find your specific laptop speaker mixer
+            Mixer.Info targetMixerInfo = null;
+            for (Mixer.Info info : AudioSystem.getMixerInfo()) {
+                if (info.getName().contains("PCH [plughw:0,0]")) {
+                    targetMixerInfo = info;
+                    break;
+                }
+            }
+
+            // 2. Open the clip on that specific mixer
+            Clip clip;
+            if (targetMixerInfo != null) {
+                clip = AudioSystem.getClip(targetMixerInfo);
+            } else {
+                clip = AudioSystem.getClip(); // fallback
+            }
+
+            // 3. Add listener to prevent memory leaks
+            clip.addLineListener(event -> {
+                if (event.getType() == javax.sound.sampled.LineEvent.Type.STOP) {
+                    clip.close();
+                }
+            });
+
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException exception) {
             System.err.println(exception.getMessage());
         }
     }

@@ -4,26 +4,18 @@ import dev.phlorion.chess.Board;
 import dev.phlorion.chess.engine.EnginePlayer;
 import dev.phlorion.chess.engine.GameEngine;
 import dev.phlorion.chess.engine.HumanProvider;
-import dev.phlorion.chess.misc.Vector2;
 import dev.phlorion.chess.move.Move;
-import dev.phlorion.chess.pieces.Piece;
 
-import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class LANGame extends Game {
+public class StaticGame extends Game {
     public static void main(String[] args) {
-        Game game = new LANGame();
+        Game game = new StaticGame();
 
         Board board = new Board("src/main/resources/test3");
 

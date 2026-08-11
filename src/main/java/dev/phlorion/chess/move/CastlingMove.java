@@ -43,4 +43,22 @@ public class CastlingMove extends Move {
         board.getCurrentPlayer().setPieces(board.getPieces(board.getCurrentPlayer().getType()));
         board.getOpponentPlayer().setPieces(board.getPieces(board.getOpponentPlayer().getType()));
     }
+
+    @Override
+    public void redo(Board board) {
+        piece.setPosition(previousPos);
+        piece.setHasMoved(false);
+        board.setOnBoard(previousPos, piece);
+        board.setOnBoard(targetedPos, null);
+
+        rook.setPosition(rookPreviousPos);
+        rook.setHasMoved(false);
+        board.setOnBoard(rookPreviousPos, rook);
+        board.setOnBoard(rookTargetPosition, null);
+
+        board.removeLastMove();
+
+        board.getCurrentPlayer().setPieces(board.getPieces(board.getCurrentPlayer().getType()));
+        board.getOpponentPlayer().setPieces(board.getPieces(board.getOpponentPlayer().getType()));
+    }
 }
